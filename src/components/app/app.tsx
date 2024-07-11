@@ -1,4 +1,4 @@
-import MainPage from "../../pages/main/main";
+import MainPage from '../../pages/main/main';
 
 type OffersProps = {
   offersCount: number;

@@ -34,19 +34,19 @@ type OfferPage =
     maxAdults: number;
   }
 
-function InsideItem ({good} : {good: string}) : JSX.Element {
+function InsideItem({ good }: { good: string }): JSX.Element {
   return (
     <li className="offer__inside-item">{good}</li>
-  )
+  );
 }
 
-function InsideList ({items} : {items: OfferPage}) : JSX.Element {
-  const {goods} = items
+function InsideList({ items }: { items: OfferPage }): JSX.Element {
+  const { goods } = items;
   return (
     <ul className="offer__inside-list">
       {goods.map((good) => <InsideItem good={good} key={good} />)}
-  </ul>
-  )
+    </ul>
+  );
 }
 
-export default InsideList
+export default InsideList;

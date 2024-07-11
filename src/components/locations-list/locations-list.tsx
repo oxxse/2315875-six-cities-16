@@ -1,4 +1,4 @@
-import { CITIES } from "../../const";
+import { CITIES } from '../../const';
 
 function LocationsItem({ city }: { city: string }): JSX.Element {
   return (
@@ -7,13 +7,14 @@ function LocationsItem({ city }: { city: string }): JSX.Element {
         <span>{city}</span>
       </a>
     </li>
-  )
+  );
 }
 
 function LocationsList(): JSX.Element {
-  return (<ul className="locations__list tabs__list">
-    {CITIES.map((city) => <LocationsItem city={city} key={city} />)}
-  </ul>)
+  return (
+    <ul className="locations__list tabs__list">
+      {CITIES.map((city) => <LocationsItem city={city} key={city} />)}
+    </ul>);
 }
 
 export default LocationsList;

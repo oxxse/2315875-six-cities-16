@@ -42,7 +42,7 @@ function FeaturesList({ feature }: { feature: OfferPage }): JSX.Element {
       <li className="offer__feature offer__feature--bedrooms">{bedrooms} Bedrooms</li>
       <li className="offer__feature offer__feature--adults">Max {maxAdults} adults</li>
     </ul>
-  )
+  );
 }
 
-export default FeaturesList
+export default FeaturesList;

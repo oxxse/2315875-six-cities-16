@@ -11,7 +11,7 @@ function LoginForm(): JSX.Element {
       </div>
       <button className="login__submit form__submit button" type="submit">Sign in</button>
     </form>
-  )
+  );
 }
 
-export default LoginForm
+export default LoginForm;

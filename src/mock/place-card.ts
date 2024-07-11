@@ -94,4 +94,4 @@ const PlaceCard = [
 
 ] as const;
 
-export { PlaceCard }
+export { PlaceCard };

@@ -35,7 +35,7 @@ type OfferPage =
   }
 
 function Host ({hostData} : {hostData : OfferPage}) : JSX.Element {
-  const { host } = hostData
+  const { host } = hostData;
   return (
     <div className="offer__host-user user">
       <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
@@ -48,7 +48,7 @@ function Host ({hostData} : {hostData : OfferPage}) : JSX.Element {
         Pro
       </span>
     </div>
-  )
+  );
 }
 
-export default Host
+export default Host;

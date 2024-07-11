@@ -1,12 +1,12 @@
-import Header from "../../components/header/header"
-import CardItem from "../../components/card-item/card-item"
-import { FavoritesProps } from "../../mock/favorites-list"
-import Footer from "../../components/footer/footer"
+import Header from '../../components/header/header';
+import CardItem from '../../components/card-item/card-item';
+import { FavoritesProps } from '../../mock/favorites-list';
+import Footer from '../../components/footer/footer';
 
 function FavoritesPage(): JSX.Element {
   return (
     <div className="page">
-      <Header/>
+      <Header />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
@@ -22,10 +22,9 @@ function FavoritesPage(): JSX.Element {
                   </div>
                 </div>
                 <div className="favorites__places">
-                {FavoritesProps.map((offer) => <CardItem className='cities__card' place={offer} key={crypto.randomUUID()} />)}
+                  {FavoritesProps.map((offer) => <CardItem className='cities__card' place={offer} key={crypto.randomUUID()} />)}
                 </div>
               </li>
-
               <li className="favorites__locations-items">
                 <div className="favorites__locations locations locations--current">
                   <div className="locations__item">
@@ -35,16 +34,16 @@ function FavoritesPage(): JSX.Element {
                   </div>
                 </div>
                 <div className="favorites__places">
-                {FavoritesProps.map((offer) => <CardItem className='cities__card' place={offer} key={crypto.randomUUID()} />)}
+                  {FavoritesProps.map((offer) => <CardItem className='cities__card' place={offer} key={crypto.randomUUID()} />)}
                 </div>
               </li>
             </ul>
           </section>
         </div>
       </main>
-      <Footer/>
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default FavoritesPage
+export default FavoritesPage;

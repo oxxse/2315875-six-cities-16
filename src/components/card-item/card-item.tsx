@@ -59,7 +59,7 @@ function CardItem({ className = 'cities__card', place }: { className: string; pl
         <p className="place-card__type">{type}</p>
       </div>
     </article>
-  )
+  );
 }
 
 export default CardItem;
