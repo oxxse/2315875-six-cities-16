@@ -2,6 +2,10 @@ const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseld
 const OFFERS = {
   OffersCount: 5
 } as const;
+const REVIEWS = {
+  ReviewsCount: 1
+} as const
 
 export {CITIES}
 export {OFFERS}
+export {REVIEWS}
