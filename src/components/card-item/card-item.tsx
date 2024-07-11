@@ -6,7 +6,7 @@ type LocationCardProps = {
 
 type CityCardProps = {
   name: string;
-  data: LocationCardProps;
+  location: LocationCardProps;
 }
 
 type PlaceCardProps = {

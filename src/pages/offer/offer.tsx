@@ -108,7 +108,7 @@ function OfferPage({ offers, reviews }: { offers: OfferPage; reviews: Review }):
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
                 <ul className="reviews__list">
-                  {reviews.map((comment) => <ReviewItem reviewData={comment} key={comment} />)}
+                  {reviews.map((comment) => <ReviewItem reviewData={comment} key={crypto.randomUUID()} />)}
                 </ul>
                 <ReviewForm />
               </section>
