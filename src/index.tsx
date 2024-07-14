@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/app/app';
-import { AppProps } from './mock/app';
+import { OfferPageProps } from './mock/offer-page';
+import { ReviewsProps } from './mock/reviews';
 
 
 const root = ReactDOM.createRoot(
@@ -10,6 +11,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App offers={AppProps.offers} reviews={AppProps.reviews} />
+    <App offers={OfferPageProps} reviews={ReviewsProps} />
   </React.StrictMode>
 );

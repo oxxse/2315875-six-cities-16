@@ -1,4 +1,4 @@
-type LocationCardProps = {
+export type LocationCardProps = {
   latitude: number;
   longitude: number;
   zoom: number;
@@ -10,7 +10,7 @@ type User = {
   isPro: boolean;
 }
 
-type CityCardProps = {
+export type CityCardProps = {
   name: string;
   location: LocationCardProps;
 }
@@ -21,7 +21,6 @@ export type OfferPage =
     title: string;
     type: string;
     price: number;
-    previewImage: string;
     city: CityCardProps;
     location: LocationCardProps;
     isFavorite: boolean;
@@ -41,7 +40,6 @@ export type Offer =
     title: string;
     type: string;
     price: number;
-    previewImage: string;
     city: CityCardProps;
     location: LocationCardProps;
     isFavorite: boolean;

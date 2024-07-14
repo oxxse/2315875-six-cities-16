@@ -7,11 +7,12 @@ import LoginPage from '../../pages/login/login';
 import NotFound from '../../pages/not-found-page/not-found';
 import type { AuthStatus } from '../access-route/access-foute';
 import { PublicRoute, PrivateRoute } from '../access-route/access-foute';
-import { AppPropsType } from '../../mock/app';
+import type { OfferPage } from '../../types/offer';
+import type { Review } from '../../types/offer';
 
 const currentStatus: AuthStatus = 'NO_AUTH';
 
-function App({ offers, reviews }: AppPropsType): JSX.Element {
+function App({ offers, reviews }: {offers : OfferPage; reviews : Review}): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
