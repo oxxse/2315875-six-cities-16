@@ -97,3 +97,4 @@ function Offer({ hotels, comments }: { hotels: OfferPage; comments: Review }): J
 }
 
 export default Offer;
+

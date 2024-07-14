@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
 * Студент: [Ксения Лаврухина](https://up.htmlacademy.ru/react/16/user/2315875).
-* Наставник: `Неизвестно`.
+* Наставник: [Юлия Волкова](https://htmlacademy.ru/profile/julie_volkova).
 
 ---
 

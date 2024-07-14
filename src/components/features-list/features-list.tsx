@@ -1,6 +1,7 @@
 import type { Offer } from '../../types/offer';
 
 function FeaturesList({ feature }: { feature: Offer }): JSX.Element {
+
   const { type, bedrooms, maxAdults } = feature;
   return (
     <ul className="offer__features">
