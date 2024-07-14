@@ -1,5 +1,4 @@
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
-const OFFERS = 5 as const;
 
 export enum AppRoute {
   Main = '/',
@@ -10,4 +9,3 @@ export enum AppRoute {
 }
 
 export {CITIES};
-export {OFFERS};
