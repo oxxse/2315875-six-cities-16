@@ -1,5 +1,4 @@
 import type { Offer } from '../../types/offer';
-
 function InsideItem({ good }: { good: string }): JSX.Element {
   return (
     <li className="offer__inside-item">{good}</li>

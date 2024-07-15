@@ -7,6 +7,7 @@ import Map from '../../components/map/map';
 import type { OfferPage } from '../../types/offer';
 
 export function MainPage({offersCount} :{ offersCount : OfferPage}): JSX.Element {
+
   return (
     <div className="page page--gray page--main">
       <Header />

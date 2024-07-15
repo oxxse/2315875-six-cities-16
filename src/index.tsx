@@ -4,7 +4,6 @@ import App from './components/app/app';
 import { OfferPageProps } from './mock/offer-page';
 import { ReviewsProps } from './mock/reviews';
 
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
