@@ -9,21 +9,23 @@ import type { AuthStatus } from '../access-route/access-foute';
 import { PublicRoute, PrivateRoute } from '../access-route/access-foute';
 import type { OfferPage } from '../../types/offer';
 import type { Review } from '../../types/offer';
+import { HelmetProvider } from 'react-helmet-async';
 
 const currentStatus: AuthStatus = 'NO_AUTH';
 
-function App({ offers, reviews }: {offers : OfferPage; reviews : Review}): JSX.Element {
+function App({ offers, reviews }: { offers: OfferPage; reviews: Review }): JSX.Element {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={AppRoute.Main} element={<MainPage offersCount={offers} />}>
+    <HelmetProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path={AppRoute.Main} element={<MainPage offersCount={offers} />} />
           <Route path={AppRoute.Favorites} element={<PrivateRoute status={currentStatus}><FavoritesPage /> </PrivateRoute>} />
           <Route path={AppRoute.Login} element={<PublicRoute status={currentStatus}> <LoginPage /> </PublicRoute>} />
           <Route path={AppRoute.Offer} element={<Offer hotels={offers} comments={reviews} />} />
           <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

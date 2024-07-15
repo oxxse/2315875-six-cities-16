@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import NotFound from '../not-found-page/not-found';
 import type { OfferPage } from '../../types/offer';
 import type { Review } from '../../types/offer';
+import { Helmet } from 'react-helmet-async';
 
 
 function Offer({ hotels, comments }: { hotels: OfferPage; comments: Review }): JSX.Element {
@@ -21,6 +22,9 @@ function Offer({ hotels, comments }: { hotels: OfferPage; comments: Review }): J
   if (typeof hotel !== 'undefined') {
     return (
       <div className="page">
+        <Helmet>
+          <title>6 cities: Offer</title>
+        </Helmet>
         <Header />
         <main className="page__main page__main--offer">
           <section className="offer">
