@@ -20,12 +20,12 @@ import PlaceCardList from '../../components/place-card-list/place-card-list';
 
 const authorizationStatus = getAuthorizationStatus();
 
-type OfferPage = {
+type OfferPageData = {
   offers: Offer[];
   reviews: Review[];
 };
 
-function OfferPage({ offers, reviews }: OfferPage): JSX.Element {
+function OfferPage({ offers, reviews }: OfferPageData): JSX.Element {
   const { id } = useParams();
   const filteredOffers = offers.filter((offer) => offer.city.name);
   const currentOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === id);
@@ -38,7 +38,7 @@ function OfferPage({ offers, reviews }: OfferPage): JSX.Element {
   const MAX_NEARBY_OFFERS_COUNT = 3;
   const nearbyOffers = filteredOffers.filter((offer) => offer.id !== currentOffer.id).slice(0, MAX_NEARBY_OFFERS_COUNT);
 
-  const { title, price, rating, isPremium, isFavorite, goods, description, host, bedrooms, maxAdults } = currentOffer;
+  const { title, price, rating, isPremium, isFavorite, goods, description, host } = currentOffer;
   const { name: hostName, isPro } = host;
 
   return (
