@@ -1,19 +1,52 @@
-function PlaceSorting(): JSX.Element {
+import { PLACES_OPTIONS } from '../../../const';
+import { useState } from 'react';
+
+type PlacesInsideProps = {
+  placesOption: string;
+}
+
+type PlaceSortingProps = {
+  width: number;
+  height: number;
+}
+
+type PlaceOptionsProps = {
+  className: string;
+}
+
+function PlacesOption({ placesOption }: PlacesInsideProps): JSX.Element {
   return (
-    <form className="places__sorting" action="#" method="get">
+    <li className="places__option" tabIndex={0}>{placesOption}</li>
+  );
+}
+
+function PlacesOptionsList({ className }: PlaceOptionsProps): JSX.Element {
+
+  return (
+    <ul className={className}>
+      {PLACES_OPTIONS.map((option) => <PlacesOption placesOption={option} key={option} />)}
+    </ul>
+  );
+}
+
+function PlaceSorting({ width, height }: PlaceSortingProps): JSX.Element {
+  const [isActive, setActive] = useState(false);
+  const toggleClass = () => {
+    setActive(!isActive);
+  };
+
+  return (
+    <form onClick={toggleClass} className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
       <span className="places__sorting-type" tabIndex={0}>
         Popular
-        <svg className="places__sorting-arrow" width="7" height="4">
-          <use xlinkHref="#icon-arrow-select"></use>
+        <svg className="places__sorting-arrow" width={width} height={height}>
+          <use xlinkHref="#icon-arrow-select" />
         </svg>
       </span>
-      <ul className="places__options places__options--custom places__options--opened">
-        <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-        <li className="places__option" tabIndex={0}>Price: low to high</li>
-        <li className="places__option" tabIndex={0}>Price: high to low</li>
-        <li className="places__option" tabIndex={0}>Top rated first</li>
-      </ul>
+      {isActive ?
+        <PlacesOptionsList className={'places__options places__options--custom places__options--opened'} /> :
+        <PlacesOptionsList className={'places__options places__options--custom'} />}
     </form>
   );
 }
