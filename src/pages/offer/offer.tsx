@@ -27,6 +27,7 @@ type OfferPage = {
 
 function OfferPage({ offers, reviews }: OfferPage): JSX.Element {
   const { id } = useParams();
+  const filteredOffers = offers.filter((offer) => offer.city.name);
   const currentOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === id);
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
@@ -34,9 +35,11 @@ function OfferPage({ offers, reviews }: OfferPage): JSX.Element {
     return <NotFound />;
   }
 
-  const { title, price, rating, isPremium, isFavorite, goods, description, host } = currentOffer;
-  const { name: hostName, isPro } = host;
+  const MAX_NEARBY_OFFERS_COUNT = 3;
+  const nearbyOffers = filteredOffers.filter((offer) => offer.id !== currentOffer.id).slice(0, MAX_NEARBY_OFFERS_COUNT);
 
+  const { title, price, rating, isPremium, isFavorite, goods, description, host, bedrooms, maxAdults } = currentOffer;
+  const { name: hostName, isPro } = host;
 
   return (
     <div className="page">
@@ -105,7 +108,7 @@ function OfferPage({ offers, reviews }: OfferPage): JSX.Element {
       <div className="container">
         <section className="near-places places">
           <h2 className="near-places__title">Other places in the neighborhood</h2>
-          <PlaceCardList offers={offers} className="near-places" imageWidth={260} imageHeight={200} />
+          <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places__' imageWidth={260} imageHeight={200} />
         </section>
       </div>
     </div >

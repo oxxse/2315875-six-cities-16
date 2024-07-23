@@ -36,7 +36,7 @@ function MainPage({ offers }: MainPage): JSX.Element {
                   <h2 className="visually-hidden">Places</h2>
                   <b className="places__found">{offers.length} {placesTitle} to stay in Amsterdam</b>
                   <PlaceSorting width={7} height={4} />
-                  <PlaceCardList offers={offers} className={'cities'} imageWidth={260} imageHeight={200} />
+                  <PlaceCardList offers={offers} classNameList={'cities__places-list'} classNameItem = {'cities__'} imageWidth={260} imageHeight={200} />
                 </section>
                 <div className="cities__right-section">
                   <Map className='cities' />

@@ -20,7 +20,7 @@ const authorizationStatus = getAuthorizationStatus();
 function CardItem({ imageWidth, imageHeight, className, title, type, price, isFavorite, isPremium, previewImage, rating, id, onMouseOver, onMouseLeave }: PlaceCardType): JSX.Element {
 
   return (
-    <article className={`${className}__card place-card`}
+    <article className={`${className}card place-card`}
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}
     >

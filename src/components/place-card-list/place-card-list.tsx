@@ -5,14 +5,15 @@ import CardItem from '../card-item/card-item.tsx';
 
 type PlaceList = {
   offers: PlaceCard[];
-  className: string;
+  classNameList: string;
+  classNameItem: string;
   imageWidth: number;
   imageHeight: number;
 };
 
-function PlaceCardList({ offers, imageWidth, imageHeight, className}: PlaceList): JSX.Element {
-  const classes = [`${className}__places-list`, 'places__list'];
-  if (className === 'cities') {
+function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNameItem}: PlaceList): JSX.Element {
+  const classes = [`${classNameList}`, 'places__list'];
+  if (classNameList === 'cities__places-') {
     classes.push('tabs__content');
   }
 
@@ -31,7 +32,7 @@ function PlaceCardList({ offers, imageWidth, imageHeight, className}: PlaceList)
           key={offer.id}
           imageWidth={imageWidth}
           imageHeight={imageHeight}
-          className={className}
+          className={classNameItem}
           {...offer}
           onMouseOver={() => handleHover(offer)}
           onMouseLeave={() => handleHover()}
