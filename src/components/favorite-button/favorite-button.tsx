@@ -1,11 +1,11 @@
-type FavoriteButtonProps = {
+type FavoriteButton = {
   className: string;
   isFavorite: boolean;
 };
 
 const OFFER_CLASS_NAME = 'offer';
 
-export default function FavoriteButton({ className, isFavorite }: FavoriteButtonProps): JSX.Element {
+export default function FavoriteButton({ className, isFavorite }: FavoriteButton): JSX.Element {
   const imgWidth = className === OFFER_CLASS_NAME ? 31 : 18;
   const imgHeight = className === OFFER_CLASS_NAME ? 33 : 19;
 

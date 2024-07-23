@@ -20,12 +20,12 @@ import PlaceCardList from '../../components/place-card-list/place-card-list';
 
 const authorizationStatus = getAuthorizationStatus();
 
-type OfferPageProps = {
+type OfferPage = {
   offers: Offer[];
   reviews: Review[];
 };
 
-function OfferPage({ offers, reviews }: OfferPageProps): JSX.Element {
+function OfferPage({ offers, reviews }: OfferPage): JSX.Element {
   const { id } = useParams();
   const currentOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === id);
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);

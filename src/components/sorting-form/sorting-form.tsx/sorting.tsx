@@ -1,26 +1,26 @@
 import { PLACES_OPTIONS } from '../../../const';
 import { useState } from 'react';
 
-type PlacesInsideProps = {
+type PlacesInside = {
   placesOption: string;
 }
 
-type PlaceSortingProps = {
+type PlaceSorting = {
   width: number;
   height: number;
 }
 
-type PlaceOptionsProps = {
+type PlaceOptions = {
   className: string;
 }
 
-function PlacesOption({ placesOption }: PlacesInsideProps): JSX.Element {
+function PlacesOption({ placesOption }: PlacesInside): JSX.Element {
   return (
     <li className="places__option" tabIndex={0}>{placesOption}</li>
   );
 }
 
-function PlacesOptionsList({ className }: PlaceOptionsProps): JSX.Element {
+function PlacesOptionsList({ className }: PlaceOptions): JSX.Element {
 
   return (
     <ul className={className}>
@@ -29,7 +29,7 @@ function PlacesOptionsList({ className }: PlaceOptionsProps): JSX.Element {
   );
 }
 
-function PlaceSorting({ width, height }: PlaceSortingProps): JSX.Element {
+function PlaceSorting({ width, height }: PlaceSorting): JSX.Element {
   const [isActive, setActive] = useState(false);
   const toggleClass = () => {
     setActive(!isActive);

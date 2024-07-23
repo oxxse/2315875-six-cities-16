@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/app/app';
-import { OfferPageProps } from './mock/offer-page';
-import { ReviewsProps } from './mock/reviews';
+import { offerPageData } from './mock/offers';
+import { reviewsData } from './mock/reviews';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -10,6 +10,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App offers={OfferPageProps} reviews={ReviewsProps} />
+    <App offers={offerPageData} reviews={reviewsData} />
   </React.StrictMode>
 );

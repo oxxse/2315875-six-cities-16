@@ -1,49 +1,94 @@
+import { useState, ChangeEvent } from 'react';
+import { MAX_REVIEW_LENGTH, MIN_REVIEW_LENGTH, RATING_TITLES } from '../../const.ts';
+
+type RatingStar = {
+  id: string;
+  ratingValue: number;
+  title: string;
+  onChange: () => void;
+  checked: boolean;
+};
+
+function RatingStar({ id, ratingValue, title, onChange, checked }: RatingStar): JSX.Element {
+  return (
+    <>
+      <input
+        className="form__rating-input visually-hidden"
+        name="rating"
+        defaultValue={ratingValue}
+        id={id}
+        type="radio"
+        onChange={onChange}
+        checked={checked}
+      />
+      <label
+        htmlFor={id}
+        className="reviews__rating-label form__rating-label"
+        title={title}
+      >
+        <svg className="form__star-image" width={37} height={33}>
+          <use xlinkHref="#icon-star" />
+        </svg>
+      </label>
+    </>
+  );
+}
+
 function ReviewForm(): JSX.Element {
+  const [review, setReview] = useState<string>('');
+  const [rating, setRating] = useState<number>(0);
+
+  const isValid: boolean = review.length >= MIN_REVIEW_LENGTH && review.length <= MAX_REVIEW_LENGTH && rating !== 0;
+  const handleTextareaChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
+    setReview(evt.target.value);
+  };
+
+  const handleRatingChange = (ratingValue: number) => {
+    setRating(ratingValue);
+  };
+
   return (
     <form className="reviews__form form" action="#" method="post">
-      <label className="reviews__label form__label" htmlFor="review">Your review</label>
+      <label className="reviews__label form__label" htmlFor="review">
+        Your review
+      </label>
       <div className="reviews__rating-form form__rating">
-        <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" />
-        <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" />
-        <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" />
-        <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" />
-        <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio" />
-        <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
+        {RATING_TITLES.map((title, index) => {
+          const ratingValue = 5 - index;
+          return (
+            <RatingStar
+              key={ratingValue}
+              id={`${ratingValue}-stars`}
+              ratingValue={ratingValue}
+              title={title}
+              onChange={() => handleRatingChange(ratingValue)}
+              checked={rating === ratingValue}
+            />
+          );
+        })}
       </div>
-      <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"></textarea>
+      <textarea
+        className="reviews__textarea form__textarea"
+        id="review"
+        name="review"
+        placeholder="Tell how was your stay, what you like and what can be improved"
+        value={review}
+        onChange={handleTextareaChange}
+      />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
+          To submit review please make sure to set{' '}
+          <span className="reviews__star">rating</span> and describe your
+          stay with at least{' '}
+          <b className="reviews__text-amount">{MIN_REVIEW_LENGTH} characters</b>.
         </p>
-        <button className="reviews__submit form__submit button" type="submit" disabled>Submit</button>
+        <button
+          className="reviews__submit form__submit button"
+          type="submit"
+          disabled={!isValid}
+        >
+          Submit
+        </button>
       </div>
     </form>
   );

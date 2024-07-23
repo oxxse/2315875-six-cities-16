@@ -7,11 +7,11 @@ import type { Offer } from '../../types/types';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import MainEmpty from '../../components/main-empty/main-empty';
 
-type MainPageProps = {
+type MainPage = {
   offers: Offer[];
 }
 
-function MainPage({ offers }: MainPageProps): JSX.Element {
+function MainPage({ offers }: MainPage): JSX.Element {
   const placesTitle = offers.length === 1 ? 'place' : 'places';
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 

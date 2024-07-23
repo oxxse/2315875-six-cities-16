@@ -65,6 +65,6 @@ const getRandomReviews = (reviews: Review[]): Review[] => {
   return reviews.slice(0, randomCount);
 };
 
-const reviewsProps = getRandomReviews(allReviews);
+const reviewsData = getRandomReviews(allReviews);
 
-export { reviewsProps };
+export { reviewsData };

@@ -1,7 +1,7 @@
 import { Review } from '../../types/types.ts';
 import { getMarkupRating } from '../../utils/common.ts';
 
-type ReviewsListProps = {
+type ReviewsList = {
   reviews: Review[];
 }
 
@@ -46,7 +46,7 @@ function ReviewsItem({ date, user, comment, rating }: Review): JSX.Element {
   );
 }
 
-function ReviewsList({ reviews }: ReviewsListProps): JSX.Element {
+function ReviewsList({ reviews }: ReviewsList): JSX.Element {
   return (
     <ul className="reviews__list">
       {reviews.map(({ id, date, user, comment, rating }) => (

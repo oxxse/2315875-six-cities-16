@@ -2,16 +2,16 @@ import PlaceCardList from '../place-card-list/place-card-list';
 import LocationsItem from '../locations-item/locations-item';
 import { Offer } from '../../types/types';
 
-type FavoritePlaceProps = {
+type FavoritePlace = {
   city: string;
   offers: Offer[];
 };
 
-type FavoritePlacesListProps = {
+type FavoritePlacesList = {
   groupedOffers: Record<string, Offer[]>;
 };
 
-function FavoritePlace({ city, offers }: FavoritePlaceProps): JSX.Element {
+function FavoritePlace({ city, offers }: FavoritePlace): JSX.Element {
 
   return (
     <li className="favorites__locations-items">
@@ -23,7 +23,7 @@ function FavoritePlace({ city, offers }: FavoritePlaceProps): JSX.Element {
   );
 }
 
-function FavoritePlacesList({groupedOffers}: FavoritePlacesListProps): JSX.Element {
+function FavoritePlacesList({groupedOffers}: FavoritePlacesList): JSX.Element {
   return (
     <ul className="favorites__list">
       {Object.entries(groupedOffers).map(([city, cityOffers]) => (

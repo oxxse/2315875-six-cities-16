@@ -7,11 +7,11 @@ import { AuthorizationStatus } from '../../const';
 import type { Offer } from '../../types/types';
 
 
-type HeaderPropsType = {
+type Header = {
   favorites?: Offer[];
 }
 
-function Header({ favorites }: HeaderPropsType): JSX.Element {
+function Header({ favorites }: Header): JSX.Element {
   const { pathname } = useLocation();
   const { linkClassName, shouldRenderUser } = getHeaderState(pathname as AppRoute);
   const authorizationStatus = getAuthorizationStatus();

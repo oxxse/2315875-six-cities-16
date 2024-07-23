@@ -5,7 +5,7 @@ import { Offer } from '../../types/types';
 import FavoritePlacesList from '../../components/favorite-places-list/favorite-places-list';
 import FavoriteEmpty from '../../components/favorite-empty/favorite-empty';
 
-type FavoritesPageProps = {
+type FavoritesPage = {
   offers: Offer[];
 }
 
@@ -19,7 +19,7 @@ const groupOffersByCity = (offers: Offer[]) => offers.reduce((accumulator: Recor
   return accumulator;
 }, {} as Record<string, Offer[]>);
 
-function FavoritesPage({ offers }: FavoritesPageProps): JSX.Element {
+function FavoritesPage({ offers }: FavoritesPage): JSX.Element {
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
   const groupedOffers = groupOffersByCity(favoriteOffers);
 

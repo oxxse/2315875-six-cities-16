@@ -1,20 +1,10 @@
-import { NavLink } from 'react-router-dom';
 import { CITIES } from '../../const';
-
-function LocationsItem({ city }: { city: string }): JSX.Element {
-  return (
-    <li className="locations__item">
-      <NavLink className={({isActive}) => isActive ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'} to={city}>
-        <span>{city}</span>
-      </NavLink>
-    </li>
-  );
-}
+import LocationsItem from '../locations-item/locations-item';
 
 function LocationsList(): JSX.Element {
   return (
     <ul className="locations__list tabs__list">
-      {CITIES.map((city) => <LocationsItem city={city} key={city} />)}
+      {CITIES.map((city) => <LocationsItem city={city} isFavoritePage={false} key={city} />)}
     </ul>);
 }
 

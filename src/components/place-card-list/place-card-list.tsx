@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import { Nullable } from 'vitest';
 import CardItem from '../card-item/card-item.tsx';
 
-type PlaceListProps = {
+type PlaceList = {
   offers: PlaceCard[];
   className: string;
   imageWidth: number;
   imageHeight: number;
 };
 
-function PlaceCardList({ offers, imageWidth, imageHeight, className}: PlaceListProps): JSX.Element {
+function PlaceCardList({ offers, imageWidth, imageHeight, className}: PlaceList): JSX.Element {
   const classes = [`${className}__places-list`, 'places__list'];
   if (className === 'cities') {
     classes.push('tabs__content');

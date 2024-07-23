@@ -155,6 +155,6 @@ const getRandomMockOffers = (): Offer => {
   };
 };
 
-const offerPageProps = Array.from({ length: getRandomInteger(OFFER_COUNT) }, getRandomMockOffers);
+const offerPageData = Array.from({ length: getRandomInteger(OFFER_COUNT) }, getRandomMockOffers);
 
-export { offerPageProps };
+export { offerPageData };
