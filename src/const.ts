@@ -1,7 +1,11 @@
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
-const OFFERS = {
-  OffersCount: 5
-} as const;
+
+export enum AppRoute {
+  Main = '/',
+  Login = '/login',
+  Favorites = '/favorites',
+  Offer = '/offer',
+  Error = '/error'
+}
 
 export {CITIES};
-export {OFFERS};

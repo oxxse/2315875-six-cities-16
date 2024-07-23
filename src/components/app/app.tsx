@@ -1,13 +1,31 @@
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { AppRoute } from '../../const';
 import MainPage from '../../pages/main/main';
+import FavoritesPage from '../../pages/favorites/favorites';
+import Offer from '../../pages/offer/offer';
+import LoginPage from '../../pages/login/login';
+import NotFound from '../../pages/not-found-page/not-found';
+import type { AuthStatus } from '../access-route/access-foute';
+import { PublicRoute, PrivateRoute } from '../access-route/access-foute';
+import type { OfferPage } from '../../types/offer';
+import type { Review } from '../../types/offer';
+import { HelmetProvider } from 'react-helmet-async';
 
-type OffersProps = {
-  offersCount: number;
-}
+const currentStatus: AuthStatus = 'NO_AUTH';
 
-
-function App({offersCount}: OffersProps): JSX.Element {
+function App({ offers, reviews }: { offers: OfferPage; reviews: Review }): JSX.Element {
   return (
-    <MainPage offersCount={offersCount} />
+    <HelmetProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path={AppRoute.Main} element={<MainPage offersCount={offers} />} />
+          <Route path={AppRoute.Favorites} element={<PrivateRoute status={currentStatus}><FavoritesPage /> </PrivateRoute>} />
+          <Route path={AppRoute.Login} element={<PublicRoute status={currentStatus}> <LoginPage /> </PublicRoute>} />
+          <Route path={AppRoute.Offer} element={<Offer hotels={offers} comments={reviews} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

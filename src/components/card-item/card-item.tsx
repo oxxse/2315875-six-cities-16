@@ -1,38 +1,18 @@
-type LocationCardProps = {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-}
-
-type CityCardProps = {
-  name: string;
-  location: LocationCardProps;
-}
-
-type PlaceCardProps = {
-  id: string;
-  title: string;
-  type: string;
-  price: number;
-  city: CityCardProps;
-  location: LocationCardProps;
-  isFavorite: boolean;
-  isPremium: boolean;
-  rating: number;
-  previewImage: string;
-};
+import { Link } from 'react-router-dom';
+import type { PlaceCardProps } from '../../types/card';
+import { AppRoute } from '../../const';
 
 function CardItem({ className = 'cities__card', place }: { className: string; place: PlaceCardProps }): JSX.Element {
-  const { price, type, title, previewImage, rating } = place;
+  const { price, type, title, previewImage, rating, id } = place;
   return (
     <article className={`${className} place-card`}>
       <div className="place-card__mark">
         <span>Premium</span>
       </div>
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
+        <Link to={`${AppRoute.Offer}/${id}`}>
           <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
-        </a>
+        </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
@@ -54,11 +34,11 @@ function CardItem({ className = 'cities__card', place }: { className: string; pl
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">Beautiful &amp; {title}</a>
+          <Link to={`${AppRoute.Offer}/${id}`}>Beautiful &amp; {title}</Link>
         </h2>
         <p className="place-card__type">{type}</p>
       </div>
-    </article>
+    </article >
   );
 }
 

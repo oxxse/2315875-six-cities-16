@@ -1,11 +1,16 @@
 import Header from '../../components/header/header';
 import LoginForm from '../../components/login-form/login-form';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { AppRoute } from '../../const';
 
 function LoginPage(): JSX.Element {
   return (
     <div className="page page--gray page--login">
+      <Helmet>
+        <title>6 cities: Login</title>
+      </Helmet>
       <Header />
-
       <main className="page__main page__main--login">
         <div className="page__login-container container">
           <section className="login">
@@ -14,9 +19,9 @@ function LoginPage(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <a className="locations__item-link" href="#">
+              <Link className="locations__item-link" to={AppRoute.Main}>
                 <span>Amsterdam</span>
-              </a>
+              </Link>
             </div>
           </section>
         </div>

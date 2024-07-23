@@ -1,11 +1,12 @@
+import { NavLink } from 'react-router-dom';
 import { CITIES } from '../../const';
 
 function LocationsItem({ city }: { city: string }): JSX.Element {
   return (
     <li className="locations__item">
-      <a className="locations__item-link tabs__item" href="#">
+      <NavLink className={({isActive}) => isActive ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'} to={city}>
         <span>{city}</span>
-      </a>
+      </NavLink>
     </li>
   );
 }

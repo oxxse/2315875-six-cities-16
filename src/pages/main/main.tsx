@@ -4,12 +4,10 @@ import PlaceSorting from '../../components/sorting-form/sorting-form.tsx/sorting
 import CardItem from '../../components/card-item/card-item';
 import { PlaceCard } from '../../mock/place-card';
 import Map from '../../components/map/map';
+import type { OfferPage } from '../../types/offer';
 
-type OffersProps = {
-  offersCount: number;
-}
+export function MainPage({offersCount} :{ offersCount : OfferPage}): JSX.Element {
 
-export function MainPage({ offersCount }: OffersProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <Header />
@@ -24,7 +22,7 @@ export function MainPage({ offersCount }: OffersProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersCount} places to stay in Amsterdam</b>
+              <b className="places__found">{offersCount.length} places to stay in Amsterdam</b>
               <PlaceSorting />
               <div className="cities__places-list places__list tabs__content">
                 {PlaceCard.map((offer) => <CardItem className='cities__card' place={offer} key={crypto.randomUUID()} />)}

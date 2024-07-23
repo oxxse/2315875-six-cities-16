@@ -1,40 +1,7 @@
-type LocationCardProps = {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-}
+import type { Offer } from '../../types/offer';
 
-type HostProps = {
-  name: string;
-  avatarUrl: string;
-  isPro: boolean;
-}
+function FeaturesList({ feature }: { feature: Offer }): JSX.Element {
 
-type CityCardProps = {
-  name: string;
-  location: LocationCardProps;
-}
-
-type OfferPage =
-  {
-    id: string;
-    title: string;
-    type: string;
-    price: number;
-    city: CityCardProps;
-    location: LocationCardProps;
-    isFavorite: boolean;
-    isPremium: boolean;
-    rating: number;
-    description: string;
-    bedrooms: number;
-    goods: [string];
-    host: HostProps;
-    images: [string];
-    maxAdults: number;
-  }
-
-function FeaturesList({ feature }: { feature: OfferPage }): JSX.Element {
   const { type, bedrooms, maxAdults } = feature;
   return (
     <ul className="offer__features">
