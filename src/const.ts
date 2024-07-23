@@ -6,7 +6,7 @@ const MAX_REVIEW_LENGTH = 300;
 
 
 enum AppRoute {
-  Main = '/:city',
+  Main = '/',
   Login = '/login',
   Favorites = '/favorites',
   Offer = '/offer/:id',

@@ -9,34 +9,37 @@ import MainEmpty from '../../components/main-empty/main-empty';
 
 type MainPage = {
   offers: Offer[];
+  selectedCity: string;
+  onCityClick: (city: string) => void;
 }
 
-function MainPage({ offers }: MainPage): JSX.Element {
+function MainPage({ offers, selectedCity, onCityClick }: MainPage): JSX.Element {
   const placesTitle = offers.length === 1 ? 'place' : 'places';
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
+  const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity);
 
   return (
     <div className="page page--gray page--main">
       <Helmet>
         <title> 6 cities.</title>
       </Helmet>
-      <Header favorites={favoriteOffers}/>
+      <Header favorites={favoriteOffers} />
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <LocationsList />
+            <LocationsList selectedCity={selectedCity} onCityClick={onCityClick} />
           </section>
         </div>
         <div className="cities">
-          <div className={`cities__places-container container${offers.length ? '' : 'cities__places-container--empty'}`}>
-            {offers.length ?
+          <div className={`cities__places-container container${filteredOffers.length ? '' : 'cities__places-container--empty'}`}>
+            {filteredOffers.length ?
               <>
                 <section className="cities__places places">
                   <h2 className="visually-hidden">Places</h2>
-                  <b className="places__found">{offers.length} {placesTitle} to stay in Amsterdam</b>
+                  <b className="places__found">{filteredOffers.length} {placesTitle} to stay in {selectedCity}</b>
                   <PlaceSorting width={7} height={4} />
-                  <PlaceCardList offers={offers} classNameList={'cities__places-list'} classNameItem = {'cities__'} imageWidth={260} imageHeight={200} />
+                  <PlaceCardList offers={filteredOffers} classNameList={'cities__places-list'} classNameItem={'cities__'} imageWidth={260} imageHeight={200} />
                 </section>
                 <div className="cities__right-section">
                   <Map className='cities' />

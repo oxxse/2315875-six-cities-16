@@ -1,21 +1,29 @@
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 
 type Location = {
   city: string;
   isFavoritePage: boolean;
+  isActive?: boolean;
+  onClick?: (city: string) => void | undefined;
 }
 
-export default function LocationsItem({ city, isFavoritePage }: Location): JSX.Element {
+export default function LocationsItem({ city, isFavoritePage, isActive, onClick }: Location): JSX.Element {
   const content = (
-    <NavLink className={({ isActive }) => isActive ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'} to={AppRoute.Main.replace(':city', city)}>
+    <Link className={`locations__item-link tabs__item ${isActive ? 'tabs__item--active' : ''}`} to={ `${AppRoute.Main}${city}` }>
       <span>{city}</span>
-    </NavLink >
+    </Link >
   );
 
+  const handleOnClick = () => {
+    if (onClick) {
+      onClick(city);
+    }
+  };
+
   return isFavoritePage ? (
-    <div className="locations__item">{content}</div>
+    <div className="locations__item" onClick={handleOnClick}>{content}</div>
   ) : (
-    <li className="locations__item">{content}</li>
+    <li className="locations__item" onClick={handleOnClick}>{content}</li>
   );
 }
