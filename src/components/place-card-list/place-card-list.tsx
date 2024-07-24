@@ -17,14 +17,6 @@ function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNa
     classes.push('tabs__content');
   }
 
-  const [ activeOffer, setActiveOffer ] = useState<Nullable<PlaceCard>>(null);
-
-  const handleHover = (offer?: PlaceCard) => {
-    setActiveOffer(offer || null);
-  };
-
-  useEffect(() => {}, [activeOffer]);
-
   return (
     <div className={classes.join(' ')}>
       {offers.map((offer) => (
@@ -33,9 +25,16 @@ function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNa
           imageWidth={imageWidth}
           imageHeight={imageHeight}
           className={classNameItem}
-          {...offer}
-          onMouseOver={() => handleHover(offer)}
-          onMouseLeave={() => handleHover()}
+          title={offer.title}
+          id={offer.id}
+          type={offer.type}
+          isFavorite={offer.isFavorite}
+          city={offer.city}
+          price={offer.price}
+          rating={offer.rating}
+          isPremium={offer.isPremium}
+          location={offer.location}
+          previewImage={offer.previewImage}
         />
       ))}
     </div>
