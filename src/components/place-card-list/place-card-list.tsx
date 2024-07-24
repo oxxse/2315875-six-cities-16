@@ -1,6 +1,4 @@
 import { PlaceCard } from '../../types/types.ts';
-import { useEffect, useState } from 'react';
-import { Nullable } from 'vitest';
 import CardItem from '../card-item/card-item.tsx';
 
 type PlaceList = {
@@ -11,7 +9,7 @@ type PlaceList = {
   imageHeight: number;
 };
 
-function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNameItem}: PlaceList): JSX.Element {
+function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNameItem }: PlaceList): JSX.Element {
   const classes = [`${classNameList}`, 'places__list'];
   if (classNameList === 'cities__places-') {
     classes.push('tabs__content');

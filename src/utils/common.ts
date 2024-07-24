@@ -49,7 +49,7 @@ const getHeaderState = (pathname: AppRoute) => {
     (route.includes(':id') && pathname.startsWith(route.split('/:id')[0]))
   );
 
-  if (pathname === AppRoute.Main) {
+  if (pathname === AppRoute.Main || AppRoute.Main.replace(':selectedCity', '')) {
     linkClassName = ' header__logo-link--active';
   } else if (pathname === AppRoute.Login) {
     shouldRenderUser = false;

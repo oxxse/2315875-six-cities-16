@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { AppRoute } from '../../const';
+import { AppRoute, BASE_ACTIVE_CITY } from '../../const';
 import { Navigate } from 'react-router-dom';
 
 export type AuthStatus = 'AUTH' | 'NO_AUTH' | 'UNKNOWN';
@@ -24,6 +24,6 @@ const createAccessRoute = (statusToCheck: AuthStatus, fallbackPath: AppRouteData
   };
 
 const PrivateRoute = createAccessRoute('AUTH', AppRoute.Login);
-const PublicRoute = createAccessRoute('NO_AUTH', AppRoute.Main.replace(':selectedCity', 'Amsterdam'));
+const PublicRoute = createAccessRoute('NO_AUTH', AppRoute.Main.replace(':selectedCity', BASE_ACTIVE_CITY));
 
 export {PrivateRoute, PublicRoute};
