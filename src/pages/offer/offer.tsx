@@ -38,8 +38,7 @@ function OfferPage({ offers, reviews }: OfferPageData): JSX.Element {
   const MAX_NEARBY_OFFERS_COUNT = 3;
   const nearbyOffers = filteredOffers.filter((offer) => offer.id !== currentOffer.id).slice(0, MAX_NEARBY_OFFERS_COUNT);
 
-  const { title, price, rating, isPremium, isFavorite, goods, description, host } = currentOffer;
-  const { name: hostName, isPro } = host;
+  const { title, price, rating, isPremium, isFavorite, goods, description } = currentOffer;
 
   return (
     <div className="page">
@@ -85,8 +84,6 @@ function OfferPage({ offers, reviews }: OfferPageData): JSX.Element {
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 <Host hostData={currentOffer} />
-                <span className="offer__user-name">{hostName}</span>
-                {isPro ? <span className="offer__user-status">Pro</span> : ''}
               </div>
               <div className="offer__description">
                 <p className="offer__text">

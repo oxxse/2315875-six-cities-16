@@ -9,7 +9,9 @@ type AccessRoute = {
   status: AuthStatus;
 }
 
-const createAccessRoute = (statusToCheck: AuthStatus, fallbackPath: AppRoute) =>
+type AppRouteData = string;
+
+const createAccessRoute = (statusToCheck: AuthStatus, fallbackPath: AppRouteData) =>
   function AccessRoute({children, status} : AccessRoute) {
     switch (status) {
       case statusToCheck:
@@ -22,6 +24,6 @@ const createAccessRoute = (statusToCheck: AuthStatus, fallbackPath: AppRoute) =>
   };
 
 const PrivateRoute = createAccessRoute('AUTH', AppRoute.Login);
-const PublicRoute = createAccessRoute('NO_AUTH', AppRoute.Main);
+const PublicRoute = createAccessRoute('NO_AUTH', AppRoute.Main.replace(':selectedCity', 'Amsterdam'));
 
 export {PrivateRoute, PublicRoute};

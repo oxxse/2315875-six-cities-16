@@ -39,7 +39,7 @@ const getMarkupRating = (rating: number) => {
 
 const upFirstLetter = (str: string) => `${str[0].toUpperCase()}${str.slice(1)}`;
 
-const getAuthorizationStatus = () => AuthorizationStatus.NoAuth;
+const getAuthorizationStatus = () => AuthorizationStatus.Auth;
 
 const getHeaderState = (pathname: AppRoute) => {
   let linkClassName = '';

@@ -6,14 +6,14 @@ import Map from '../../components/map/map';
 import type { Offer } from '../../types/types';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import MainEmpty from '../../components/main-empty/main-empty';
+import { useParams } from 'react-router-dom';
 
 type MainPage = {
   offers: Offer[];
-  selectedCity: string;
-  onCityClick: (city: string) => void;
 }
 
-function MainPage({ offers, selectedCity, onCityClick }: MainPage): JSX.Element {
+function MainPage({ offers }: MainPage): JSX.Element {
+  const { selectedCity } = useParams();
   const placesTitle = offers.length === 1 ? 'place' : 'places';
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
   const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity);
@@ -28,7 +28,7 @@ function MainPage({ offers, selectedCity, onCityClick }: MainPage): JSX.Element 
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <LocationsList selectedCity={selectedCity} onCityClick={onCityClick} />
+            <LocationsList/>
           </section>
         </div>
         <div className="cities">

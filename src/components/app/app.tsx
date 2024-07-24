@@ -10,7 +10,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import type { Review } from '../../types/types';
 import type { Offer } from '../../types/types';
 import { getAuthorizationStatus } from '../../utils/common';
-import { useState } from 'react';
 
 type App = {
   offers: Offer[];
@@ -18,19 +17,14 @@ type App = {
 }
 
 function App({ offers, reviews }: App): JSX.Element {
-  const [ selectedCity, setSelectedCity ] = useState('Amsterdam');
   const currentStatus = getAuthorizationStatus();
-
-  const handleCityClick = (city: string) => {
-    setSelectedCity(city);
-  };
 
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route path={AppRoute.Main} element={<MainPage offers={offers} selectedCity={selectedCity} onCityClick={handleCityClick}/>} />
-          <Route path={`${AppRoute.Main}${selectedCity}`} element={<MainPage offers={offers} selectedCity={selectedCity} onCityClick={handleCityClick}/>} />
+          <Route path='/' element={<MainPage offers={offers}/>} />
+          <Route path={AppRoute.Main} element={<MainPage offers={offers}/>} />
           <Route path={AppRoute.Favorites} element={<PrivateRoute status={currentStatus}><FavoritesPage offers={offers} /> </PrivateRoute>} />
           <Route path={AppRoute.Login} element={<PublicRoute status={currentStatus}> <LoginPage /> </PublicRoute>} />
           <Route path={AppRoute.Offer} element={<OfferPage offers={offers} reviews={reviews} />} />
