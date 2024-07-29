@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { AppRoute, BASE_ACTIVE_CITY } from '../../const';
+import { AppRoute } from '../../const';
+import { BASE_ACTIVE_CITY } from '../../const';
 
 type Logo = {
   className : string;

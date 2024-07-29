@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { AppRoute, BASE_ACTIVE_CITY } from '../../const';
+import { AppRoute } from '../../const';
 import { Navigate } from 'react-router-dom';
+import { BASE_ACTIVE_CITY } from '../../const';
 
 export type AuthStatus = 'AUTH' | 'NO_AUTH' | 'UNKNOWN';
 
