@@ -1,6 +1,10 @@
-function Map () : JSX.Element {
+type Map = {
+   className: string;
+}
+
+function Map ({className} : Map) : JSX.Element {
   return (
-    <section className="cities__map map"></section>
+    <section className={`${className}__map map`}></section>
   );
 }
 

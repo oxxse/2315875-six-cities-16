@@ -3,102 +3,113 @@ import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import FeaturesList from '../../components/features-list/features-list';
 import InsideList from '../../components/inside-list/inside-list';
 import Host from '../../components/host/host';
-import ReviewItem from '../../components/reviews/review';
-import ReviewForm from '../../components/review-form/review-form';
 import Map from '../../components/map/map';
-import CardItem from '../../components/card-item/card-item';
-import { NearPlaceCard } from '../../mock/near-place-card';
 import { useParams } from 'react-router-dom';
 import NotFound from '../not-found-page/not-found';
-import type { OfferPage } from '../../types/offer';
-import type { Review } from '../../types/offer';
+import type { OfferPage } from '../../types/types';
+import type { Review } from '../../types/types';
 import { Helmet } from 'react-helmet-async';
+import { getAuthorizationStatus } from '../../utils/common';
+import type { Offer } from '../../types/types';
+import FavoriteButton from '../../components/favorite-button/favorite-button';
+import { getMarkupRating } from '../../utils/common';
+import ReviewsList from '../../components/reviews-list/review-list';
+import { AuthorizationStatus } from '../../const';
+import ReviewForm from '../../components/review-form/review-form';
+import PlaceCardList from '../../components/place-card-list/place-card-list';
 
+const authorizationStatus = getAuthorizationStatus();
 
-function Offer({ hotels, comments }: { hotels: OfferPage; comments: Review }): JSX.Element {
-  const params = useParams();
-  const hotel = hotels.find((offer) => offer.id === params.id);
+type OfferPageData = {
+  offers: Offer[];
+  reviews: Review[];
+};
 
-  if (typeof hotel !== 'undefined') {
-    return (
-      <div className="page">
-        <Helmet>
-          <title>6 cities: Offer</title>
-        </Helmet>
-        <Header />
-        <main className="page__main page__main--offer">
-          <section className="offer">
-            <div className="offer__gallery-container container">
-              <OfferGallery sources={hotel} />
-            </div>
-            <div className="offer__container container">
-              <div className="offer__wrapper">
+function OfferPage({ offers, reviews }: OfferPageData): JSX.Element {
+  const { id } = useParams();
+  const filteredOffers = offers.filter((offer) => offer.city.name);
+  const currentOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === id);
+  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
+
+  if (!currentOffer) {
+    return <NotFound />;
+  }
+
+  const MAX_NEARBY_OFFERS_COUNT = 3;
+  const nearbyOffers = filteredOffers.filter((offer) => offer.id !== currentOffer.id).slice(0, MAX_NEARBY_OFFERS_COUNT);
+
+  const { title, price, rating, isPremium, isFavorite, goods, description } = currentOffer;
+
+  return (
+    <div className="page">
+      <Helmet>
+        <title>6 cities: Offer</title>
+      </Helmet>
+      <Header favorites={favoriteOffers} />
+      <main className="page__main page__main--offer">
+        <section className="offer">
+          <div className="offer__gallery-container container">
+            <OfferGallery sources={currentOffer} />
+          </div>
+          <div className="offer__container container">
+            <div className="offer__wrapper">
+              {isPremium &&
                 <div className="offer__mark">
                   <span>Premium</span>
+                </div>}
+              <div className="offer__name-wrapper">
+                <h1 className="offer__name">
+                  {title}
+                </h1>
+                <FavoriteButton className='offer' isFavorite={isFavorite} />
+              </div>
+              <div className="offer__rating rating">
+                <div className="offer__stars rating__stars">
+                  <span style={getMarkupRating(rating)}></span>
+                  <span className="visually-hidden">Rating</span>
                 </div>
-                <div className="offer__name-wrapper">
-                  <h1 className="offer__name">{hotel.title}</h1>
-                  <button className="offer__bookmark-button button" type="button">
-                    <svg className="offer__bookmark-icon" width="31" height="33">
-                      <use xlinkHref="#icon-bookmark"></use>
-                    </svg>
-                    <span className="visually-hidden">To bookmarks</span>
-                  </button>
-                </div>
-                <div className="offer__rating rating">
-                  <div className="offer__stars rating__stars">
-                    <span style={{ width: '80%' }}></span>
-                    <span className="visually-hidden">Rating</span>
-                  </div>
-                  <span className="offer__rating-value rating__value">{hotel.rating}</span>
-                </div>
-                <FeaturesList feature={hotel} />
-                <div className="offer__price">
-                  <b className="offer__price-value">&euro;{hotel.price}</b>
-                  <span className="offer__price-text">&nbsp;night</span>
-                </div>
+                <span className="offer__rating-value rating__value">{rating}</span>
+              </div>
+              <FeaturesList feature={currentOffer} />
+              <div className="offer__price">
+                <b className="offer__price-value">€{price}</b>
+                <span className="offer__price-text">&nbsp;night</span>
+              </div>
+              {goods.length > 1 ?
                 <div className="offer__inside">
                   <h2 className="offer__inside-title">What&apos;s inside</h2>
-                  <InsideList items={hotel} />
-                </div>
-                <div className="offer__host">
-                  <h2 className="offer__host-title">Meet the host</h2>
-                  <Host hostData={hotel} />
-                  <div className="offer__description">
-                    <p className="offer__text">{hotel.description}</p>
-                    <p className="offer__text">
-                      An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
-                    </p>
-                  </div>
-                </div>
-                <section className="offer__reviews reviews">
-                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{comments.length}</span></h2>
-                  <ul className="reviews__list">
-                    {comments.map((comment) => <ReviewItem reviewData={comment} key={crypto.randomUUID()} />)}
-                  </ul>
-                  <ReviewForm />
-                </section>
+                  <InsideList items={currentOffer} />
+                </div> :
+                ''}
+              <div className="offer__host">
+                <h2 className="offer__host-title">Meet the host</h2>
+                <Host hostData={currentOffer} />
+              </div>
+              <div className="offer__description">
+                <p className="offer__text">
+                  {description}
+                </p>
               </div>
             </div>
-            <Map />
-          </section>
-          <div className="container">
-            <section className="near-places places">
-              <h2 className="near-places__title">Other places in the neighbourhood</h2>
-              <div className="near-places__list places__list">
-                {NearPlaceCard.map((offer) => <CardItem className='near-places__card' place={offer} key={crypto.randomUUID()} />)}
-              </div>
+            <section className="offer__reviews reviews">
+              <h2 className="reviews__title">
+                Reviews · <span className="reviews__amount">{reviews.length}</span>
+              </h2>
+              <ReviewsList reviews={reviews} />
+              {authorizationStatus === AuthorizationStatus.Auth ? <ReviewForm /> : ''}
             </section>
           </div>
-        </main>
+        </section>
+        <Map className='offer' />
+      </main>
+      <div className="container">
+        <section className="near-places places">
+          <h2 className="near-places__title">Other places in the neighborhood</h2>
+          <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places__' imageWidth={260} imageHeight={200} />
+        </section>
       </div>
-    );
-  } else {
-    return (
-      <NotFound />
-    );
-  }
+    </div >
+  );
 }
 
-export default Offer;
-
+export default OfferPage;

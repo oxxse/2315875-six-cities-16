@@ -2,7 +2,7 @@ import Header from '../../components/header/header';
 import LoginForm from '../../components/login-form/login-form';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AppRoute } from '../../const';
+import { AppRoute, BASE_ACTIVE_CITY } from '../../const';
 
 function LoginPage(): JSX.Element {
   return (
@@ -19,7 +19,7 @@ function LoginPage(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to={AppRoute.Main}>
+              <Link className="locations__item-link" to={AppRoute.Main.replace(':selectedCity', BASE_ACTIVE_CITY)}>
                 <span>Amsterdam</span>
               </Link>
             </div>

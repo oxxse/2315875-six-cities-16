@@ -1,42 +1,58 @@
 import { Link } from 'react-router-dom';
-import type { PlaceCardProps } from '../../types/card';
+import { PlaceCard } from '../../types/types';
 import { AppRoute } from '../../const';
+import { getAuthorizationStatus, getMarkupRating, upFirstLetter } from '../../utils/common';
+import FavoriteButton from '../favorite-button/favorite-button';
+import { AuthorizationStatus } from '../../const';
 
-function CardItem({ className = 'cities__card', place }: { className: string; place: PlaceCardProps }): JSX.Element {
-  const { price, type, title, previewImage, rating, id } = place;
+type Card = {
+  imageWidth: number;
+  imageHeight: number;
+  className: string;
+}
+
+type PlaceCardType = PlaceCard & Card;
+
+const authorizationStatus = getAuthorizationStatus();
+
+function CardItem({ imageWidth, imageHeight, className, title, type, price, isFavorite, isPremium, previewImage, rating, id }: PlaceCardType): JSX.Element {
+
   return (
-    <article className={`${className} place-card`}>
-      <div className="place-card__mark">
-        <span>Premium</span>
-      </div>
-      <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`${AppRoute.Offer}/${id}`}>
-          <img className="place-card__image" src={previewImage} width="260" height="200" alt="Place image" />
+    <article className={`${className}card place-card`}>
+      {isPremium && (
+        <div className="place-card__mark">
+          <span>Premium</span>
+        </div>
+      )}
+      <div className={`${className}__image-wrapper place-card__image-wrapper`}>
+        <Link to={AppRoute.Offer.replace(':id', id)}>
+          <img
+            className="place-card__image"
+            src={previewImage}
+            width={imageWidth}
+            height={imageHeight}
+            alt="Place image"
+          />
         </Link>
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{price}</b>
-            <span className="place-card__price-text">&#47;&nbsp;night</span>
+            <b className="place-card__price-value">€{price}</b>
+            <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">To bookmarks</span>
-          </button>
+          {authorizationStatus === AuthorizationStatus.Auth ? <FavoriteButton className={className} isFavorite={isFavorite}/> : <Link to={AppRoute.Login}><FavoriteButton className={className} isFavorite={false}/></Link>}
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: '80%' }}></span>
+            <span style={getMarkupRating(rating)}></span>
             <span className="visually-hidden">{rating}</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`${AppRoute.Offer}/${id}`}>Beautiful &amp; {title}</Link>
+          <Link to={AppRoute.Offer.replace(':id', id)}>{title}</Link>
         </h2>
-        <p className="place-card__type">{type}</p>
+        <p className="place-card__type">{upFirstLetter(type)}</p>
       </div>
     </article >
   );

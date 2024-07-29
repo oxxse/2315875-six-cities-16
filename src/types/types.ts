@@ -1,18 +1,18 @@
-export type LocationCardProps = {
+export type Location = {
   latitude: number;
   longitude: number;
   zoom: number;
 }
 
-type User = {
+export type User = {
   name: string;
   avatarUrl: string;
   isPro: boolean;
 }
 
-export type CityCardProps = {
+export type City = {
   name: string;
-  location: LocationCardProps;
+  location: Location;
 }
 
 export type OfferPage =
@@ -21,8 +21,8 @@ export type OfferPage =
     title: string;
     type: string;
     price: number;
-    city: CityCardProps;
-    location: LocationCardProps;
+    city: City;
+    location: Location;
     isFavorite: boolean;
     isPremium: boolean;
     rating: number;
@@ -34,29 +34,37 @@ export type OfferPage =
     maxAdults: number;
   }]
 
-export type Offer =
+export type OfferTemplate =
   {
     id: string;
     title: string;
     type: string;
     price: number;
-    city: CityCardProps;
-    location: LocationCardProps;
+    city: City;
+    location: Location;
     isFavorite: boolean;
     isPremium: boolean;
     rating: number;
-    description: string;
-    bedrooms: number;
-    goods: [string];
-    host: User;
-    images: [string];
-    maxAdults: number;
   }
 
-export type Review = [{
+export type Review = {
   id: string;
   date: string;
   user: User;
   comment: string;
   rating: number;
-}]
+};
+
+export type PlaceCard = OfferTemplate & {
+  previewImage: string;
+};
+
+export type Offer = OfferTemplate & {
+  previewImage: string;
+  description: string;
+  bedrooms: number;
+  goods: string[];
+  host: User;
+  images: string[];
+  maxAdults: number;
+};

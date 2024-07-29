@@ -1,4 +1,4 @@
-import type { Offer } from '../../types/offer';
+import type { Offer } from '../../types/types';
 
 function OfferImage({ image }: { image: string }): JSX.Element {
   return (

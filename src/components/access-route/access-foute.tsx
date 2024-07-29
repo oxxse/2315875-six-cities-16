@@ -1,16 +1,18 @@
 import { ReactNode } from 'react';
-import { AppRoute } from '../../const';
+import { AppRoute, BASE_ACTIVE_CITY } from '../../const';
 import { Navigate } from 'react-router-dom';
 
 export type AuthStatus = 'AUTH' | 'NO_AUTH' | 'UNKNOWN';
 
-type AccessRouteProps = {
+type AccessRoute = {
   children: ReactNode;
   status: AuthStatus;
 }
 
-const createAccessRoute = (statusToCheck: AuthStatus, fallbackPath: AppRoute) =>
-  function AccessRoute({children, status} : AccessRouteProps) {
+type AppRouteData = string;
+
+const createAccessRoute = (statusToCheck: AuthStatus, fallbackPath: AppRouteData) =>
+  function AccessRoute({children, status} : AccessRoute) {
     switch (status) {
       case statusToCheck:
         return children;
@@ -22,6 +24,6 @@ const createAccessRoute = (statusToCheck: AuthStatus, fallbackPath: AppRoute) =>
   };
 
 const PrivateRoute = createAccessRoute('AUTH', AppRoute.Login);
-const PublicRoute = createAccessRoute('NO_AUTH', AppRoute.Main);
+const PublicRoute = createAccessRoute('NO_AUTH', AppRoute.Main.replace(':selectedCity', BASE_ACTIVE_CITY));
 
 export {PrivateRoute, PublicRoute};
