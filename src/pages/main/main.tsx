@@ -5,7 +5,7 @@ import PlaceSorting from '../../components/sorting-form/sorting-form.tsx/sorting
 import Map from '../../components/map/map';
 import type { Offer } from '../../types/types';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
-import MainEmpty from '../../components/main-empty/main-empty';
+import NoOffers from '../../components/no-offers/no-offers';
 import { useParams } from 'react-router-dom';
 
 type MainPage = {
@@ -48,7 +48,7 @@ function MainPage({ offers, activeOffer, onHover }: MainPage): JSX.Element {
                 </div>
               </> :
               <>
-                <MainEmpty />
+                {selectedCity && <NoOffers city = {selectedCity} />}
                 <div className="cities__right-section"></div>
               </>}
           </div>

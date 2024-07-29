@@ -1,5 +1,5 @@
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
-const BASE_ACTIVE_CITY = 'Amsterdam';
+const BASE_ACTIVE_CITY = 'Paris';
 const REVIEW_COUNT = 5;
 const AVATAR_URL = 'https://i.pravatar.cc/128';
 const MIN_REVIEW_LENGTH = 50;
