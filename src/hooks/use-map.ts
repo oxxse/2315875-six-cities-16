@@ -1,7 +1,7 @@
 import leaflet from 'leaflet';
 import { useEffect, useState, useRef, RefObject } from 'react';
 import { Location } from '../types/types';
-import { TILE_LAYER_ATTRIBUTION, TILE_LAYER_URL_PATTERN } from '../const';
+import { TileLayers } from '../const';
 
 type UseMapProps = {
   mapRef: RefObject<HTMLDivElement>;
@@ -24,9 +24,9 @@ function useMap({mapRef, city}: UseMapProps) {
 
       leaflet
         .tileLayer(
-          TILE_LAYER_URL_PATTERN,
+          TileLayers.TileLayerUrlPattern,
           {
-            attribution: TILE_LAYER_ATTRIBUTION,
+            attribution: TileLayers.TileLayerAttribution,
           },
         )
         .addTo(instance);
