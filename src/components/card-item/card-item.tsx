@@ -9,16 +9,21 @@ type Card = {
   imageWidth: number;
   imageHeight: number;
   className: string;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 type PlaceCardType = PlaceCard & Card;
 
 const authorizationStatus = getAuthorizationStatus();
 
-function CardItem({ imageWidth, imageHeight, className, title, type, price, isFavorite, isPremium, previewImage, rating, id }: PlaceCardType): JSX.Element {
+function CardItem({ imageWidth, imageHeight, className, title, type, price, isFavorite, isPremium, previewImage, rating, id, onMouseEnter, onMouseLeave }: PlaceCardType): JSX.Element {
 
   return (
-    <article className={`${className}card place-card`}>
+    <article className={`${className}card place-card`}
+      onMouseOver={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>

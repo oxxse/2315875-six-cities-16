@@ -5,14 +5,16 @@ import PlaceSorting from '../../components/sorting-form/sorting-form.tsx/sorting
 import Map from '../../components/map/map';
 import type { Offer } from '../../types/types';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
-import MainEmpty from '../../components/main-empty/main-empty';
+import NoOffers from '../../components/no-offers/no-offers';
 import { useParams } from 'react-router-dom';
 
 type MainPage = {
   offers: Offer[];
+  activeOffer?: Offer | null;
+  onHover: (offer?: Offer) => void;
 }
 
-function MainPage({ offers }: MainPage): JSX.Element {
+function MainPage({ offers, activeOffer, onHover }: MainPage): JSX.Element {
   const { selectedCity } = useParams();
   const placesTitle = offers.length === 1 ? 'place' : 'places';
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
@@ -28,7 +30,7 @@ function MainPage({ offers }: MainPage): JSX.Element {
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
-            <LocationsList/>
+            <LocationsList />
           </section>
         </div>
         <div className="cities">
@@ -39,14 +41,14 @@ function MainPage({ offers }: MainPage): JSX.Element {
                   <h2 className="visually-hidden">Places</h2>
                   <b className="places__found">{filteredOffers.length} {placesTitle} to stay in {selectedCity}</b>
                   <PlaceSorting width={7} height={4} />
-                  <PlaceCardList offers={filteredOffers} classNameList={'cities__places-list'} classNameItem={'cities__'} imageWidth={260} imageHeight={200} />
+                  <PlaceCardList offers={filteredOffers} onHover={onHover} classNameList={'cities__places-list'} classNameItem={'cities__'} imageWidth={260} imageHeight={200} />
                 </section>
                 <div className="cities__right-section">
-                  <Map className='cities' />
+                  <Map offers={filteredOffers} city={filteredOffers[0].location} className='cities' activeOffer={activeOffer}/>
                 </div>
               </> :
               <>
-                <MainEmpty />
+                {selectedCity && <NoOffers city = {selectedCity} />}
                 <div className="cities__right-section"></div>
               </>}
           </div>

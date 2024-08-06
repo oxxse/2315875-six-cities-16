@@ -3,7 +3,7 @@ import Footer from '../../components/footer/footer';
 import { Helmet } from 'react-helmet-async';
 import { Offer } from '../../types/types';
 import FavoritePlacesList from '../../components/favorite-places-list/favorite-places-list';
-import FavoriteEmpty from '../../components/favorite-empty/favorite-empty';
+import NoFavorites from '../../components/no-favorites/no-favorites';
 
 type FavoritesPage = {
   offers: Offer[];
@@ -35,7 +35,7 @@ function FavoritesPage({ offers }: FavoritesPage): JSX.Element {
             <section className="favorites">
               <h1 className="favorites__title">Saved listing</h1>
               <FavoritePlacesList groupedOffers={groupedOffers} />
-            </section> : <FavoriteEmpty />}
+            </section> : <NoFavorites />}
         </div>
       </main>
       <Footer />

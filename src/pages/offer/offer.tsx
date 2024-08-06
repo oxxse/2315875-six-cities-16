@@ -27,8 +27,8 @@ type OfferPageData = {
 
 function OfferPage({ offers, reviews }: OfferPageData): JSX.Element {
   const { id } = useParams();
-  const filteredOffers = offers.filter((offer) => offer.city.name);
   const currentOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === id);
+  const filteredOffers = offers.filter((offer) => offer.city.name === currentOffer?.city.name);
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
   if (!currentOffer) {
@@ -100,13 +100,14 @@ function OfferPage({ offers, reviews }: OfferPageData): JSX.Element {
             </section>
           </div>
         </section>
-        <Map className='offer' />
+        <Map city={currentOffer.location} offers={[...nearbyOffers, currentOffer]} className='offer' activeOffer={currentOffer} />
       </main>
       <div className="container">
-        <section className="near-places places">
-          <h2 className="near-places__title">Other places in the neighborhood</h2>
-          <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places__' imageWidth={260} imageHeight={200} />
-        </section>
+        {nearbyOffers.length > 0 ?
+          <section className="near-places places">
+            <h2 className="near-places__title">Other places in the neighborhood</h2>
+            <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places__' imageWidth={260} imageHeight={200} />
+          </section> : ''}
       </div>
     </div >
   );
