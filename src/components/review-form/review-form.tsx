@@ -1,5 +1,6 @@
 import { useState, ChangeEvent } from 'react';
 import { ReviewLengths } from '../../const';
+import { RATING_TITLES } from '../../const';
 
 type RatingStar = {
   id: string;
@@ -82,7 +83,7 @@ function ReviewForm(): JSX.Element {
           To submit review please make sure to set{' '}
           <span className="reviews__star">rating</span> and describe your
           stay with at least{' '}
-          <b className="reviews__text-amount">{MIN_REVIEW_LENGTH} characters</b>.
+          <b className="reviews__text-amount">{minLength} characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"
