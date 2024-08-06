@@ -1,5 +1,6 @@
 import { useState, ChangeEvent } from 'react';
-import { MAX_REVIEW_LENGTH, MIN_REVIEW_LENGTH, RATING_TITLES } from '../../const.ts';
+import { ReviewLengths } from '../../const';
+import { RATING_TITLES } from '../../const';
 
 type RatingStar = {
   id: string;
@@ -37,8 +38,10 @@ function RatingStar({ id, ratingValue, title, onChange, checked }: RatingStar): 
 function ReviewForm(): JSX.Element {
   const [review, setReview] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
+  const minLength : number = ReviewLengths.MinLength;
+  const maxLength : number = ReviewLengths.MaxLength;
 
-  const isValid: boolean = review.length >= MIN_REVIEW_LENGTH && review.length <= MAX_REVIEW_LENGTH && rating !== 0;
+  const isValid: boolean = review.length >= minLength && review.length <= maxLength && rating !== 0;
   const handleTextareaChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
     setReview(evt.target.value);
   };
@@ -80,7 +83,7 @@ function ReviewForm(): JSX.Element {
           To submit review please make sure to set{' '}
           <span className="reviews__star">rating</span> and describe your
           stay with at least{' '}
-          <b className="reviews__text-amount">{MIN_REVIEW_LENGTH} characters</b>.
+          <b className="reviews__text-amount">{minLength} characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"

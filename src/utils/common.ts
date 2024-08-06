@@ -22,8 +22,8 @@ const getRandomRating = () => (Math.floor(Math.random() * 40) + 10) / 10;
 const getRandomFloat = (min: number, max: number, precision: number = 2): number => parseFloat((Math.random() * (max - min) + min).toFixed(precision));
 
 const generateHotelLocation = (cityLocation: Location): Location => {
-  const latitudeOffset = getRandomFloat(-0.05, 0.05);
-  const longitudeOffset = getRandomFloat(-0.05, 0.05);
+  const latitudeOffset = getRandomFloat(-0.02, 0.02);
+  const longitudeOffset = getRandomFloat(-0.02, 0.02);
 
   return {
     latitude: cityLocation.latitude + latitudeOffset,
