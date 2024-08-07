@@ -7,7 +7,7 @@ type Location = {
   city: string;
   isFavoritePage: boolean;
   onClick?: (city: string) => void | undefined;
-  selectedCity: string;
+  selectedCity?: string;
 }
 
 export default function LocationsItem({ city, selectedCity, isFavoritePage, onClick}: Location): JSX.Element {

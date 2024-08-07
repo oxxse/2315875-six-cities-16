@@ -24,7 +24,7 @@ const currentCustomIcon = leaflet.icon({
   iconAnchor: [13, 39],
 });
 
-function Map({className, city, offers, activeOffer}: Map): JSX.Element {
+function Map({ className, city, offers, activeOffer }: Map): JSX.Element {
   const mapRef = useRef<HTMLDivElement>(null);
   const map = useMap({ mapRef, city });
   const markerLayer = useRef<LayerGroup>(leaflet.layerGroup());
@@ -51,12 +51,12 @@ function Map({className, city, offers, activeOffer}: Map): JSX.Element {
         }
       });
     }
-  }, [ activeOffer, map, offers ]);
+  }, [activeOffer, map, offers]);
 
-  return(
+  return (
     <section
       className={`${className}__map map`}
-      style={{height: '500px'}}
+      style={{ height: '500px' }}
       ref={mapRef}
     >
     </section>

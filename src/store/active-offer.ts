@@ -14,7 +14,7 @@ export const activeOfferSlice = createSlice({
   name: 'setActiveOffer',
   initialState,
   reducers: {
-    change: (state, action: PayloadAction<Offer>) => {
+    change: (state, action: PayloadAction<Offer | null>) => {
       state.activeOffer = action.payload;
     }
   }

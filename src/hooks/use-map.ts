@@ -3,12 +3,12 @@ import { useEffect, useState, useRef, RefObject } from 'react';
 import { Location } from '../types/types';
 import { TileLayers } from '../const';
 
-type UseMapProps = {
+type UseMap = {
   mapRef: RefObject<HTMLDivElement>;
   city: Location;
 }
 
-function useMap({mapRef, city}: UseMapProps) {
+function useMap({mapRef, city}: UseMap) {
   const [ map, setMap ] = useState<leaflet.Map | null>(null);
   const isRenderedRef = useRef(false);
 

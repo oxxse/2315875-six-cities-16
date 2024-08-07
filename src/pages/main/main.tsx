@@ -79,7 +79,7 @@ function MainPage(): JSX.Element {
                 <PlaceCardList offers={sortedOffers} onHover={handleHover} classNameList={'cities__places-list'} classNameItem={'cities__'} imageWidth={260} imageHeight={200} />
               </section>
               <div className="cities__right-section">
-                <Map offers={sortedOffers} city={filteredOffers[0].city.location} className='cities' activeOffer={activeOffer.activeOffer} />
+                <Map offers={filteredOffers} city={filteredOffers[0].city.location} className='cities' activeOffer={activeOffer.activeOffer} />
               </div>
             </div>}
           {!filteredOffers.length && selectedCity && <NoOffers city={selectedCity} />}
