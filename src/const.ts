@@ -39,7 +39,6 @@ const PLACES_OPTIONS = ['Popular', 'Price: low to high', 'Price: high to low', '
 
 const RATING_TITLES = ['perfect', 'good', 'not bad', 'badly', 'terribly'];
 
-
 export {
   AppRoute,
   AuthorizationStatus,

@@ -1,52 +1,76 @@
 import { PLACES_OPTIONS } from '../../../const';
 import { useState } from 'react';
-
-type PlacesInside = {
-  placesOption: string;
-}
+import { SortingOption } from '../../../types/types';
 
 type PlaceSorting = {
   width: number;
   height: number;
+  currentOption: string;
+  onOptionClick: (option: SortingOption) => void;
 }
 
-type PlaceOptions = {
-  className: string;
+type PlacesOptionsList = {
+  onOptionClick: (option: SortingOption) => void;
+  currentOption: string;
+  isOpen: boolean;
 }
 
-function PlacesOption({ placesOption }: PlacesInside): JSX.Element {
+type PlacesOption = {
+  placesOption: SortingOption;
+  isActive: boolean;
+  onClick: (option: SortingOption) => void;
+};
+
+function PlacesOption({ placesOption, isActive, onClick }: PlacesOption): JSX.Element {
   return (
-    <li className="places__option" tabIndex={0}>{placesOption}</li>
+    <li
+      className={`places__option ${isActive ? 'places__option--active' : ''}`}
+      tabIndex={0}
+      onClick={() => onClick(placesOption)}
+    >
+      {placesOption}
+    </li>
   );
 }
 
-function PlacesOptionsList({ className }: PlaceOptions): JSX.Element {
+function PlacesOptionsList({ currentOption, onOptionClick, isOpen }: PlacesOptionsList): JSX.Element {
 
   return (
-    <ul className={className}>
-      {PLACES_OPTIONS.map((option) => <PlacesOption placesOption={option} key={option} />)}
+    <ul className={`places__options places__options--custom ${isOpen ? 'places__options--opened' : ''}`}>
+      {PLACES_OPTIONS.map((option) => (
+        <PlacesOption
+          placesOption={option}
+          key={option}
+          isActive={option === currentOption}
+          onClick={onOptionClick}
+        />))}
     </ul>
   );
 }
 
-function PlaceSorting({ width, height }: PlaceSorting): JSX.Element {
-  const [isActive, setActive] = useState(false);
-  const toggleClass = () => {
-    setActive(!isActive);
+function PlaceSorting({ width, height, currentOption, onOptionClick }: PlaceSorting): JSX.Element {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleList = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <form onClick={toggleClass} className="places__sorting" action="#" method="get">
+    <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
-      <span className="places__sorting-type" tabIndex={0}>
+      <span className="places__sorting-type" tabIndex={0} onClick={toggleList}>
         Popular
         <svg className="places__sorting-arrow" width={width} height={height}>
           <use xlinkHref="#icon-arrow-select" />
         </svg>
       </span>
-      {isActive ?
-        <PlacesOptionsList className={'places__options places__options--custom places__options--opened'} /> :
-        <PlacesOptionsList className={'places__options places__options--custom'} />}
+      <PlacesOptionsList
+        currentOption={currentOption}
+        onOptionClick={(option) => {
+          onOptionClick(option);
+          setIsOpen(false);
+        }}
+        isOpen={isOpen}
+      />
     </form>
   );
 }

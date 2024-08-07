@@ -17,22 +17,34 @@ import ReviewsList from '../../components/reviews-list/review-list';
 import { AuthorizationStatus } from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
+import { useAppSelector } from '../../hooks';
+import { selectOffers } from '../../store/selectors';
+
 
 const authorizationStatus = getAuthorizationStatus();
 
+
 type OfferPageData = {
-  offers: Offer[];
   reviews: Review[];
 };
 
-function OfferPage({ offers, reviews }: OfferPageData): JSX.Element {
+function OfferPage({ reviews }: OfferPageData): JSX.Element {
   const { id } = useParams();
+  const offers = useAppSelector(selectOffers).offers;
+
   const currentOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === id);
+  const cityData = currentOffer?.city;
+
+
   const filteredOffers = offers.filter((offer) => offer.city.name === currentOffer?.city.name);
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
 
   if (!currentOffer) {
     return <NotFound />;
+  }
+
+  if (!cityData) {
+    return <div>City information is missing</div>;
   }
 
   const MAX_NEARBY_OFFERS_COUNT = 3;

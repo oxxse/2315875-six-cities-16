@@ -1,3 +1,5 @@
+import { PLACES_OPTIONS } from '../const';
+
 export type Location = {
   latitude: number;
   longitude: number;
@@ -68,3 +70,5 @@ export type Offer = OfferTemplate & {
   images: string[];
   maxAdults: number;
 };
+
+export type SortingOption = typeof PLACES_OPTIONS[number];
