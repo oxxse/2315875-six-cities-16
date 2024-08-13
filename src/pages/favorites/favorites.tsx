@@ -17,7 +17,7 @@ const groupOffersByCity = (offers: Offer[]) => offers.reduce((accumulator: Recor
 }, {} as Record<string, Offer[]>);
 
 function FavoritesPage(): JSX.Element {
-  const offers = useAppSelector(selectOffers).offers;
+  const offers = useAppSelector(selectOffers);
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
   const groupedOffers = groupOffersByCity(favoriteOffers);
 

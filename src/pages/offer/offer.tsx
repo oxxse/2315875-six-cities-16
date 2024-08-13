@@ -30,7 +30,7 @@ type OfferPageData = {
 
 function OfferPage({ reviews }: OfferPageData): JSX.Element {
   const { id } = useParams();
-  const offers = useAppSelector(selectOffers).offers;
+  const offers = useAppSelector(selectOffers);
 
   const currentOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === id);
   const cityData = currentOffer?.city;

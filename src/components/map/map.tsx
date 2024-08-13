@@ -1,6 +1,7 @@
 import leaflet, { LayerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useRef, useEffect } from 'react';
+import './map.module.css';
 import { Offer, Location } from '../../types/types';
 import { UrlMarkers } from '../../const';
 import useMap from '../../hooks/use-map';
@@ -56,7 +57,6 @@ function Map({ className, city, offers, activeOffer }: Map): JSX.Element {
   return (
     <section
       className={`${className}__map map`}
-      style={{ height: '500px' }}
       ref={mapRef}
     >
     </section>
