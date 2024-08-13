@@ -4,11 +4,8 @@ import { Helmet } from 'react-helmet-async';
 import { Offer } from '../../types/types';
 import FavoritePlacesList from '../../components/favorite-places-list/favorite-places-list';
 import NoFavorites from '../../components/no-favorites/no-favorites';
-
-type FavoritesPage = {
-  offers: Offer[];
-}
-
+import { useAppSelector } from '../../hooks';
+import { selectOffers } from '../../store/selectors';
 
 const groupOffersByCity = (offers: Offer[]) => offers.reduce((accumulator: Record<string, Offer[]>, offer) => {
   const cityName = offer.city.name;
@@ -19,7 +16,8 @@ const groupOffersByCity = (offers: Offer[]) => offers.reduce((accumulator: Recor
   return accumulator;
 }, {} as Record<string, Offer[]>);
 
-function FavoritesPage({ offers }: FavoritesPage): JSX.Element {
+function FavoritesPage(): JSX.Element {
+  const offers = useAppSelector(selectOffers).offers;
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
   const groupedOffers = groupOffersByCity(favoriteOffers);
 
