@@ -42,7 +42,6 @@ const RATING_TITLES = ['perfect', 'good', 'not bad', 'badly', 'terribly'];
 export {
   AppRoute,
   AuthorizationStatus,
-  REVIEW_COUNT,
   CITIES,
   TYPES,
   PLACES_OPTIONS,
