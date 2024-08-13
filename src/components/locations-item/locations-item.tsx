@@ -6,11 +6,10 @@ import { setCity } from '../../store/active-city';
 type Location = {
   city: string;
   isFavoritePage: boolean;
-  onClick?: (city: string) => void | undefined;
   selectedCity?: string;
 }
 
-export default function LocationsItem({ city, selectedCity, isFavoritePage, onClick}: Location): JSX.Element {
+export default function LocationsItem({ city, selectedCity, isFavoritePage}: Location): JSX.Element {
   const dispatch = useAppDispatch();
   const isActive = (city === selectedCity);
 
@@ -20,16 +19,13 @@ export default function LocationsItem({ city, selectedCity, isFavoritePage, onCl
     </NavLink >
   );
 
-  const handleOnClick = () => {
+  const handleCityClick = () => {
     dispatch(setCity(city));
-    if (onClick) {
-      onClick(city);
-    }
   };
 
   return isFavoritePage ? (
-    <div className="locations__item" onClick={handleOnClick}>{content}</div>
+    <div className="locations__item" onClick={handleCityClick}>{content}</div>
   ) : (
-    <li className="locations__item" onClick={handleOnClick}>{content}</li>
+    <li className="locations__item" onClick={handleCityClick}>{content}</li>
   );
 }

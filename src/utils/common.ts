@@ -1,4 +1,5 @@
 import { Location } from '../types/types';
+import { Offer } from '../types/types';
 import { AuthorizationStatus } from '../const';
 import { AppRoute } from '../const';
 
@@ -60,6 +61,19 @@ const getHeaderState = (pathname: AppRoute) => {
   return {linkClassName, shouldRenderUser };
 };
 
+const getSortedOffers = (offersToSort: Offer[], sortingOption: string): Offer[] => {
+  switch (sortingOption) {
+    case 'Price: low to high':
+      return [...offersToSort].sort((offerA, offerB) => offerA.price - offerB.price);
+    case 'Price: high to low':
+      return [...offersToSort].sort((offerA, offerB) => offerB.price - offerA.price);
+    case 'Top rated first':
+      return [...offersToSort].sort((offerA, offerB) => offerB.rating - offerA.rating);
+    default:
+      return offersToSort;
+  }
+};
+
 export {
   getRandomArrayElement,
   getRandomInteger,
@@ -70,5 +84,6 @@ export {
   getMarkupRating,
   upFirstLetter,
   getAuthorizationStatus,
-  getHeaderState
+  getHeaderState,
+  getSortedOffers
 };

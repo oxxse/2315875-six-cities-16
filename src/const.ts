@@ -1,6 +1,5 @@
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
 const BASE_ACTIVE_CITY = 'Paris';
-const REVIEW_COUNT = 5;
 const AVATAR_URL = 'https://i.pravatar.cc/128';
 
 enum ReviewLengths {
@@ -20,6 +19,7 @@ enum TileLayers {
 }
 
 enum AppRoute {
+  Root = '/',
   Main = '/:selectedCity',
   Login = '/login',
   Favorites = '/favorites',
@@ -42,7 +42,6 @@ const RATING_TITLES = ['perfect', 'good', 'not bad', 'badly', 'terribly'];
 export {
   AppRoute,
   AuthorizationStatus,
-  REVIEW_COUNT,
   CITIES,
   TYPES,
   PLACES_OPTIONS,

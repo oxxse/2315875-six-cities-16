@@ -21,7 +21,7 @@ function App({ reviews }: App): JSX.Element {
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<MainPage/>}/>
+          <Route path={AppRoute.Root} element={<MainPage/>}/>
           <Route path={AppRoute.Main} element={<MainPage />} />
           <Route path={AppRoute.Favorites} element={<PrivateRoute status={currentStatus}><FavoritesPage /> </PrivateRoute>} />
           <Route path={AppRoute.Login} element={<PublicRoute status={currentStatus}> <LoginPage /> </PublicRoute>} />

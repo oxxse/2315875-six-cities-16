@@ -54,6 +54,11 @@ function PlaceSorting({ width, height, currentOption, onOptionClick }: PlaceSort
     setIsOpen(!isOpen);
   };
 
+  const handleOptionSet = (option : string) => {
+    onOptionClick(option);
+    setIsOpen(false);
+  };
+
   return (
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
@@ -65,10 +70,7 @@ function PlaceSorting({ width, height, currentOption, onOptionClick }: PlaceSort
       </span>
       <PlacesOptionsList
         currentOption={currentOption}
-        onOptionClick={(option) => {
-          onOptionClick(option);
-          setIsOpen(false);
-        }}
+        onOptionClick={handleOptionSet}
         isOpen={isOpen}
       />
     </form>
