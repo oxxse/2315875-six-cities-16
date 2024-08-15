@@ -1,6 +1,6 @@
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
 const BASE_ACTIVE_CITY = 'Paris';
-const TIMEOUT_SHOW_ERROR = 2000;
+const TIMEOUT_SHOW_ERROR = 5000;
 const PASSWORD_REGEXP = /^.*(?=.*[a-zA-Z])(?=.*\d).*$/;
 const MAX_REVIEWS_COUNT = 10;
 
