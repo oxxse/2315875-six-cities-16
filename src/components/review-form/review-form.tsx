@@ -1,6 +1,8 @@
-import { useState, ChangeEvent } from 'react';
-import { ReviewLengths } from '../../const';
-import { RATING_TITLES } from '../../const';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import { ReviewLengths, RATING_TITLES, TIMEOUT_SHOW_ERROR } from '../../const';
+import { useAppDispatch } from '../../hooks';
+import { setError } from '../../store/error/error';
+import { fetchOfferComments, postComment } from '../../store/thunk-actions';
 
 type RatingStar = {
   id: string;
@@ -8,9 +10,10 @@ type RatingStar = {
   title: string;
   onChange: () => void;
   checked: boolean;
+  disabled: boolean;
 };
 
-function RatingStar({ id, ratingValue, title, onChange, checked }: RatingStar): JSX.Element {
+function RatingStar({disabled, id, ratingValue, title, onChange, checked }: RatingStar): JSX.Element {
   return (
     <>
       <input
@@ -21,6 +24,7 @@ function RatingStar({ id, ratingValue, title, onChange, checked }: RatingStar): 
         type="radio"
         onChange={onChange}
         checked={checked}
+        disabled={disabled}
       />
       <label
         htmlFor={id}
@@ -35,13 +39,16 @@ function RatingStar({ id, ratingValue, title, onChange, checked }: RatingStar): 
   );
 }
 
-function ReviewForm(): JSX.Element {
+function ReviewForm({ offerId }: { offerId: string }): JSX.Element {
   const [review, setReview] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
-  const minLength : number = ReviewLengths.MinLength;
-  const maxLength : number = ReviewLengths.MaxLength;
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const minLength: number = ReviewLengths.MinLength;
+  const maxLength: number = ReviewLengths.MaxLength;
 
   const isValid: boolean = review.length >= minLength && review.length <= maxLength && rating !== 0;
+
   const handleTextareaChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
     setReview(evt.target.value);
   };
@@ -50,8 +57,31 @@ function ReviewForm(): JSX.Element {
     setRating(ratingValue);
   };
 
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    if (isValid) {
+      setIsSubmitting(true);
+      dispatch(postComment({ offerId, commentText: review, rating }))
+        .unwrap()
+        .then(() => {
+          setReview('');
+          setRating(0);
+          dispatch(fetchOfferComments(offerId));
+        })
+        .catch(() => {
+          dispatch(setError('Failed to post comment. Please try again later.'));
+          setTimeout(() => {
+            dispatch(setError(null));
+          }, TIMEOUT_SHOW_ERROR);
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+        });
+    }
+  };
+
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form onSubmit={handleFormSubmit} className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
@@ -66,6 +96,7 @@ function ReviewForm(): JSX.Element {
               title={title}
               onChange={() => handleRatingChange(ratingValue)}
               checked={rating === ratingValue}
+              disabled={isSubmitting}
             />
           );
         })}
@@ -77,6 +108,7 @@ function ReviewForm(): JSX.Element {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={review}
         onChange={handleTextareaChange}
+        disabled={isSubmitting}
       />
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
@@ -88,7 +120,7 @@ function ReviewForm(): JSX.Element {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={!isValid}
+          disabled={!isValid || isSubmitting}
         >
           Submit
         </button>

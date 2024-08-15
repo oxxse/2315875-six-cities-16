@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { Offer } from '../types/types';
+import { Offer } from '../../types/types';
 
 type ActiveOfferState = {
   activeOffer: Offer | null;
@@ -11,7 +11,7 @@ const initialState: ActiveOfferState = {
 };
 
 export const activeOfferSlice = createSlice({
-  name: 'setActiveOffer',
+  name: 'activeOffer',
   initialState,
   reducers: {
     change: (state, action: PayloadAction<Offer | null>) => {

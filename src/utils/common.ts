@@ -1,37 +1,6 @@
-import { Location } from '../types/types';
-import { Offer } from '../types/types';
 import { AuthorizationStatus } from '../const';
 import { AppRoute } from '../const';
-
-const getRandomArrayElement = <T>(items: T[]): T => items[Math.floor(Math.random() * items.length)];
-
-const getRandomInteger = (max: number) => Math.floor(Math.random() * max) + 1;
-
-const getRandomBoolean = () => Math.random() >= 0.5;
-
-const createIdGenerator = () => {
-  let lastGeneratedId = 0;
-
-  return function () {
-    lastGeneratedId += 1;
-    return lastGeneratedId;
-  };
-};
-
-const getRandomRating = () => (Math.floor(Math.random() * 40) + 10) / 10;
-
-const getRandomFloat = (min: number, max: number, precision: number = 2): number => parseFloat((Math.random() * (max - min) + min).toFixed(precision));
-
-const generateHotelLocation = (cityLocation: Location): Location => {
-  const latitudeOffset = getRandomFloat(-0.02, 0.02);
-  const longitudeOffset = getRandomFloat(-0.02, 0.02);
-
-  return {
-    latitude: cityLocation.latitude + latitudeOffset,
-    longitude: cityLocation.longitude + longitudeOffset,
-    zoom: 16,
-  };
-};
+import { Offer, Review } from '../types/types';
 
 const getMarkupRating = (rating: number) => {
   const ratingInProcents = `${(Math.floor(rating) / 5) * 100}%`;
@@ -74,16 +43,32 @@ const getSortedOffers = (offersToSort: Offer[], sortingOption: string): Offer[] 
   }
 };
 
+const compareDates = (reviewA: Review, reviewB: Review) => new Date(reviewB.date).getTime() - new Date(reviewA.date).getTime();
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+};
+
+const capitalizeFirstLetter = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+const groupOffersByCity = (offers: Offer[]) => offers.reduce((accumulator: Record<string, Offer[]>, offer) => {
+  const cityName = offer.city.name;
+  if (!accumulator[cityName]) {
+    accumulator[cityName] = [];
+  }
+  accumulator[cityName].push(offer);
+  return accumulator;
+}, {} as Record<string, Offer[]>);
+
 export {
-  getRandomArrayElement,
-  getRandomInteger,
-  getRandomBoolean,
-  createIdGenerator,
-  getRandomRating,
-  generateHotelLocation,
   getMarkupRating,
   upFirstLetter,
   getAuthorizationStatus,
   getHeaderState,
-  getSortedOffers
+  getSortedOffers,
+  capitalizeFirstLetter,
+  groupOffersByCity,
+  compareDates,
+  formatDate
 };

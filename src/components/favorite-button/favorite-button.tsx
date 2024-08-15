@@ -1,20 +1,51 @@
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
+import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
+import { toggleFavoriteStatus } from '../../store/thunk-actions';
+import { AuthorizationStatus, AppRoute } from '../../const';
+
 type FavoriteButton = {
-  className: string;
+  offerId: string;
   isFavorite: boolean;
+  buttonType: 'offer' | 'card';
+  width: number;
+  height: number;
 };
 
-const OFFER_CLASS_NAME = 'offer';
+const FavoriteButton: React.FC<FavoriteButton> = ({ offerId, isFavorite, buttonType, width, height }) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
 
-export default function FavoriteButton({ className, isFavorite }: FavoriteButton): JSX.Element {
-  const imgWidth = className === OFFER_CLASS_NAME ? 31 : 18;
-  const imgHeight = className === OFFER_CLASS_NAME ? 33 : 19;
+  const handleClick = () => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(toggleFavoriteStatus({ offerId, status: !isFavorite }));
+    } else {
+      navigate(AppRoute.Login);
+    }
+  };
+
+  const getButtonClass = () => {
+    let baseClass = 'button';
+    if (buttonType === 'offer') {
+      baseClass += ` offer__bookmark-button ${isFavorite ? 'offer__bookmark-button--active' : ''}`;
+    } else if (buttonType === 'card') {
+      baseClass += ` place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''}`;
+    } else if (buttonType === 'favorite') {
+      baseClass += ` favorites__locations-items place-card__bookmark-button ${isFavorite ? 'place-card__bookmark-button--active' : ''}`;
+    }
+    return baseClass;
+  };
 
   return (
-    <button className={`${className}__bookmark-button button ${isFavorite ? `${className}bookmark-button--active` : ''} button`} type="button">
-      <svg className={`${className}__bookmark-icon`} width={imgWidth} height={imgHeight}>
-        <use xlinkHref="#icon-bookmark" />
+    <button className={getButtonClass()} type="button" onClick={handleClick}>
+      <svg className={buttonType === 'offer' ? 'offer__bookmark-icon' : 'place-card__bookmark-icon'} width={width} height={height}>
+        <use xlinkHref="#icon-bookmark"></use>
       </svg>
       <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
     </button>
   );
-}
+};
+
+export default FavoriteButton;

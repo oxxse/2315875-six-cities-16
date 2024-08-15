@@ -1,6 +1,13 @@
-import type { Offer } from '../../types/types';
+type OfferImage = {
+  image: string;
+};
 
-function OfferImage({ image }: { image: string }): JSX.Element {
+type OfferGallery = {
+  images: string[];
+};
+
+
+function OfferImage({image} : OfferImage) : JSX.Element {
   return (
     <div className="offer__image-wrapper">
       <img className="offer__image" src={image} alt="Photo studio" />
@@ -8,11 +15,11 @@ function OfferImage({ image }: { image: string }): JSX.Element {
   );
 }
 
-function OfferGallery({sources} : {sources: Offer}): JSX.Element {
-  const {images} = sources;
+function OfferGallery({images} : OfferGallery): JSX.Element {
+
   return (
     <div className="offer__gallery">
-      {images.map((image) => <OfferImage image={image} key={image} />)}
+      {images.map((image) => <OfferImage image={image} key={image}/>)}
     </div>
   );
 }

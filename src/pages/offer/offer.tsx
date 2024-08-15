@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Header from '../../components/header/header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import FeaturesList from '../../components/features-list/features-list';
@@ -7,61 +8,73 @@ import Map from '../../components/map/map';
 import { useParams } from 'react-router-dom';
 import NotFound from '../not-found-page/not-found';
 import type { OfferPage } from '../../types/types';
-import type { Review } from '../../types/types';
 import { Helmet } from 'react-helmet-async';
-import { getAuthorizationStatus } from '../../utils/common';
-import type { Offer } from '../../types/types';
 import FavoriteButton from '../../components/favorite-button/favorite-button';
 import { getMarkupRating } from '../../utils/common';
 import ReviewsList from '../../components/reviews-list/review-list';
-import { AuthorizationStatus } from '../../const';
+import { AuthorizationStatus, MAX_NEARBY_OFFERS_COUNT, MAX_IMAGES_COUNT } from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
-import { useAppSelector } from '../../hooks';
-import { selectOffers } from '../../store/selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchOfferDetailsById, fetchOfferComments, fetchNearbyOffers, fetchFavoriteOffers } from '../../store/thunk-actions';
+import { selectCity } from '../../store/active-city/active-sity-selector';
+import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
+import { selectNearbyOffers, selectOfferDetails, selectOfferComments } from '../../store/offers/offer-selector';
+
+function OfferPage(): JSX.Element {
+  const { id } = useParams<{ id: string }>();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchOfferDetailsById(id)).then((response) => {
+        if (response.meta.requestStatus === 'fulfilled') {
+          dispatch(fetchOfferComments(id));
+          dispatch(fetchNearbyOffers(id));
+        }
+      });
+    }
+  }, [id, dispatch]);
+
+  const selectedCity = useAppSelector(selectCity);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const currentOffer = useAppSelector(selectOfferDetails);
+  const reviews = useAppSelector(selectOfferComments);
+  const nearOffers = useAppSelector(selectNearbyOffers);
 
 
-const authorizationStatus = getAuthorizationStatus();
-
-
-type OfferPageData = {
-  reviews: Review[];
-};
-
-function OfferPage({ reviews }: OfferPageData): JSX.Element {
-  const { id } = useParams();
-  const offers = useAppSelector(selectOffers);
-
-  const currentOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === id);
-  const cityData = currentOffer?.city;
-
-
-  const filteredOffers = offers.filter((offer) => offer.city.name === currentOffer?.city.name);
-  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoriteOffers());
+    }
+  }, [dispatch, authorizationStatus]);
 
   if (!currentOffer) {
     return <NotFound />;
   }
 
+  const cityData = currentOffer?.city;
+
   if (!cityData) {
     return <div>City information is missing</div>;
   }
 
-  const MAX_NEARBY_OFFERS_COUNT = 3;
-  const nearbyOffers = filteredOffers.filter((offer) => offer.id !== currentOffer.id).slice(0, MAX_NEARBY_OFFERS_COUNT);
+  const nearbyOffers = nearOffers.filter((offer) => currentOffer.city.name === selectedCity && offer.id !== currentOffer.id).slice(0, MAX_NEARBY_OFFERS_COUNT);
 
-  const { title, price, rating, isPremium, isFavorite, goods, description } = currentOffer;
+  const { title, price, rating, isPremium, isFavorite, goods, description, images } = currentOffer;
+  const imagesToShow = images.slice(0, MAX_IMAGES_COUNT);
+  const offerId = id ?? 'defaultId';
 
   return (
     <div className="page">
       <Helmet>
         <title>6 cities: Offer</title>
       </Helmet>
-      <Header favorites={favoriteOffers} />
+      <Header/>
       <main className="page__main page__main--offer">
         <section className="offer">
           <div className="offer__gallery-container container">
-            <OfferGallery sources={currentOffer} />
+            <OfferGallery images={imagesToShow} />
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
@@ -73,7 +86,7 @@ function OfferPage({ reviews }: OfferPageData): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <FavoriteButton className='offer' isFavorite={isFavorite} />
+                <FavoriteButton offerId={offerId} isFavorite={isFavorite} width={31} height={33} buttonType="offer"/>
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
@@ -103,23 +116,23 @@ function OfferPage({ reviews }: OfferPageData): JSX.Element {
                 </p>
               </div>
             </div>
-            <section className="offer__reviews reviews">
+            <section className="offer__reviews reviews" style={{maxWidth: '613px', marginLeft: 'auto', marginRight: 'auto'}}>
               <h2 className="reviews__title">
                 Reviews · <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ReviewsList reviews={reviews} />
-              {authorizationStatus === AuthorizationStatus.Auth ? <ReviewForm /> : ''}
+              {authorizationStatus === AuthorizationStatus.Auth && id && <ReviewForm offerId={offerId}/>}
             </section>
           </div>
         </section>
         <Map city={currentOffer.location} offers={[...nearbyOffers, currentOffer]} className='offer' activeOffer={currentOffer} />
       </main>
       <div className="container">
-        {nearbyOffers.length > 0 ?
+        {nearbyOffers &&
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighborhood</h2>
             <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places__' imageWidth={260} imageHeight={200} />
-          </section> : ''}
+          </section>}
       </div>
     </div >
   );

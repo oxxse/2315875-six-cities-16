@@ -9,7 +9,7 @@ const initialState : SortingOptyionsState = {
 };
 
 export const sortingOptionSlice = createSlice({
-  name: 'setSortingOption',
+  name: 'sortingOption',
   initialState,
   reducers: {
     setSort: (state, action: PayloadAction<string>) => {

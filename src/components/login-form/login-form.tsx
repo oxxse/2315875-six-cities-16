@@ -1,45 +1,40 @@
-import { useState } from 'react';
-import { ChangeEvent } from 'react';
+import { FormEvent } from 'react';
 
-function LoginForm(): JSX.Element {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+type LoginForm = {
+  loginRef: React.MutableRefObject<HTMLInputElement | null>;
+  passwordRef: React.MutableRefObject<HTMLInputElement | null>;
+  isSubmitting: boolean;
+  onSubmit: (evt: FormEvent<HTMLFormElement>) => void;
+}
 
-  const handleEmailChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    setEmail(evt.target.value);
-  };
-
-  const handlePasswordChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    setPassword(evt.target.value);
-  };
+function LoginForm({ loginRef, passwordRef, isSubmitting, onSubmit }: LoginForm): JSX.Element {
 
   return (
-    <form className="login__form form" action="#" method="post">
+    <form onSubmit={onSubmit} className="login__form form" action="#" method="post">
       <div className="login__input-wrapper form__input-wrapper">
         <label className="visually-hidden">E-mail</label>
         <input
+          ref={loginRef}
           className="login__input form__input"
           type="email"
           name="email"
           placeholder="Email"
-          value={email}
-          onChange={handleEmailChange}
           required
         />
       </div>
       <div className="login__input-wrapper form__input-wrapper">
         <label className="visually-hidden">Password</label>
         <input className="login__input form__input"
+          ref={passwordRef}
           type="password"
           name="password"
           placeholder="Password"
-          value={password}
-          onChange={handlePasswordChange}
+          minLength={2}
           required
         />
       </div>
-      <button className="login__submit form__submit button" type="submit">Sign in</button>
-    </form>
+      <button className="login__submit form__submit button" type="submit" disabled={isSubmitting} style={{backgroundColor: isSubmitting ? 'grey' : ''}} > Sign in </button>
+    </form >
   );
 }
 

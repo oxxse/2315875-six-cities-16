@@ -5,17 +5,18 @@ import FavoritesPage from '../../pages/favorites/favorites';
 import OfferPage from '../../pages/offer/offer';
 import LoginPage from '../../pages/login/login';
 import NotFound from '../../pages/not-found-page/not-found';
-import { PublicRoute, PrivateRoute } from '../access-route/access-foute';
+import AccessRoute from '../access-route/access-route';
 import { HelmetProvider } from 'react-helmet-async';
-import type { Review } from '../../types/types';
-import { getAuthorizationStatus } from '../../utils/common';
+import { checkAuthAction } from '../../store/thunk-actions';
+import { useAppDispatch } from '../../hooks';
+import { useEffect } from 'react';
 
-type App = {
-  reviews: Review[];
-}
+function App(): JSX.Element {
+  const dispatch = useAppDispatch();
 
-function App({ reviews }: App): JSX.Element {
-  const currentStatus = getAuthorizationStatus();
+  useEffect(() => {
+    dispatch(checkAuthAction());
+  }, [dispatch]);
 
   return (
     <HelmetProvider>
@@ -23,9 +24,9 @@ function App({ reviews }: App): JSX.Element {
         <Routes>
           <Route path={AppRoute.Root} element={<MainPage/>}/>
           <Route path={AppRoute.Main} element={<MainPage />} />
-          <Route path={AppRoute.Favorites} element={<PrivateRoute status={currentStatus}><FavoritesPage /> </PrivateRoute>} />
-          <Route path={AppRoute.Login} element={<PublicRoute status={currentStatus}> <LoginPage /> </PublicRoute>} />
-          <Route path={AppRoute.Offer} element={<OfferPage reviews={reviews} />} />
+          <Route path={AppRoute.Favorites} element={<AccessRoute><FavoritesPage /></AccessRoute>} />
+          <Route path={AppRoute.Login} element={<AccessRoute isReverse><LoginPage /></AccessRoute>} />
+          <Route path={AppRoute.Offer} element={<OfferPage/>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
