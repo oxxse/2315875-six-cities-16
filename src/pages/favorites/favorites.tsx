@@ -1,24 +1,14 @@
-import { useEffect } from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { Helmet } from 'react-helmet-async';
 import FavoritePlacesList from '../../components/favorite-places-list/favorite-places-list';
 import NoFavorites from '../../components/no-favorites/no-favorites';
-import { useAppSelector, useAppDispatch } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import { selectFavoriteOffers } from '../../store/offers/offer-selector';
-import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
-import { fetchFavoriteOffers } from '../../store/thunk-actions';
-import { AuthorizationStatus } from '../../const';
-function FavoritesPage(): JSX.Element {
-  const favoriteOffers = useAppSelector(selectFavoriteOffers);
-  const dispatch = useAppDispatch();
-  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
 
-  useEffect(() => {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(fetchFavoriteOffers());
-    }
-  }, [dispatch, authorizationStatus]);
+
+function FavoritesPage(): JSX.Element {
+  const favorites = useAppSelector(selectFavoriteOffers);
 
   return (
     <div className="page">
@@ -26,12 +16,12 @@ function FavoritesPage(): JSX.Element {
         <title>6 cities: Favorites</title>
       </Helmet>
       <Header/>
-      <main className={`page__main page__main--favorites${!favoriteOffers.length && 'page__main--favorites-empty'}`}>
+      <main className={`page__main page__main--favorites${!favorites.length && 'page__main--favorites-empty'}`}>
         <div className="page__favorites-container container">
-          {favoriteOffers.length ?
+          {favorites.length ?
             <section className="favorites">
               <h1 className="favorites__title">Saved listing</h1>
-              <FavoritePlacesList offers={favoriteOffers} />
+              <FavoritePlacesList offers={favorites} />
             </section> : <NoFavorites />}
         </div>
       </main>

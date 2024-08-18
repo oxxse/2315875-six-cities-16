@@ -7,9 +7,11 @@ import LoginPage from '../../pages/login/login';
 import NotFound from '../../pages/not-found-page/not-found';
 import AccessRoute from '../access-route/access-route';
 import { HelmetProvider } from 'react-helmet-async';
-import { checkAuthAction } from '../../store/thunk-actions';
-import { useAppDispatch } from '../../hooks';
+import { checkAuthAction, fetchFavoriteOffers } from '../../store/thunk-actions';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useEffect } from 'react';
+import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
+import { AuthorizationStatus } from '../../const';
 
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -18,13 +20,21 @@ function App(): JSX.Element {
     dispatch(checkAuthAction());
   }, [dispatch]);
 
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoriteOffers());
+    }
+  }, [dispatch, authorizationStatus]);
+
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
           <Route path={AppRoute.Root} element={<MainPage/>}/>
-          <Route path={AppRoute.Main} element={<MainPage />} />
-          <Route path={AppRoute.Favorites} element={<AccessRoute><FavoritesPage /></AccessRoute>} />
+          <Route path={AppRoute.Main} element={<MainPage/>} />
+          <Route path={AppRoute.Favorites} element={<AccessRoute><FavoritesPage/></AccessRoute>} />
           <Route path={AppRoute.Login} element={<AccessRoute isReverse><LoginPage /></AccessRoute>} />
           <Route path={AppRoute.Offer} element={<OfferPage/>} />
           <Route path="*" element={<NotFound />} />

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../logo/logo';
 import { getHeaderState } from '../../utils/common';
@@ -7,7 +6,7 @@ import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
 import { AppRoute } from '../../const';
 import { AuthorizationStatus } from '../../const';
 import { selectUser } from '../../store/user/user-selector';
-import { fetchFavoriteOffers, logoutAction } from '../../store/thunk-actions';
+import { logoutAction } from '../../store/thunk-actions';
 import { selectFavoriteOffers } from '../../store/offers/offer-selector';
 
 function Header(): JSX.Element {
@@ -17,14 +16,7 @@ function Header(): JSX.Element {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(fetchFavoriteOffers());
-    }
-  }, [dispatch, authorizationStatus]);
-
-  const favoriteOffers = useAppSelector(selectFavoriteOffers);
+  const favorites = useAppSelector(selectFavoriteOffers);
 
   const handleLogoutClick = () => {
     dispatch(logoutAction()).then(() => {
@@ -55,7 +47,7 @@ function Header(): JSX.Element {
                       <>
                         <span className="header__user-name user__name">
                           {userEmail}
-                        </span><span className="header__favorite-count">{favoriteOffers ? favoriteOffers.length : ''}</span>
+                        </span><span className="header__favorite-count">{favorites ? favorites.length : ''}</span>
                       </>
                     ) : <span className="header__login">Sign in</span>}
                   </Link>
