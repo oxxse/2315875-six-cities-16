@@ -6,7 +6,7 @@ import InsideList from '../../components/inside-list/inside-list';
 import Host from '../../components/host/host';
 import Map from '../../components/map/map';
 import { useParams } from 'react-router-dom';
-import NotFound from '../not-found-page/not-found';
+import NotFound from '../not-found/not-found';
 import { Helmet } from 'react-helmet-async';
 import FavoriteButton from '../../components/favorite-button/favorite-button';
 import { getMarkupRating } from '../../utils/common';
@@ -16,8 +16,8 @@ import ReviewForm from '../../components/review-form/review-form';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { fetchOfferDetailsById, fetchOfferComments, fetchNearbyOffers } from '../../store/thunk-actions';
-import { selectCity } from '../../store/active-city/active-sity-selector';
-import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
+import { selectCity } from '../../store/active-main/active-main-selectors';
+import { selectAuthorizationStatus } from '../../store/user/user-selectors';
 import { selectNearbyOffers, selectOfferDetails, selectOfferComments } from '../../store/offers/offer-selector';
 
 function OfferPage(): JSX.Element {

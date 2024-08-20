@@ -9,13 +9,13 @@ import { UserData } from '../types/auth.ts';
 import { store } from './index.ts';
 import { setNearbyOffers, setOfferComments, setOfferDetails, loadOffers, updateOffer, setOffersDataLoadingStatus, setShouldFetchComments, setShouldFetchFavorites } from './offers/offers.ts';
 import { setUser } from './user/user.ts';
-import { requireAuthorization } from './auth/auth.ts';
+import { requireAuthorization } from './user/user.ts';
 import { setError, clearError } from './error/error.ts';
 
 export const setFavoriteOffers = createAction<Offer[]>('offers/setFavoriteOffers');
 
 export const clearErrorAction = createAsyncThunk(
-  'app/clearError',
+  'error/clearError',
   () => {
     setTimeout(
       () => store.dispatch(setError(null)),
@@ -29,7 +29,7 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
   RootState: RootState;
   extra: AxiosInstance;
 }>(
-  'data/fetchOffers',
+  'offers/fetchOffers',
   async (_arg, { dispatch, extra: api }) => {
     dispatch(setOffersDataLoadingStatus(true));
     try {
@@ -95,7 +95,7 @@ export const fetchOfferDetailsById = createAsyncThunk<void, string, {
   RootState: RootState;
   extra: AxiosInstance;
 }>(
-  'data/fetchOfferDetails',
+  'offers/fetchOfferDetails',
   async (id, { dispatch, extra: api }) => {
     dispatch(setOffersDataLoadingStatus(true));
     try {
@@ -117,7 +117,7 @@ export const fetchOfferComments = createAsyncThunk<void, string, {
   state: RootState;
   extra: AxiosInstance;
 }>(
-  'data/fetchOfferComments',
+  'offers/fetchOfferComments',
   async (offerId, { dispatch, getState, extra: api }) => {
     if (!getState().offers.shouldFetchComments) {
       return;
@@ -139,7 +139,7 @@ export const postComment = createAsyncThunk<Review, { offerId: string; commentTe
   state: RootState;
   extra: AxiosInstance;
 }>(
-  'data/postComment',
+  'offers/postComment',
   async ({ offerId, commentText, rating }, { dispatch, getState, extra: api }) => {
     dispatch(setShouldFetchComments(false));
     try {
@@ -167,7 +167,7 @@ export const fetchNearbyOffers = createAsyncThunk<void, string, {
   state: RootState;
   extra: AxiosInstance;
 }>(
-  'data/fetchNearbyOffers',
+  'offers/fetchNearbyOffers',
   async (offerId, { dispatch, extra: api }) => {
     try {
       const { data } = await api.get<Offer[]>(`${ApiRoute.Offers}/${offerId}/nearby`);

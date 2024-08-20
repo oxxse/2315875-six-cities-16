@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
-import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
+import { selectAuthorizationStatus } from '../../store/user/user-selectors';
 import { toggleFavoriteStatus } from '../../store/thunk-actions';
 import { AuthorizationStatus, AppRoute } from '../../const';
 

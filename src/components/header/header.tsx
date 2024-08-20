@@ -2,10 +2,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../logo/logo';
 import { getHeaderState } from '../../utils/common';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
+import { selectAuthorizationStatus } from '../../store/user/user-selectors';
 import { AppRoute } from '../../const';
 import { AuthorizationStatus } from '../../const';
-import { selectUser } from '../../store/user/user-selector';
+import { selectUser } from '../../store/user/user-selectors';
 import { logoutAction } from '../../store/thunk-actions';
 import { selectFavoriteOffers } from '../../store/offers/offer-selector';
 

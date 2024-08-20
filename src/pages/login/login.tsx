@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { AppRoute, BASE_ACTIVE_CITY, TIMEOUT_SHOW_ERROR, PASSWORD_REGEXP} from '../../const';
 import { useRef, useState, FormEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectCity } from '../../store/active-city/active-sity-selector';
+import { selectCity } from '../../store/active-main/active-main-selectors.ts';
 import { loginAction } from '../../store/thunk-actions';
 import { setError, clearError } from '../../store/error/error.ts';
 

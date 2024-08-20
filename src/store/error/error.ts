@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { NameSpace } from '../../const';
 
 type errorState = {
   error: string | null;
@@ -10,7 +11,7 @@ const initialState: errorState = {
 };
 
 export const errorSlice = createSlice({
-  name: 'offers',
+  name: NameSpace.Error,
   initialState,
   reducers: {
     setError: (state, action: PayloadAction<string | null>) => {
@@ -24,4 +25,3 @@ export const errorSlice = createSlice({
 
 export const {setError, clearError} = errorSlice.actions;
 export const errorReducer = errorSlice.reducer;
-

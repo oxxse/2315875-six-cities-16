@@ -8,38 +8,24 @@ import NoOffers from '../../components/no-offers/no-offers';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectCity } from '../../store/active-city/active-sity-selector';
-import { selectActiveOffer } from '../../store/active-offer/active-offer-selector';
-import { selectOffers, selectOffersDataLoading } from '../../store/offers/offer-selector';
-import { selectSortingOption } from '../../store/sorting-option/sorting-option-selector';
-import { Offer } from '../../types/types';
+import { selectCity, selectActiveOffer, selectSortingOption } from '../../store/active-main/active-main-selectors';
+import { selectOffers } from '../../store/offers/offer-selector';import { Offer } from '../../types/types';
 import { SortingOption } from '../../types/types';
-import { setActiveOffer } from '../../store/active-offer/active-offer';
-import { setSortingOption } from '../../store/sorting-option/sorting-option';
-import { AppRoute, AuthorizationStatus } from '../../const';
+import { setActiveOffer, setSort } from '../../store/active-main/active-main';
+import { AppRoute } from '../../const';
 import { getSortedOffers } from '../../utils/common';
-import { selectAuthorizationStatus } from '../../store/auth/auth-selector';
-import Spinner from '../../components/spinner/spinner';
 
-function MainPage(): JSX.Element {
+function Main(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const selectedCity = useAppSelector(selectCity);
   const offers = useAppSelector(selectOffers);
   const activeOffer = useAppSelector(selectActiveOffer);
   const selectedSortingOption = useAppSelector(selectSortingOption);
-  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
-  const isOffersDataLoading = useAppSelector(selectOffersDataLoading);
 
   useEffect(() => {
     navigate(AppRoute.Main.replace(':selectedCity', selectedCity));
   }, [navigate, selectedCity]);
-
-  if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
-    return (
-      <Spinner />
-    );
-  }
 
   const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity);
   const placesTitle = filteredOffers.length === 1 ? 'place' : 'places';
@@ -54,7 +40,7 @@ function MainPage(): JSX.Element {
     dispatch(setActiveOffer(offer ?? null));
   };
 
-  const handleOptionClick = (option: SortingOption) => dispatch(setSortingOption(option));
+  const handleOptionClick = (option: SortingOption) => dispatch(setSort(option));
 
   return (
     <div className="page page--gray page--main">
@@ -89,4 +75,4 @@ function MainPage(): JSX.Element {
   );
 }
 
-export default MainPage;
+export default Main;

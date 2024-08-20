@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch } from '../../hooks';
-import { setCity } from '../../store/active-city/active-city';
+import { setCity } from '../../store/active-main/active-main';
 
 type Location = {
   city: string;

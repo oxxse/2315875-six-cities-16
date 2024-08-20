@@ -42,6 +42,13 @@ enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
+enum NameSpace {
+  Offers = 'offers',
+  User = 'user',
+  Error = 'error',
+  ActiveMain = 'activeMain'
+}
+
 const PLACES_OPTIONS = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
 
 const RATING_TITLES = ['perfect', 'good', 'not bad', 'badly', 'terribly'];
@@ -59,6 +66,7 @@ export {
   ReviewLengths,
   UrlMarkers,
   TileLayers,
+  NameSpace,
   BASE_ACTIVE_CITY,
   TIMEOUT_SHOW_ERROR,
   MAX_NEARBY_OFFERS_COUNT,
