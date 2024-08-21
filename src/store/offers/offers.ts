@@ -1,5 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { Offer, Review } from '../../types/types';
+import { AxiosInstance } from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AppDispatch, RootState } from '../../types/state.ts';
+import { ApiRoute, TIMEOUT_SHOW_ERROR } from '../../const.ts';
+import { setError, clearError } from '../error/error.ts';
 import { NameSpace } from '../../const.ts';
 
 
@@ -28,6 +33,29 @@ const initialState: OffersState = {
   shouldFetchComments: true,
   shouldFetchFavorites: true,
 };
+
+export const fetchFavoriteOffers = createAsyncThunk<Offer[], undefined, {
+  dispatch: AppDispatch;
+  state: RootState;
+  extra: AxiosInstance;
+}>(
+  'offers/fetchFavorites',
+  async (_, { dispatch, getState, extra: api }) => {
+    if (getState().offers.shouldFetchFavorites) {
+      try {
+        const response = await api.get<Offer[]>(ApiRoute.Favorites);
+        return response.data;
+      } catch (error) {
+        dispatch(setError('Failed to get the list of favorite offers. Please, try again.'));
+      } finally {
+        setTimeout(() => {
+          dispatch(clearError());
+        }, TIMEOUT_SHOW_ERROR);
+      }
+    }
+    return [];
+  }
+);
 
 export const offersSlice = createSlice({
   name: NameSpace.Offers,
@@ -74,6 +102,11 @@ export const offersSlice = createSlice({
         state.favoriteOffers[favoriteOffersIndex] = action.payload;
       }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchFavoriteOffers.fulfilled, (state, action) => {
+      state.favoriteOffers = action.payload;
+    });
   }
 });
 

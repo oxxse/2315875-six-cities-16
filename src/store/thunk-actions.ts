@@ -11,6 +11,7 @@ import { setNearbyOffers, setOfferComments, setOfferDetails, loadOffers, updateO
 import { setUser } from './user/user.ts';
 import { requireAuthorization } from './user/user.ts';
 import { setError, clearError } from './error/error.ts';
+import { fetchFavoriteOffers } from './offers/offers.ts';
 
 export const setFavoriteOffers = createAction<Offer[]>('offers/setFavoriteOffers');
 
@@ -178,29 +179,6 @@ export const fetchNearbyOffers = createAsyncThunk<void, string, {
         dispatch(clearError());
       }, TIMEOUT_SHOW_ERROR);
     }
-  }
-);
-
-export const fetchFavoriteOffers = createAsyncThunk<Offer[], undefined, {
-  dispatch: AppDispatch;
-  state: RootState;
-  extra: AxiosInstance;
-}>(
-  'offers/fetchFavorites',
-  async (_, { dispatch, getState, extra: api }) => {
-    if (getState().offers.shouldFetchFavorites) {
-      try {
-        const response = await api.get<Offer[]>(ApiRoute.Favorites);
-        return response.data;
-      } catch (error) {
-        dispatch(setError('Failed to get the list of favorite offers. Please, try again.'));
-      } finally {
-        setTimeout(() => {
-          dispatch(clearError());
-        }, TIMEOUT_SHOW_ERROR);
-      }
-    }
-    return [];
   }
 );
 
