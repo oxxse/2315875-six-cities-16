@@ -25,24 +25,23 @@ function Main(): JSX.Element {
   const offers = useAppSelector(selectOffers);
   const activeOffer = useAppSelector(selectActiveOffer);
   const selectedSortingOption = useAppSelector(selectSortingOption);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const isOffersDataLoading = useAppSelector(selectOffersDataLoading);
 
   useEffect(() => {
     navigate(AppRoute.Main.replace(':selectedCity', selectedCity));
   }, [navigate, selectedCity]);
-
-  const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity);
-  const placesTitle = filteredOffers.length === 1 ? 'place' : 'places';
-  const sortedOffers = getSortedOffers(filteredOffers, selectedSortingOption);
-  const city = filteredOffers[0].city.location;
-
-  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
-  const isOffersDataLoading = useAppSelector(selectOffersDataLoading);
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
     return (
       <Spinner />
     );
   }
+
+  const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity);
+  const placesTitle = filteredOffers.length === 1 ? 'place' : 'places';
+  const sortedOffers = getSortedOffers(filteredOffers, selectedSortingOption);
+  const city = filteredOffers[0].city.location;
 
   if (!city) {
     return <div>City not found</div>;
@@ -59,7 +58,7 @@ function Main(): JSX.Element {
       <Helmet>
         <title> 6 cities.</title>
       </Helmet>
-      <Header/>
+      <Header />
       <main className={`page__main page__main--index ${!filteredOffers && 'page__main--index-empty'}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">

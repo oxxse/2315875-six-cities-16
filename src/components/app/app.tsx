@@ -7,13 +7,24 @@ import LoginPage from '../../pages/login/login';
 import NotFound from '../../pages/not-found/not-found';
 import AccessRoute from '../access-route/access-route';
 import { HelmetProvider } from 'react-helmet-async';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import { selectError } from '../../store/error/error-selector';
 import { LoadingError } from '../loading-error/loading-error';
-
+import { useEffect } from 'react';
+import { selectAuthorizationStatus } from '../../store/user/user-selectors';
+import { AuthorizationStatus } from '../../const';
+import { fetchFavoriteOffers } from '../../store/offers/offers';
 
 function App(): JSX.Element {
+  const dispatch = useAppDispatch();
   const error = useAppSelector(selectError);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoriteOffers());
+    }
+  }, [dispatch, authorizationStatus]);
 
   if (error) {
     return (
