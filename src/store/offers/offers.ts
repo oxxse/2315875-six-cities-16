@@ -10,7 +10,6 @@ import { NameSpace } from '../../const.ts';
 
 type OffersState = {
   offers: Offer[];
-  error: string | null;
   isOffersDataLoading: boolean;
   offerDetails: Offer | null;
   offerComments: Review[];
@@ -23,7 +22,6 @@ type OffersState = {
 
 const initialState: OffersState = {
   offers: [],
-  error: null,
   isOffersDataLoading: false,
   offerDetails: null,
   offerComments: [],
@@ -39,7 +37,7 @@ export const fetchFavoriteOffers = createAsyncThunk<Offer[], undefined, {
   state: RootState;
   extra: AxiosInstance;
 }>(
-  'offers/fetchFavorites',
+  `${NameSpace.Offers}/fetchFavorites`,
   async (_, { dispatch, getState, extra: api }) => {
     if (getState().offers.shouldFetchFavorites) {
       try {

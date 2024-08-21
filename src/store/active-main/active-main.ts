@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { CITIES } from '../../const';
 import { Offer } from '../../types/types';
-import { NameSpace } from '../../const';
+import { NameSpace, PLACES_OPTIONS } from '../../const';
 
 type ActiveMainState = {
   activeOffer: Offer | null;
@@ -13,7 +13,7 @@ type ActiveMainState = {
 const initialState: ActiveMainState = {
   activeOffer: null,
   currentCity: CITIES[0],
-  selectedSortingOption: 'Popular'
+  selectedSortingOption: PLACES_OPTIONS[0]
 };
 
 

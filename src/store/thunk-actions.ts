@@ -2,7 +2,7 @@ import { AxiosInstance } from 'axios';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '../types/state.ts';
 import { saveToken, dropToken, saveUserEmail, dropUserEmail } from '../services/token.ts';
-import { ApiRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR } from '../const.ts';
+import { ApiRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR, NameSpace } from '../const.ts';
 import { Offer, Review } from '../types/types.ts';
 import { AuthData } from '../types/auth.ts';
 import { UserData } from '../types/auth.ts';
@@ -16,7 +16,7 @@ import { fetchFavoriteOffers } from './offers/offers.ts';
 export const setFavoriteOffers = createAction<Offer[]>('offers/setFavoriteOffers');
 
 export const clearErrorAction = createAsyncThunk(
-  'error/clearError',
+  `${NameSpace.Error}/clearError`,
   () => {
     setTimeout(
       () => store.dispatch(setError(null)),
@@ -30,7 +30,7 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
   RootState: RootState;
   extra: AxiosInstance;
 }>(
-  'offers/fetchOffers',
+  `${NameSpace.Offers}/fetchOffers`,
   async (_arg, { dispatch, extra: api }) => {
     dispatch(setOffersDataLoadingStatus(true));
     try {
@@ -52,7 +52,8 @@ export const checkAuthAction = createAsyncThunk<void, undefined, {
   RootState: RootState;
   extra: AxiosInstance;
 }>(
-  'user/checkAuth', async (_arg, { dispatch, extra: api }) => {
+  `${NameSpace.User}/checkAuth`,
+  async (_arg, { dispatch, extra: api }) => {
     try {
       const response = await api.get<UserData>(ApiRoute.Login);
       dispatch(setUser(response.data));
@@ -68,7 +69,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   RootState: RootState;
   extra: AxiosInstance;
 }>(
-  'user/login',
+  `${NameSpace.User}/login`,
   async ({ login: email, password }, { dispatch, extra: api }) => {
     const response = await api.post<UserData>(ApiRoute.Login, { email, password });
     saveToken(response.data.token);
@@ -83,7 +84,8 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   RootState: RootState;
   extra: AxiosInstance;
 }>(
-  'user/logout', async (_arg, { dispatch, extra: api }) => {
+  `${NameSpace.User}/logout`,
+  async (_arg, { dispatch, extra: api }) => {
     await api.delete(ApiRoute.Logout);
     dropToken();
     dropUserEmail();
@@ -96,7 +98,7 @@ export const fetchOfferDetailsById = createAsyncThunk<void, string, {
   RootState: RootState;
   extra: AxiosInstance;
 }>(
-  'offers/fetchOfferDetails',
+  `${NameSpace.Offers}/fetchOfferDetails`,
   async (id, { dispatch, extra: api }) => {
     dispatch(setOffersDataLoadingStatus(true));
     try {
@@ -118,7 +120,7 @@ export const fetchOfferComments = createAsyncThunk<void, string, {
   state: RootState;
   extra: AxiosInstance;
 }>(
-  'offers/fetchOfferComments',
+  `${NameSpace.Offers}/fetchOfferComments`,
   async (offerId, { dispatch, getState, extra: api }) => {
     if (!getState().offers.shouldFetchComments) {
       return;
@@ -140,7 +142,7 @@ export const postComment = createAsyncThunk<Review, { offerId: string; commentTe
   state: RootState;
   extra: AxiosInstance;
 }>(
-  'offers/postComment',
+  `${NameSpace.Offers}/postComment`,
   async ({ offerId, commentText, rating }, { dispatch, getState, extra: api }) => {
     dispatch(setShouldFetchComments(false));
     try {
@@ -168,7 +170,7 @@ export const fetchNearbyOffers = createAsyncThunk<void, string, {
   state: RootState;
   extra: AxiosInstance;
 }>(
-  'offers/fetchNearbyOffers',
+  `${NameSpace.Offers}/fetchNearbyOffers`,
   async (offerId, { dispatch, extra: api }) => {
     try {
       const { data } = await api.get<Offer[]>(`${ApiRoute.Offers}/${offerId}/nearby`);
@@ -187,7 +189,7 @@ export const toggleFavoriteStatus = createAsyncThunk<void, { offerId: string; st
   state: RootState;
   extra: AxiosInstance;
 }>(
-  'offers/toggleFavorite',
+  `${NameSpace.Offers}/toggleFavorite`,
   async ({ offerId, status }, { dispatch, getState, extra: api }) => {
     dispatch(setShouldFetchFavorites(false));
     try {

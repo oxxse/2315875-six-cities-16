@@ -47,7 +47,7 @@ function Header(): JSX.Element {
                       <>
                         <span className="header__user-name user__name">
                           {userEmail}
-                        </span><span className="header__favorite-count">{favorites ? favorites.length : ''}</span>
+                        </span><span className="header__favorite-count">{favorites.length}</span>
                       </>
                     ) : <span className="header__login">Sign in</span>}
                   </Link>
