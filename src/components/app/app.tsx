@@ -7,36 +7,13 @@ import LoginPage from '../../pages/login/login';
 import NotFound from '../../pages/not-found/not-found';
 import AccessRoute from '../access-route/access-route';
 import { HelmetProvider } from 'react-helmet-async';
-import { fetchFavoriteOffers } from '../../store/offers/offers';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useEffect } from 'react';
-import { selectAuthorizationStatus } from '../../store/user/user-selectors';
-import { AuthorizationStatus } from '../../const';
-import { selectOffersDataLoading } from '../../store/offers/offer-selector';
+import { useAppSelector } from '../../hooks';
 import { selectError } from '../../store/error/error-selector';
-import Spinner from '../spinner/spinner';
 import { LoadingError } from '../loading-error/loading-error';
 
 
 function App(): JSX.Element {
-  const dispatch = useAppDispatch();
-  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
   const error = useAppSelector(selectError);
-  const isOffersDataLoading = useAppSelector(selectOffersDataLoading);
-
-  useEffect(() => {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(fetchFavoriteOffers());
-    }
-  }, [dispatch, authorizationStatus]);
-
-  if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
-    return (
-      <HelmetProvider>
-        <Spinner />
-      </HelmetProvider>
-    );
-  }
 
   if (error) {
     return (

@@ -9,11 +9,14 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCity, selectActiveOffer, selectSortingOption } from '../../store/active-main/active-main-selectors';
-import { selectOffers } from '../../store/offers/offer-selector';import { Offer } from '../../types/types';
+import { selectOffers, selectOffersDataLoading } from '../../store/offers/offer-selector';
+import { Offer } from '../../types/types';
 import { SortingOption } from '../../types/types';
 import { setActiveOffer, setSort } from '../../store/active-main/active-main';
-import { AppRoute } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { getSortedOffers } from '../../utils/common';
+import Spinner from '../../components/spinner/spinner';
+import { selectAuthorizationStatus } from '../../store/user/user-selectors';
 
 function Main(): JSX.Element {
   const navigate = useNavigate();
@@ -31,6 +34,15 @@ function Main(): JSX.Element {
   const placesTitle = filteredOffers.length === 1 ? 'place' : 'places';
   const sortedOffers = getSortedOffers(filteredOffers, selectedSortingOption);
   const city = filteredOffers[0].city.location;
+
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const isOffersDataLoading = useAppSelector(selectOffersDataLoading);
+
+  if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
+    return (
+      <Spinner />
+    );
+  }
 
   if (!city) {
     return <div>City not found</div>;

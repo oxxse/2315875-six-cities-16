@@ -41,6 +41,13 @@ function OfferPage(): JSX.Element {
   const reviews = useAppSelector(selectOfferComments);
   const nearOffers = useAppSelector(selectNearbyOffers);
 
+
+  // useEffect(() => {
+  //   if (authorizationStatus === AuthorizationStatus.Auth) {
+  //     dispatch(fetchFavoriteOffers());
+  //   }
+  // }, [dispatch, authorizationStatus]);
+
   if (!currentOffer) {
     return <NotFound />;
   }
