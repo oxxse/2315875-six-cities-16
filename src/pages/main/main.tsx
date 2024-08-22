@@ -25,12 +25,13 @@ function Main(): JSX.Element {
   const offers = useAppSelector(selectOffers);
   const activeOffer = useAppSelector(selectActiveOffer);
   const selectedSortingOption = useAppSelector(selectSortingOption);
-  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
-  const isOffersDataLoading = useAppSelector(selectOffersDataLoading);
 
   useEffect(() => {
     navigate(AppRoute.Main.replace(':selectedCity', selectedCity));
   }, [navigate, selectedCity]);
+
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const isOffersDataLoading = useAppSelector(selectOffersDataLoading);
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
     return (
@@ -58,7 +59,7 @@ function Main(): JSX.Element {
       <Helmet>
         <title> 6 cities.</title>
       </Helmet>
-      <Header />
+      <Header/>
       <main className={`page__main page__main--index ${!filteredOffers && 'page__main--index-empty'}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
