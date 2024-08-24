@@ -8,15 +8,17 @@ import NoOffers from '../../components/no-offers/no-offers';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { selectCity, selectActiveOffer, selectOffers, selectSortingOption } from '../../store/selectors';
+import { selectCity, selectActiveOffer, selectSortingOption } from '../../store/active-main/active-main-selectors';
+import { selectOffers, selectOffersDataLoading } from '../../store/offers/offer-selector';
 import { Offer } from '../../types/types';
 import { SortingOption } from '../../types/types';
-import { setActiveOffer } from '../../store/active-offer';
-import { setSortingOption } from '../../store/sorting-option';
-import { AppRoute } from '../../const';
+import { setActiveOffer, setSort } from '../../store/active-main/active-main';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { getSortedOffers } from '../../utils/common';
+import Spinner from '../../components/spinner/spinner';
+import { selectAuthorizationStatus } from '../../store/user/user-selectors';
 
-function MainPage(): JSX.Element {
+function Main(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const selectedCity = useAppSelector(selectCity);
@@ -28,24 +30,37 @@ function MainPage(): JSX.Element {
     navigate(AppRoute.Main.replace(':selectedCity', selectedCity));
   }, [navigate, selectedCity]);
 
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const isOffersDataLoading = useAppSelector(selectOffersDataLoading);
+
+  if (authorizationStatus === AuthorizationStatus.Unknown || isOffersDataLoading) {
+    return (
+      <Spinner />
+    );
+  }
+
   const filteredOffers = offers.filter((offer) => offer.city.name === selectedCity);
   const placesTitle = filteredOffers.length === 1 ? 'place' : 'places';
-  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
   const sortedOffers = getSortedOffers(filteredOffers, selectedSortingOption);
+  const city = filteredOffers[0].city.location;
+
+  if (!city) {
+    return <div>City not found</div>;
+  }
 
   const handleOfferHover = (offer?: Offer | null) => {
     dispatch(setActiveOffer(offer ?? null));
   };
 
-  const handleOptionClick = (option: SortingOption) => dispatch(setSortingOption(option));
+  const handleOptionClick = (option: SortingOption) => dispatch(setSort(option));
 
   return (
     <div className="page page--gray page--main">
       <Helmet>
         <title> 6 cities.</title>
       </Helmet>
-      <Header favorites={favoriteOffers} />
-      <main className="page__main page__main--index">
+      <Header/>
+      <main className={`page__main page__main--index ${!filteredOffers && 'page__main--index-empty'}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
@@ -62,7 +77,7 @@ function MainPage(): JSX.Element {
                 <PlaceCardList offers={sortedOffers} onHover={handleOfferHover} classNameList={'cities__places-list'} classNameItem={'cities__'} imageWidth={260} imageHeight={200} />
               </section>
               <div className="cities__right-section">
-                <Map offers={filteredOffers} city={filteredOffers[0].city.location} className='cities' activeOffer={activeOffer} />
+                <Map offers={filteredOffers} city={city} className='cities' activeOffer={activeOffer} />
               </div>
             </div>}
           {!filteredOffers.length && selectedCity && <NoOffers city={selectedCity} />}
@@ -72,4 +87,4 @@ function MainPage(): JSX.Element {
   );
 }
 
-export default MainPage;
+export default Main;

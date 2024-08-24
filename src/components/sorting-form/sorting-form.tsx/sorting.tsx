@@ -54,7 +54,7 @@ function PlaceSorting({ width, height, currentOption, onOptionClick }: PlaceSort
     setIsOpen(!isOpen);
   };
 
-  const handleOptionSet = (option : string) => {
+  const handleOptionSet = (option: string) => {
     onOptionClick(option);
     setIsOpen(false);
   };
@@ -63,7 +63,7 @@ function PlaceSorting({ width, height, currentOption, onOptionClick }: PlaceSort
     <form className="places__sorting" action="#" method="get">
       <span className="places__sorting-caption">Sort by</span>
       <span className="places__sorting-type" tabIndex={0} onClick={toggleList}>
-        Popular
+        {currentOption}
         <svg className="places__sorting-arrow" width={width} height={height}>
           <use xlinkHref="#icon-arrow-select" />
         </svg>

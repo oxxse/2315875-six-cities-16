@@ -1,31 +1,48 @@
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import MainPage from '../../pages/main/main';
+import Main from '../../pages/main/main';
 import FavoritesPage from '../../pages/favorites/favorites';
 import OfferPage from '../../pages/offer/offer';
 import LoginPage from '../../pages/login/login';
-import NotFound from '../../pages/not-found-page/not-found';
-import { PublicRoute, PrivateRoute } from '../access-route/access-foute';
+import NotFound from '../../pages/not-found/not-found';
+import AccessRoute from '../access-route/access-route';
 import { HelmetProvider } from 'react-helmet-async';
-import type { Review } from '../../types/types';
-import { getAuthorizationStatus } from '../../utils/common';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { selectError } from '../../store/error/error-selector';
+import { LoadingError } from '../loading-error/loading-error';
+import { useEffect } from 'react';
+import { selectAuthorizationStatus } from '../../store/user/user-selectors';
+import { AuthorizationStatus } from '../../const';
+import { fetchFavoriteOffers } from '../../store/offers/offers';
 
-type App = {
-  reviews: Review[];
-}
+function App(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const error = useAppSelector(selectError);
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
 
-function App({ reviews }: App): JSX.Element {
-  const currentStatus = getAuthorizationStatus();
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoriteOffers());
+    }
+  }, [dispatch, authorizationStatus]);
+
+  if (error) {
+    return (
+      <HelmetProvider>
+        <LoadingError />
+      </HelmetProvider>
+    );
+  }
 
   return (
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route path={AppRoute.Root} element={<MainPage/>}/>
-          <Route path={AppRoute.Main} element={<MainPage />} />
-          <Route path={AppRoute.Favorites} element={<PrivateRoute status={currentStatus}><FavoritesPage /> </PrivateRoute>} />
-          <Route path={AppRoute.Login} element={<PublicRoute status={currentStatus}> <LoginPage /> </PublicRoute>} />
-          <Route path={AppRoute.Offer} element={<OfferPage reviews={reviews} />} />
+          <Route path={AppRoute.Root} element={<Main />} />
+          <Route path={AppRoute.Main} element={<Main />} />
+          <Route path={AppRoute.Favorites} element={<AccessRoute><FavoritesPage /></AccessRoute>} />
+          <Route path={AppRoute.Login} element={<AccessRoute isReverse><LoginPage /></AccessRoute>} />
+          <Route path={AppRoute.Offer} element={<OfferPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { PlaceCard } from '../../types/types';
 import { AppRoute } from '../../const';
-import { getAuthorizationStatus, getMarkupRating, upFirstLetter } from '../../utils/common';
+import { getMarkupRating, capitalizeFirstLetter } from '../../utils/common';
 import FavoriteButton from '../favorite-button/favorite-button';
-import { AuthorizationStatus } from '../../const';
 
 type Card = {
   imageWidth: number;
@@ -15,9 +14,8 @@ type Card = {
 
 type PlaceCardType = PlaceCard & Card;
 
-const authorizationStatus = getAuthorizationStatus();
-
 function CardItem({ imageWidth, imageHeight, className, title, type, price, isFavorite, isPremium, previewImage, rating, id, onMouseEnter, onMouseLeave }: PlaceCardType): JSX.Element {
+  const hotelType = capitalizeFirstLetter(type);
 
   return (
     <article className={`${className}card place-card`}
@@ -46,7 +44,7 @@ function CardItem({ imageWidth, imageHeight, className, title, type, price, isFa
             <b className="place-card__price-value">€{price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          {authorizationStatus === AuthorizationStatus.Auth ? <FavoriteButton className={className} isFavorite={isFavorite}/> : <Link to={AppRoute.Login}><FavoriteButton className={className} isFavorite={false}/></Link>}
+          <FavoriteButton offerId={id} isFavorite={isFavorite} buttonType="card" width={18} height={19} />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
@@ -57,7 +55,7 @@ function CardItem({ imageWidth, imageHeight, className, title, type, price, isFa
         <h2 className="place-card__name">
           <Link to={AppRoute.Offer.replace(':id', id)}>{title}</Link>
         </h2>
-        <p className="place-card__type">{upFirstLetter(type)}</p>
+        <p className="place-card__type">{hotelType}</p>
       </div>
     </article >
   );

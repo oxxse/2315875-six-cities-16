@@ -1,21 +1,34 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../logo/logo';
 import { getHeaderState } from '../../utils/common';
-import { getAuthorizationStatus } from '../../utils/common';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { selectAuthorizationStatus } from '../../store/user/user-selectors';
 import { AppRoute } from '../../const';
 import { AuthorizationStatus } from '../../const';
-import type { Offer } from '../../types/types';
+import { selectUser } from '../../store/user/user-selectors';
+import { logoutAction } from '../../store/thunk-actions';
+import { selectFavoriteOffers } from '../../store/offers/offer-selector';
 
-
-type Header = {
-  favorites?: Offer[];
-}
-
-function Header({ favorites }: Header): JSX.Element {
+function Header(): JSX.Element {
   const { pathname } = useLocation();
   const { linkClassName, shouldRenderUser } = getHeaderState(pathname as AppRoute);
-  const authorizationStatus = getAuthorizationStatus();
+  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const favorites = useAppSelector(selectFavoriteOffers);
 
+  const handleLogoutClick = () => {
+    dispatch(logoutAction()).then(() => {
+      if (pathname.toString() === AppRoute.Favorites.toString()) {
+        navigate(AppRoute.Login);
+      } else {
+        navigate(pathname);
+      }
+    });
+  };
+
+  const userEmail = user ? user.email : '';
 
   return (
     <header className="header">
@@ -33,17 +46,17 @@ function Header({ favorites }: Header): JSX.Element {
                     {authorizationStatus === AuthorizationStatus.Auth ? (
                       <>
                         <span className="header__user-name user__name">
-                          Oliver.conner@gmail.com
-                        </span><span className="header__favorite-count">{favorites ? favorites.length : ''}</span>
+                          {userEmail}
+                        </span><span className="header__favorite-count">{favorites.length}</span>
                       </>
                     ) : <span className="header__login">Sign in</span>}
                   </Link>
                 </li>
                 {authorizationStatus === AuthorizationStatus.Auth ? (
                   <li className="header__nav-item">
-                    <a className="header__nav-link" href="#">
+                    <button type='button' className="header__nav-link button" onClick={handleLogoutClick}>
                       <span className="header__signout">Sign out</span>
-                    </a>
+                    </button>
                   </li>
                 ) : ''}
               </ul>

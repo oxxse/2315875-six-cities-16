@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch } from '../../hooks';
-import { setCity } from '../../store/active-city';
+import { setCity } from '../../store/active-main/active-main';
 
 type Location = {
   city: string;
@@ -9,7 +9,7 @@ type Location = {
   selectedCity?: string;
 }
 
-export default function LocationsItem({ city, selectedCity, isFavoritePage}: Location): JSX.Element {
+export default function LocationsItem({ city, selectedCity, isFavoritePage }: Location): JSX.Element {
   const dispatch = useAppDispatch();
   const isActive = (city === selectedCity);
 
