@@ -78,3 +78,4 @@ function PlaceSorting({ width, height, currentOption, onOptionClick }: PlaceSort
 }
 
 export default PlaceSorting;
+

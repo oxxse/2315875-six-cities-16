@@ -1,132 +1,92 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
-import { ReviewLengths, RATING_TITLES, TIMEOUT_SHOW_ERROR } from '../../const';
-import { useAppDispatch } from '../../hooks';
-import { setError } from '../../store/error/error';
-import { fetchOfferComments, postComment } from '../../store/thunk-actions';
+import React, { ChangeEvent, memo, useEffect, useRef, useState } from 'react';
+import { RATING_TITLES, ReviewLength, MAX_RATING_VALUE } from '../../const';
+import { postComment } from '../../store/thunk-actions';
+import { store } from '../../store';
 
-type RatingStar = {
-  id: string;
-  ratingValue: number;
-  title: string;
-  onChange: () => void;
-  checked: boolean;
-  disabled: boolean;
-};
-
-function RatingStar({disabled, id, ratingValue, title, onChange, checked }: RatingStar): JSX.Element {
-  return (
-    <>
-      <input
-        className="form__rating-input visually-hidden"
-        name="rating"
-        defaultValue={ratingValue}
-        id={id}
-        type="radio"
-        onChange={onChange}
-        checked={checked}
-        disabled={disabled}
-      />
-      <label
-        htmlFor={id}
-        className="reviews__rating-label form__rating-label"
-        title={title}
-      >
-        <svg className="form__star-image" width={37} height={33}>
-          <use xlinkHref="#icon-star" />
-        </svg>
-      </label>
-    </>
-  );
+type ReviewForm = {
+  offerId: string;
 }
 
-function ReviewForm({ offerId }: { offerId: string }): JSX.Element {
-  const [review, setReview] = useState<string>('');
-  const [rating, setRating] = useState<number>(0);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const minLength: number = ReviewLengths.MinLength;
-  const maxLength: number = ReviewLengths.MaxLength;
+function ReviewFormTemplate({offerId}: ReviewForm): JSX.Element {
+  const [submitButtonStatus, setSubmitButtonStatus] = useState(true);
+  const [formDisableStatus, setFormDisableStatus] = useState(false);
+  const form = useRef<HTMLFormElement>(null);
+  const [formData, setFormData] = useState({
+    rating: 0,
+    comment: '',
+    offerId: offerId
+  });
 
-  const isValid: boolean = review.length >= minLength && review.length <= maxLength && rating !== 0;
+  useEffect(() => {
+    if (formData.rating > 0 && formData.comment.length >= ReviewLength.Min && formData.comment.length <= ReviewLength.Max) {
+      setSubmitButtonStatus(false);
+    } else {
+      setSubmitButtonStatus(true);
+    }
+  }, [formData]);
 
-  const handleTextareaChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
-    setReview(evt.target.value);
-  };
-
-  const handleRatingChange = (ratingValue: number) => {
-    setRating(ratingValue);
-  };
-
-  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    if (isValid) {
-      setIsSubmitting(true);
-      dispatch(postComment({ offerId, commentText: review, rating }))
-        .unwrap()
-        .then(() => {
-          setReview('');
-          setRating(0);
-          dispatch(fetchOfferComments(offerId));
-        })
-        .catch(() => {
-          dispatch(setError('Failed to post comment. Please try again later.'));
-          setTimeout(() => {
-            dispatch(setError(null));
-          }, TIMEOUT_SHOW_ERROR);
-        })
-        .finally(() => {
-          setIsSubmitting(false);
-        });
+  const handleRaitingChange = ({target}: ChangeEvent<HTMLInputElement>) => {
+    if (target.tagName === 'INPUT') {
+      setFormData({...formData, rating: parseInt(target.value, 10)});
     }
   };
 
+  const handleReviewChange = ({target}: ChangeEvent<HTMLTextAreaElement>) => {
+    if (target.tagName === 'TEXTAREA') {
+      setFormData({...formData, comment: target.value});
+    }
+  };
+
+  const handleDisableForm = (status: boolean) => {
+    if (status) {
+      setFormData({
+        rating: 0,
+        comment: '',
+        offerId: offerId
+      });
+      form.current?.reset();
+    } else {
+      setSubmitButtonStatus(false);
+    }
+    setFormDisableStatus(false);
+  };
+
+  const handleFormSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    setSubmitButtonStatus(true);
+    setFormDisableStatus(true);
+    store.dispatch(postComment({...formData, disableForm: (status: boolean) => handleDisableForm(status)}));
+
+  };
+
   return (
-    <form onSubmit={handleFormSubmit} className="reviews__form form" action="#" method="post">
-      <label className="reviews__label form__label" htmlFor="review">
-        Your review
-      </label>
-      <div className="reviews__rating-form form__rating">
-        {RATING_TITLES.map((title, index) => {
-          const ratingValue = 5 - index;
-          return (
-            <RatingStar
-              key={ratingValue}
-              id={`${ratingValue}-stars`}
-              ratingValue={ratingValue}
-              title={title}
-              onChange={() => handleRatingChange(ratingValue)}
-              checked={rating === ratingValue}
-              disabled={isSubmitting}
-            />
-          );
-        })}
+    <form ref={form} className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>
+      <label className="reviews__label form__label" htmlFor="review">Your review</label>
+      <div className="reviews__rating-form form__rating" onChange={handleRaitingChange}>
+        {
+          Array.from({ length: MAX_RATING_VALUE}, (_, i: number) => i + 1).reverse().map((item, index) => (
+            <React.Fragment key={`raiting-${item}`}>
+              <input className="form__rating-input visually-hidden" name="rating" value={ item } id={`${ item }-stars`} type="radio" disabled={formDisableStatus} />
+              <label htmlFor={(formDisableStatus) ? '' : `${ item }-stars`} className="reviews__rating-label form__rating-label" title={RATING_TITLES[index]}>
+                <svg className="form__star-image" width="37" height="33">
+                  <use xlinkHref="#icon-star"></use>
+                </svg>
+              </label>
+            </React.Fragment>)
+          )
+        }
       </div>
-      <textarea
-        className="reviews__textarea form__textarea"
-        id="review"
-        name="review"
-        placeholder="Tell how was your stay, what you like and what can be improved"
-        value={review}
-        onChange={handleTextareaChange}
-        disabled={isSubmitting}
-      />
+      <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" onChange={handleReviewChange} disabled={formDisableStatus}></textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
-          To submit review please make sure to set{' '}
-          <span className="reviews__star">rating</span> and describe your
-          stay with at least{' '}
-          <b className="reviews__text-amount">{minLength} characters</b>.
+        To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button
-          className="reviews__submit form__submit button"
-          type="submit"
-          disabled={!isValid || isSubmitting}
-        >
-          Submit
-        </button>
+        <button className="reviews__submit form__submit button" type="submit" disabled={submitButtonStatus}>Submit</button>
       </div>
     </form>
   );
 }
+
+const ReviewForm = memo(ReviewFormTemplate);
 
 export default ReviewForm;

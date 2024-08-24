@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import type { Offer } from '../../types/types';
 import { capitalizeFirstLetter } from '../../utils/common';
 
-function FeaturesList({ feature }: { feature: Offer }): JSX.Element {
+function FeaturesListTemplate ({ feature }: { feature: Offer }): JSX.Element {
   const bedroomsTitle = `${feature.bedrooms > 1 ? 'bedrooms' : 'bedroom'}`;
   const maxAdultsTitle = `${feature.maxAdults > 1 ? 'adults' : 'adult'}`;
   const hotelType = capitalizeFirstLetter(feature.type);
@@ -16,5 +17,7 @@ function FeaturesList({ feature }: { feature: Offer }): JSX.Element {
     </ul>
   );
 }
+
+const FeaturesList = memo(FeaturesListTemplate);
 
 export default FeaturesList;

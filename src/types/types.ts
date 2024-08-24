@@ -1,4 +1,4 @@
-import { PLACES_OPTIONS } from '../const';
+import { CITIES, PLACES_OPTIONS } from '../const';
 
 export type Location = {
   latitude: number;
@@ -12,10 +12,32 @@ export type User = {
   isPro: boolean;
 }
 
+export type CommentForm = {
+  rating: string;
+  comment: string;
+}
+
+export type CommentData = {
+  id: string;
+  comment: CommentForm;
+}
+
 export type City = {
-  name: string;
+  name: typeof CITIES[number];
   location: Location;
 }
+
+export type MapIconType = {
+  iconUrl: string;
+  iconSize: [number, number];
+  iconAnchor: [number, number];
+};
+
+
+export type MapIconsType = {
+  Default: MapIconType;
+  Active: MapIconType;
+};
 
 export type OfferPage =
   [{
@@ -49,12 +71,10 @@ export type OfferTemplate =
     rating: number;
   }
 
-export type Review = {
+export type Review = CommentForm & {
   id: string;
   date: string;
   user: User;
-  comment: string;
-  rating: number;
 };
 
 export type PlaceCard = OfferTemplate & {

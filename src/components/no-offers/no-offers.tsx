@@ -1,3 +1,5 @@
+import './no-offers.css';
+
 type NoOffers = {
   city: string;
 }

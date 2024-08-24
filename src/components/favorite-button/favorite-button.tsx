@@ -1,9 +1,9 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
-import { selectAuthorizationStatus } from '../../store/user/user-selectors';
 import { toggleFavoriteStatus } from '../../store/thunk-actions';
-import { AuthorizationStatus, AppRoute } from '../../const';
+import { AppRoute } from '../../const';
+import { useAuthorization } from '../../hooks/use-authorization';
 
 type FavoriteButton = {
   offerId: string;
@@ -16,11 +16,12 @@ type FavoriteButton = {
 const FavoriteButton: React.FC<FavoriteButton> = ({ offerId, isFavorite, buttonType, width, height }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const isAuth = useAuthorization();
 
   const handleClick = () => {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(toggleFavoriteStatus({ offerId, status: !isFavorite }));
+    if (isAuth) {
+      const status = (isFavorite) ? 0 : 1;
+      dispatch(toggleFavoriteStatus({offerId: offerId, status: status}));
     } else {
       navigate(AppRoute.Login);
     }
@@ -49,3 +50,4 @@ const FavoriteButton: React.FC<FavoriteButton> = ({ offerId, isFavorite, buttonT
 };
 
 export default FavoriteButton;
+
