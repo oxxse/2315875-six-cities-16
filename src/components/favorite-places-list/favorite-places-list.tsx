@@ -1,15 +1,15 @@
 import PlaceCardList from '../place-card-list/place-card-list';
 import LocationsItem from '../locations-item/locations-item';
-import { Offer } from '../../types/types';
+import { PlaceCard } from '../../types/types';
 import { groupOffersByCity } from '../../utils/common';
 
 type FavoritePlace = {
   city: string;
-  offers: Offer[];
+  offers: PlaceCard[];
 };
 
 type FavoritePlacesList = {
-  offers: Offer[];
+  offers: PlaceCard[];
 };
 
 function FavoritePlace({ city, offers }: FavoritePlace): JSX.Element {

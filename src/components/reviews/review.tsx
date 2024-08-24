@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { getMarkupRating } from '../../utils/common';
 import { Review } from '../../types/types';
 
 
-function ReviewsItem({ date, user, comment, rating }: Review): JSX.Element {
+function ReviewItemTemplate({ date, user, comment, rating }: Review): JSX.Element {
   const reviewDate = new Date(date);
   const commonDate = reviewDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -28,7 +29,7 @@ function ReviewsItem({ date, user, comment, rating }: Review): JSX.Element {
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={getMarkupRating(rating)}></span>
+            <span style={getMarkupRating(Number(rating))}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -43,4 +44,6 @@ function ReviewsItem({ date, user, comment, rating }: Review): JSX.Element {
   );
 }
 
-export default ReviewsItem;
+const ReviewItem = memo(ReviewItemTemplate);
+
+export default ReviewItem;

@@ -1,13 +1,13 @@
 import CardItem from '../card-item/card-item.tsx';
-import { Offer } from '../../types/types.ts';
+import { PlaceCard } from '../../types/types.ts';
 
 type PlaceList = {
-  offers: Offer[];
+  offers: PlaceCard[];
   classNameList: string;
   classNameItem: string;
   imageWidth: number;
   imageHeight: number;
-  onHover?: (offer?: Offer) => void;
+  onHover?: (offer?: PlaceCard) => void;
 };
 
 function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNameItem, onHover}: PlaceList): JSX.Element {
@@ -16,7 +16,7 @@ function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNa
     classes.push('tabs__content');
   }
 
-  const handleMouseEnter = (offer: Offer) => {
+  const handleMouseEnter = (offer: PlaceCard) => {
     if (onHover) {
       onHover(offer);
     }

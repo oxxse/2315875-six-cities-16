@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import Header from '../../components/header/header';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import FeaturesList from '../../components/features-list/features-list';
 import InsideList from '../../components/inside-list/inside-list';
@@ -11,22 +10,23 @@ import { Helmet } from 'react-helmet-async';
 import FavoriteButton from '../../components/favorite-button/favorite-button';
 import { getMarkupRating } from '../../utils/common';
 import ReviewsList from '../../components/reviews-list/review-list';
-import { AuthorizationStatus, MAX_NEARBY_OFFERS_COUNT, MAX_IMAGES_COUNT } from '../../const';
+import { MAX_NEARBY_OFFERS_COUNT, MAX_IMAGES_COUNT } from '../../const';
 import ReviewForm from '../../components/review-form/review-form';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { fetchOfferDetailsById, fetchOfferComments, fetchNearbyOffers } from '../../store/thunk-actions';
-import { selectCity } from '../../store/active-main/active-main-selectors';
-import { selectAuthorizationStatus } from '../../store/user/user-selectors';
-import { selectNearbyOffers, selectOfferDetails, selectOfferComments } from '../../store/offers/offer-selector';
+import { getOfferData, fetchOfferComments, fetchNearbyOffers } from '../../store/thunk-actions';
+import { selectNearbyOffers, selectOfferDetails, selectOfferComments, selectOfferLoadingStatus, selectOfferLoadingError } from '../../store/offer/offer-selectors';
+import { useAuthorization } from '../../hooks/use-authorization';
+import Spinner from '../../components/spinner/spinner';
 
 function OfferPage(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
+  const isAuth = useAuthorization();
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchOfferDetailsById(id)).then((response) => {
+      dispatch(getOfferData(id)).then((response) => {
         if (response.meta.requestStatus === 'fulfilled') {
           dispatch(fetchOfferComments(id));
           dispatch(fetchNearbyOffers(id));
@@ -35,42 +35,39 @@ function OfferPage(): JSX.Element {
     }
   }, [id, dispatch]);
 
-  const selectedCity = useAppSelector(selectCity);
-  const authorizationStatus = useAppSelector(selectAuthorizationStatus);
+  const isLoading = useAppSelector(selectOfferLoadingStatus);
+  const isError = useAppSelector(selectOfferLoadingError);
   const currentOffer = useAppSelector(selectOfferDetails);
   const reviews = useAppSelector(selectOfferComments);
   const nearOffers = useAppSelector(selectNearbyOffers);
 
-
-  // useEffect(() => {
-  //   if (authorizationStatus === AuthorizationStatus.Auth) {
-  //     dispatch(fetchFavoriteOffers());
-  //   }
-  // }, [dispatch, authorizationStatus]);
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   if (!currentOffer) {
     return <NotFound />;
   }
 
-  const cityData = currentOffer?.city;
-
-  if (!cityData) {
-    return <div>City information is missing</div>;
+  if (isError) {
+    return (
+      <main className="page__main page__main--offer">
+        <h3>Произошла ошибка при загрузке данных.</h3>
+      </main>
+    );
   }
 
-  const nearbyOffers = nearOffers.filter((offer) => currentOffer.city.name === selectedCity && offer.id !== currentOffer.id).slice(0, MAX_NEARBY_OFFERS_COUNT);
-
+  const nearbyOffers = nearOffers.slice(0, MAX_NEARBY_OFFERS_COUNT);
   const { title, price, rating, isPremium, isFavorite, goods, description, images } = currentOffer;
   const imagesToShow = images.slice(0, MAX_IMAGES_COUNT);
   const offerId = id ?? 'defaultId';
 
   return (
-    <div className="page">
-      <Helmet>
-        <title>6 cities: Offer</title>
-      </Helmet>
-      <Header/>
+    <>
       <main className="page__main page__main--offer">
+        <Helmet>
+          <title>6 cities: Offer</title>
+        </Helmet>
         <section className="offer">
           <div className="offer__gallery-container container">
             <OfferGallery images={imagesToShow} />
@@ -120,11 +117,11 @@ function OfferPage(): JSX.Element {
                 Reviews · <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ReviewsList reviews={reviews} />
-              {authorizationStatus === AuthorizationStatus.Auth && id && <ReviewForm offerId={offerId}/>}
+              {isAuth && id && <ReviewForm offerId={offerId} />}
             </section>
           </div>
         </section>
-        <Map city={currentOffer.location} offers={[...nearbyOffers, currentOffer]} className='offer' activeOffer={currentOffer} />
+        <Map isMainPage={false} city={currentOffer.location} places={[...nearbyOffers, currentOffer]} activePlaceId={currentOffer.id} />
       </main>
       <div className="container">
         {nearbyOffers &&
@@ -133,7 +130,7 @@ function OfferPage(): JSX.Element {
             <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places__' imageWidth={260} imageHeight={200} />
           </section>}
       </div>
-    </div >
+    </>
   );
 }
 

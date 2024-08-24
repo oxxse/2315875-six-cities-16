@@ -1,33 +1,27 @@
-import leaflet, { LayerGroup } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import { useRef, useEffect } from 'react';
-import './map.module.css';
-import { Offer, Location } from '../../types/types';
-import { UrlMarkers } from '../../const';
+import leaflet, { Icon, LayerGroup } from 'leaflet';
+import { PlaceCard, Location } from '../../types/types';
+import { MapIcon } from '../../const';
+
 import useMap from '../../hooks/use-map';
 
+import 'leaflet/dist/leaflet.css';
+
 type Map = {
-  className: string;
+  activePlaceId: string | undefined;
   city: Location;
-  offers?: Offer[];
-  activeOffer?: Offer | null;
+  places: PlaceCard[];
+  isMainPage: boolean;
 }
 
-const defaultCustomIcon = leaflet.icon({
-  iconUrl: UrlMarkers.UrlMarkerDefault,
-  iconSize: [27, 39],
-  iconAnchor: [13, 39],
-});
+const defaultIcon = new Icon(MapIcon.Default);
+const customIcon = new Icon(MapIcon.Active);
 
-const currentCustomIcon = leaflet.icon({
-  iconUrl: UrlMarkers.UrlMarkerCurrent,
-  iconSize: [27, 39],
-  iconAnchor: [13, 39],
-});
 
-function Map({ className, city, offers, activeOffer }: Map): JSX.Element {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const map = useMap({ mapRef, city });
+function Map(props: Map): JSX.Element {
+  const { activePlaceId, city, places, isMainPage } = props;
+  const mapRef = useRef(null);
+  const map = useMap(mapRef, city);
   const markerLayer = useRef<LayerGroup>(leaflet.layerGroup());
 
   useEffect(() => {
@@ -39,27 +33,26 @@ function Map({ className, city, offers, activeOffer }: Map): JSX.Element {
   }, [city, map]);
 
   useEffect(() => {
-    if (map && offers) {
-      offers.forEach((offer) => {
-        if (offer.location) {
-          leaflet.
-            marker({
-              lat: offer.location.latitude,
-              lng: offer.location.longitude,
-            }, {
-              icon: activeOffer && activeOffer.id === offer.id ? currentCustomIcon : defaultCustomIcon,
-            }).addTo(markerLayer.current);
-        }
+    if (map) {
+      places.forEach((place) => {
+        leaflet
+          .marker({
+            lat: place.location.latitude,
+            lng: place.location.longitude,
+          }, {
+            icon: place.id === activePlaceId ? customIcon : defaultIcon,
+          })
+          .addTo(map);
       });
     }
-  }, [activeOffer, map, offers]);
+  }, [activePlaceId, map, places]);
 
   return (
     <section
-      className={`${className}__map map`}
+      style={{ margin: '0 auto' }}
+      className={`${isMainPage ? 'cities__map' : 'offer__map'} map`}
       ref={mapRef}
-    >
-    </section>
+    />
   );
 }
 

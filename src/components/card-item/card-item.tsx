@@ -4,6 +4,7 @@ import { AppRoute } from '../../const';
 import { getMarkupRating, capitalizeFirstLetter } from '../../utils/common';
 import FavoriteButton from '../favorite-button/favorite-button';
 
+
 type Card = {
   imageWidth: number;
   imageHeight: number;

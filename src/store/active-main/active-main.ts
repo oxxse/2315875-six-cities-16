@@ -1,17 +1,14 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { CITIES } from '../../const';
-import { Offer } from '../../types/types';
 import { NameSpace, PLACES_OPTIONS } from '../../const';
 
 type ActiveMainState = {
-  activeOffer: Offer | null;
   currentCity: string;
-  selectedSortingOption: string;
+  selectedSortingOption: typeof PLACES_OPTIONS[number];
 }
 
 
 const initialState: ActiveMainState = {
-  activeOffer: null,
   currentCity: CITIES[0],
   selectedSortingOption: PLACES_OPTIONS[0]
 };
@@ -24,15 +21,11 @@ export const activeMainSlice = createSlice({
     setCity: (state, action: PayloadAction<string>) => {
       state.currentCity = action.payload;
     },
-    setActiveOffer: (state, action: PayloadAction<Offer | null>) => {
-      state.activeOffer = action.payload;
-    },
-    setSort: (state, action: PayloadAction<string>) => {
+    setSort: (state, action: PayloadAction<typeof PLACES_OPTIONS[number]>) => {
       state.selectedSortingOption = action.payload;
     }
   }
 });
 
-export const { setCity, setActiveOffer, setSort } = activeMainSlice.actions;
+export const { setCity, setSort } = activeMainSlice.actions;
 
-export const activeMainReducer = activeMainSlice.reducer;

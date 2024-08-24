@@ -1,22 +1,20 @@
-import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import { Helmet } from 'react-helmet-async';
 import FavoritePlacesList from '../../components/favorite-places-list/favorite-places-list';
 import NoFavorites from '../../components/no-favorites/no-favorites';
 import { useAppSelector } from '../../hooks';
-import { selectFavoriteOffers } from '../../store/offers/offer-selector';
+import { selectFavoriteOffers } from '../../store/offers/offers-selectors';
 
 
 function FavoritesPage(): JSX.Element {
   const favorites = useAppSelector(selectFavoriteOffers);
 
   return (
-    <div className="page">
-      <Helmet>
-        <title>6 cities: Favorites</title>
-      </Helmet>
-      <Header/>
+    <>
       <main className={`page__main page__main--favorites${!favorites.length && 'page__main--favorites-empty'}`}>
+        <Helmet>
+          <title>6 cities: Favorites</title>
+        </Helmet>
         <div className="page__favorites-container container">
           {favorites.length ?
             <section className="favorites">
@@ -26,7 +24,7 @@ function FavoritesPage(): JSX.Element {
         </div>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }
 
