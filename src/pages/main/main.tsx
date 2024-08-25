@@ -19,10 +19,6 @@ function Main(): JSX.Element {
   const offers = useAppSelector(selectOffers);
   const selectedSortingOption = useAppSelector(selectSortingOption);
   const dispatch = useAppDispatch();
-  const filterOffers = useCallback((cards: PlaceCard[]) => cards.filter((card) => card.city.name === selectedCity), [selectedCity]);
-  const currentCityOffers = useMemo(() => filterOffers(offers), [filterOffers, offers]);
-  const placesTitle = currentCityOffers.length === 1 ? 'place' : 'places';
-  const sortedOffers = getSortedOffers(currentCityOffers, selectedSortingOption);
 
   const handleOptionClick = useCallback((option: SortingOption) => {
     dispatch(setSort(option));
@@ -34,15 +30,39 @@ function Main(): JSX.Element {
     setActiveOffer(offer);
   }, []);
 
+  const filterOffers = useCallback((cards: PlaceCard[] | undefined) => cards?.filter((card) => card.city.name === selectedCity), [selectedCity]);
+  const currentCityOffers = useMemo(() => filterOffers(offers), [filterOffers, offers]);
+
+  if (!currentCityOffers || !currentCityOffers.length) {
+    return (
+      <main className={'page__main page__main--index page__main--index-empty'}>
+        <Helmet>
+          <title> 6 cities.</title>
+        </Helmet>
+        <h1 className="visually-hidden">Cities</h1>
+        <div className="tabs">
+          <section className="locations container">
+            <LocationsList selectedCity={selectedCity} />
+          </section>
+        </div>
+        <div className="cities">
+          <NoOffers city={selectedCity} />
+        </div>
+      </main>
+    );
+  }
+
+  const placesTitle = currentCityOffers?.length === 1 ? 'place' : 'places';
+  const sortedOffers = getSortedOffers(currentCityOffers, selectedSortingOption);
+
   const cityLocation = CITY_LOCATIONS.find((city) => city.name === selectedCity);
 
   if (!cityLocation) {
     return <div>Ошибка отображения карты</div>;
   }
 
-
   return (
-    <main className={`page__main page__main--index ${!currentCityOffers.length && 'page__main--index-empty'}`}>
+    <main className={'page__main page__main--index'}>
       <Helmet>
         <title> 6 cities.</title>
       </Helmet>
@@ -53,19 +73,17 @@ function Main(): JSX.Element {
         </section>
       </div>
       <div className="cities">
-        {currentCityOffers.length &&
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{currentCityOffers.length} {placesTitle} to stay in {selectedCity}</b>
-              <SortingForm currentOption={selectedSortingOption} onOptionClick={handleOptionClick} width={7} height={4} />
-              <PlaceCardList offers={sortedOffers} onHover={handleOfferHover} classNameList={'cities__places-list'} classNameItem={'cities'} imageWidth={260} imageHeight={200} />
-            </section>
-            <div className="cities__right-section">
-              <Map offers={currentCityOffers} city={cityLocation.location} className='cities' activeOffer={activeOffer} />
-            </div>
-          </div>}
-        {!currentCityOffers.length && selectedCity && <NoOffers city={selectedCity} />}
+        <div className="cities__places-container container">
+          <section className="cities__places places">
+            <h2 className="visually-hidden">Places</h2>
+            <b className="places__found">{currentCityOffers.length} {placesTitle} to stay in {selectedCity}</b>
+            <SortingForm currentOption={selectedSortingOption} onOptionClick={handleOptionClick} width={7} height={4} />
+            <PlaceCardList offers={sortedOffers} onHover={handleOfferHover} classNameList={'cities__places-list'} classNameItem={'cities'} imageWidth={260} imageHeight={200} />
+          </section>
+          <div className="cities__right-section">
+            <Map offers={currentCityOffers} city={cityLocation.location} className='cities' activeOffer={activeOffer} />
+          </div>
+        </div>
       </div>
     </main>
   );
