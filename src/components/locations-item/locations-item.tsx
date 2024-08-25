@@ -15,7 +15,7 @@ const LocationsItem = memo(({ city, selectedCity, isFavoritePage }: Location): J
   const isActive = (city === selectedCity);
 
   const content = (
-    <NavLink className={isActive ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'} to={AppRoute.Main.replace(':selectedCity', city)}>
+    <NavLink className={isActive ? 'locations__item-link tabs__item tabs__item--active' : 'locations__item-link tabs__item'} to={AppRoute.Main}>
       <span>{city}</span>
     </NavLink >
   );

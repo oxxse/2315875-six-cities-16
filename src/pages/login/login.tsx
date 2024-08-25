@@ -31,8 +31,6 @@ function LoginPage(): JSX.Element {
     }
   }, [dispatch, navigate]);
 
-  const randomCity = getRandomCity();
-
   return (
     <main className="page__main page__main--login">
       <Helmet>
@@ -45,8 +43,8 @@ function LoginPage(): JSX.Element {
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
-            <Link className="locations__item-link" to={AppRoute.Main.replace(':selectedCity', randomCity)}>
-              <span>{randomCity}</span>
+            <Link className="locations__item-link" to={AppRoute.Main}>
+              <span>{getRandomCity()}</span>
             </Link>
           </div>
         </section>

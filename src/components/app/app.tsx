@@ -23,9 +23,8 @@ function App(): JSX.Element {
     <HelmetProvider>
       <BrowserRouter>
         <Routes>
-          <Route path={AppRoute.Root} element={<Layout />}>
+          <Route path={AppRoute.Main} element={<Layout />}>
             <Route index element={<Main/>} />
-            <Route path={AppRoute.Main} element={<Main />} />
             <Route path={AppRoute.Favorites} element={<AccessRoute><FavoritesPage /></AccessRoute>} />
             <Route path={AppRoute.Login} element={<AccessRoute isReverse><LoginPage /></AccessRoute>} />
             <Route path={AppRoute.Offer} element={<OfferPage />} />

@@ -53,7 +53,6 @@ export const CITY_LOCATIONS = [
   }
 ] as const;
 
-const BASE_ACTIVE_CITY = 'Paris';
 const TIMEOUT_SHOW_ERROR = 5000;
 const PASSWORD_REGEXP = /^.*(?=.*[a-zA-Z])(?=.*\d).*$/;
 const MAX_REVIEWS_COUNT = 10;
@@ -84,8 +83,7 @@ const TileLayerUrl = {
 } as const;
 
 enum AppRoute {
-  Root = '/',
-  Main = '/:selectedCity',
+  Main = '/',
   Login = '/login',
   Favorites = '/favorites',
   Offer = '/offer/:id',
@@ -139,7 +137,6 @@ export {
   MapIcon,
   TileLayerUrl,
   NameSpace,
-  BASE_ACTIVE_CITY,
   TIMEOUT_SHOW_ERROR,
   MAX_NEARBY_OFFERS_COUNT,
   MAX_IMAGES_COUNT,

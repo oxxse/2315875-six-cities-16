@@ -3,32 +3,29 @@ import LocationsList from '../../components/locations-list/locations-list';
 import Map from '../../components/map/map';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import NoOffers from '../../components/no-offers/no-offers';
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCity, selectSortingOption } from '../../store/active-main/active-main-selectors';
 import { selectOffers } from '../../store/offers/offers-selectors';
 import { PlaceCard, SortingOption } from '../../types/types';
-import { AppRoute, CITY_LOCATIONS } from '../../const';
+import { CITY_LOCATIONS } from '../../const';
 import { getSortedOffers } from '../../utils/common';
 import { useState } from 'react';
 import { setSort } from '../../store/active-main/active-main';
 import SortingForm from '../../components/sorting-form/sorting-form';
 
 function Main(): JSX.Element {
-  const navigate = useNavigate();
   const selectedCity = useAppSelector(selectCity);
   const offers = useAppSelector(selectOffers);
   const selectedSortingOption = useAppSelector(selectSortingOption);
   const dispatch = useAppDispatch();
+  const currentCityOffers = offers.filter((offer) => offer.city.name === selectedCity);
+  const placesTitle = currentCityOffers.length === 1 ? 'place' : 'places';
+  const sortedOffers = getSortedOffers(currentCityOffers, selectedSortingOption);
 
   const handleOptionClick = useCallback((option: SortingOption) => {
     dispatch(setSort(option));
   }, [dispatch]);
-
-  useEffect(() => {
-    navigate(AppRoute.Main.replace(':selectedCity', selectedCity));
-  }, [navigate, selectedCity]);
 
   const [activeOffer, setActiveOffer] = useState<PlaceCard | null>();
 
@@ -36,9 +33,6 @@ function Main(): JSX.Element {
     setActiveOffer(offer);
   }, []);
 
-  const currentCityOffers = offers.filter((offer) => offer.city.name === selectedCity);
-  const placesTitle = currentCityOffers.length === 1 ? 'place' : 'places';
-  const sortedOffers = getSortedOffers(currentCityOffers, selectedSortingOption);
   const cityLocation = CITY_LOCATIONS.find((city) => city.name === selectedCity);
 
   if (!cityLocation) {
