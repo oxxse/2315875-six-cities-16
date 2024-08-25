@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import './offer.css';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import FeaturesList from '../../components/features-list/features-list';
 import InsideList from '../../components/inside-list/inside-list';
@@ -112,7 +113,7 @@ function OfferPage(): JSX.Element {
                 </p>
               </div>
             </div>
-            <section className="offer__reviews reviews" style={{maxWidth: '613px', marginLeft: 'auto', marginRight: 'auto'}}>
+            <section className="offer__reviews reviews">
               <h2 className="reviews__title">
                 Reviews · <span className="reviews__amount">{reviews.length}</span>
               </h2>

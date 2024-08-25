@@ -39,6 +39,7 @@ function Main(): JSX.Element {
     return <div>Ошибка отображения карты</div>;
   }
 
+
   return (
     <main className={`page__main page__main--index ${!currentCityOffers.length && 'page__main--index-empty'}`}>
       <Helmet>
