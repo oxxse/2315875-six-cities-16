@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, memo } from 'react';
 import leaflet, { Icon, LayerGroup } from 'leaflet';
 import { PlaceCard, Location } from '../../types/types';
 import { MapIcon } from '../../const';
@@ -18,7 +18,7 @@ const defaultIcon = new Icon(MapIcon.Default);
 const customIcon = new Icon(MapIcon.Active);
 
 
-function Map(props: Map): JSX.Element {
+const Map = memo((props: Map): JSX.Element => {
   const { activePlaceId, city, places, isMainPage } = props;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
@@ -54,6 +54,8 @@ function Map(props: Map): JSX.Element {
       ref={mapRef}
     />
   );
-}
+});
+
+Map.displayName = 'Map';
 
 export default Map;

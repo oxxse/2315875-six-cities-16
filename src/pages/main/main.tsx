@@ -5,7 +5,7 @@ import Map from '../../components/map/map';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import NoOffers from '../../components/no-offers/no-offers';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCity, selectSortingOption } from '../../store/active-main/active-main-selectors';
 import { selectOffers } from '../../store/offers/offers-selectors';
@@ -21,7 +21,10 @@ function Main(): JSX.Element {
   const offers = useAppSelector(selectOffers);
   const selectedSortingOption = useAppSelector(selectSortingOption);
   const dispatch = useAppDispatch();
-  const handleOptionClick = (option: SortingOption) => dispatch(setSort(option));
+
+  const handleOptionClick = useCallback((option: SortingOption) => {
+    dispatch(setSort(option));
+  }, [dispatch]);
 
   useEffect(() => {
     navigate(AppRoute.Main.replace(':selectedCity', selectedCity));
@@ -29,8 +32,9 @@ function Main(): JSX.Element {
 
   const [activeOffer, setActiveOffer] = useState<PlaceCard | null>();
 
-  const handleOfferHover = (offer?: PlaceCard) =>
+  const handleOfferHover = useCallback((offer?: PlaceCard) => {
     setActiveOffer(offer);
+  }, []);
 
   const currentCityOffers = offers.filter((offer) => offer.city.name === selectedCity);
   const placesTitle = currentCityOffers.length === 1 ? 'place' : 'places';

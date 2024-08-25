@@ -1,13 +1,13 @@
-import React, { ChangeEvent, memo, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, memo, useCallback, useEffect, useRef, useState } from 'react';
 import { RATING_TITLES, ReviewLength, MAX_RATING_VALUE } from '../../const';
 import { postComment } from '../../store/thunk-actions';
 import { store } from '../../store';
 
-type ReviewForm = {
+type ReviewFormData = {
   offerId: string;
 }
 
-function ReviewFormTemplate({offerId}: ReviewForm): JSX.Element {
+const ReviewForm = memo(({offerId}: ReviewFormData): JSX.Element => {
   const [submitButtonStatus, setSubmitButtonStatus] = useState(true);
   const [formDisableStatus, setFormDisableStatus] = useState(false);
   const form = useRef<HTMLFormElement>(null);
@@ -25,19 +25,19 @@ function ReviewFormTemplate({offerId}: ReviewForm): JSX.Element {
     }
   }, [formData]);
 
-  const handleRaitingChange = ({target}: ChangeEvent<HTMLInputElement>) => {
+  const handleRaitingChange = useCallback(({target}: ChangeEvent<HTMLInputElement>) => {
     if (target.tagName === 'INPUT') {
       setFormData({...formData, rating: parseInt(target.value, 10)});
     }
-  };
+  }, [formData]);
 
-  const handleReviewChange = ({target}: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleReviewChange = useCallback(({target}: ChangeEvent<HTMLTextAreaElement>) => {
     if (target.tagName === 'TEXTAREA') {
       setFormData({...formData, comment: target.value});
     }
-  };
+  }, [formData]);
 
-  const handleDisableForm = (status: boolean) => {
+  const handleDisableForm = useCallback((status: boolean) => {
     if (status) {
       setFormData({
         rating: 0,
@@ -49,15 +49,14 @@ function ReviewFormTemplate({offerId}: ReviewForm): JSX.Element {
       setSubmitButtonStatus(false);
     }
     setFormDisableStatus(false);
-  };
+  }, [offerId]);
 
-  const handleFormSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = useCallback((evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     setSubmitButtonStatus(true);
     setFormDisableStatus(true);
     store.dispatch(postComment({...formData, disableForm: (status: boolean) => handleDisableForm(status)}));
-
-  };
+  }, [formData, handleDisableForm]);
 
   return (
     <form ref={form} className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>
@@ -85,8 +84,8 @@ function ReviewFormTemplate({offerId}: ReviewForm): JSX.Element {
       </div>
     </form>
   );
-}
+});
 
-const ReviewForm = memo(ReviewFormTemplate);
+ReviewForm.displayName = 'ReviewForm';
 
 export default ReviewForm;

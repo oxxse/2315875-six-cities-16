@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 type OfferImage = {
   image: string;
 };
@@ -7,21 +9,20 @@ type OfferGallery = {
 };
 
 
-function OfferImage({image} : OfferImage) : JSX.Element {
-  return (
-    <div className="offer__image-wrapper">
-      <img className="offer__image" src={image} alt="Photo studio" />
-    </div>
-  );
-}
+const OfferImage = memo(({ image }: OfferImage): JSX.Element => (
+  <div className="offer__image-wrapper">
+    <img className="offer__image" src={image} alt="Photo studio" />
+  </div>
+));
 
-function OfferGallery({images} : OfferGallery): JSX.Element {
+OfferImage.displayName = 'OfferImage';
 
-  return (
-    <div className="offer__gallery">
-      {images.map((image) => <OfferImage image={image} key={image}/>)}
-    </div>
-  );
-}
+const OfferGallery = memo(({ images }: OfferGallery): JSX.Element => (
+  <div className="offer__gallery">
+    {images.map((image) => <OfferImage image={image} key={image} />)}
+  </div>
+));
+
+OfferGallery.displayName = 'OfferGallery';
 
 export default OfferGallery;

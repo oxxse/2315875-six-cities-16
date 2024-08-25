@@ -75,27 +75,12 @@ export const postComment = createAsyncThunk<Review | undefined, {offerId: string
   }
 });
 
-// export const fetchFavoriteOffers = createAppAsyncThunk<PlaceCard[], undefined>(`${NameSpace.Offers}/fetchFavoriteOffers`,
-//   async (_arg, { extra: api }) => {
-//     const { data } = await api.get<PlaceCard[]>(ApiRoute.Favorites);
-//     return data;
-//   }
-// );
-
-// export const toggleFavoriteStatus = createAppAsyncThunk<Offer, { offerId: string; status: number }>(`${NameSpace.Offers}/toggleFavoriteStatus`,
-//   async ({ offerId, status }, { extra: api }) => {
-//     const { data } = await api.post<Offer>(`${ApiRoute.Favorites}/${offerId}/${status}`);
-//     return data;
-//   }
-// );
-
-export const fetchFavoriteOffers = createAppAsyncThunk<Offer[], undefined>('uploadFavoriteOffers', async (_arg, {extra: api}) => {
+export const fetchFavoriteOffers = createAppAsyncThunk<Offer[], undefined>(`${NameSpace.Offers}/fetchFavoriteOffers`, async (_arg, {extra: api}) => {
   const { data } = await api.get<Offer[]>(ApiRoute.Favorites);
   return data;
 });
 
-export const toggleFavoriteStatus = createAppAsyncThunk<Offer, {offerId: string; status: number}>('toggleFavoriteStatus', async ({offerId, status}, {extra: api}) => {
+export const toggleFavoriteStatus = createAppAsyncThunk<Offer, {offerId: string; status: number}>(`${NameSpace.Offers}/toggleFavoriteStatus`, async ({offerId, status}, {extra: api}) => {
   const { data } = await api.post<Offer>(`${ApiRoute.Favorites}/${offerId}/${status}`);
   return data;
 });
-

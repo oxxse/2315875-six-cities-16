@@ -2,7 +2,7 @@ import LoginForm from '../../components/login-form/login-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AppRoute, CITIES } from '../../const';
-import { useRef, FormEvent } from 'react';
+import { useRef, FormEvent, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/thunk-actions';
 import { selectSubmittingStatus } from '../../store/user/user-selectors';
@@ -15,7 +15,7 @@ function LoginPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleFormSubmitLogin = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmitLogin = useCallback((evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (loginRef.current && passwordRef.current) {
       dispatch(loginAction({
@@ -28,7 +28,7 @@ function LoginPage(): JSX.Element {
           }
         });
     }
-  };
+  }, [dispatch, navigate]);
 
   const randomCity = CITIES[Math.floor(Math.random() * CITIES.length)];
 

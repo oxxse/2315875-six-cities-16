@@ -7,8 +7,9 @@ import { selectUser } from '../../store/user/user-selectors';
 import { logoutAction } from '../../store/thunk-actions';
 import { selectFavoriteOffers } from '../../store/offers/offers-selectors';
 import { useAuthorization } from '../../hooks/use-authorization';
+import { useCallback } from 'react';
 
-function Layout(): JSX.Element {
+const Layout = ((): JSX.Element => {
   const { pathname } = useLocation();
   const currentPage = pathname as AppRoute;
   const { rootClassName, linkClassName, shouldRenderUser } = getHeaderState(currentPage);
@@ -18,7 +19,7 @@ function Layout(): JSX.Element {
   const favorites = useAppSelector(selectFavoriteOffers);
   const isAuth = useAuthorization();
 
-  const handleLogoutClick = () => {
+  const handleLogoutClick = useCallback(() => {
     dispatch(logoutAction()).then(() => {
       if (isAuth) {
         navigate(AppRoute.Login);
@@ -26,7 +27,7 @@ function Layout(): JSX.Element {
         navigate(pathname);
       }
     });
-  };
+  }, [dispatch, isAuth, navigate, pathname]);
 
   const userEmail = user ? user.email : '';
 
@@ -68,6 +69,6 @@ function Layout(): JSX.Element {
       </header>
       <Outlet />
     </div>);
-}
+});
 
 export default Layout;

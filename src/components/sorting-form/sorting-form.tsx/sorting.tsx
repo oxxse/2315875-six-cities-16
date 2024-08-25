@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import { PLACES_OPTIONS } from '../../../const';
 import { useState } from 'react';
 import { SortingOption } from '../../../types/types';
@@ -21,43 +22,42 @@ type PlacesOption = {
   onClick: (option: SortingOption) => void;
 };
 
-function PlacesOption({ placesOption, isActive, onClick }: PlacesOption): JSX.Element {
-  return (
-    <li
-      className={`places__option ${isActive ? 'places__option--active' : ''}`}
-      tabIndex={0}
-      onClick={() => onClick(placesOption)}
-    >
-      {placesOption}
-    </li>
-  );
-}
+const PlacesOption = memo(({ placesOption, isActive, onClick }: PlacesOption): JSX.Element => (
+  <li
+    className={`places__option ${isActive ? 'places__option--active' : ''}`}
+    tabIndex={0}
+    onClick={() => onClick(placesOption)}
+  >
+    {placesOption}
+  </li>
+));
 
-function PlacesOptionsList({ currentOption, onOptionClick, isOpen }: PlacesOptionsList): JSX.Element {
+PlacesOption.displayName = 'PlacesOption';
 
-  return (
-    <ul className={`places__options places__options--custom ${isOpen ? 'places__options--opened' : ''}`}>
-      {PLACES_OPTIONS.map((option) => (
-        <PlacesOption
-          placesOption={option}
-          key={option}
-          isActive={option === currentOption}
-          onClick={onOptionClick}
-        />))}
-    </ul>
-  );
-}
+const PlacesOptionsList = memo(({ currentOption, onOptionClick, isOpen }: PlacesOptionsList): JSX.Element => (
+  <ul className={`places__options places__options--custom ${isOpen ? 'places__options--opened' : ''}`}>
+    {PLACES_OPTIONS.map((option) => (
+      <PlacesOption
+        placesOption={option}
+        key={option}
+        isActive={option === currentOption}
+        onClick={onOptionClick}
+      />))}
+  </ul>
+));
 
-function PlaceSorting({ width, height, currentOption, onOptionClick }: PlaceSorting): JSX.Element {
+PlacesOptionsList.displayName = 'PlacesOptionsList';
+
+const PlaceSorting = memo(({ width, height, currentOption, onOptionClick }: PlaceSorting): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleList = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionSet = (option: string) => {
+  const handleOptionSet = useCallback((option: string) => {
     onOptionClick(option);
     setIsOpen(false);
-  };
+  }, [onOptionClick]);
 
   return (
     <form className="places__sorting" action="#" method="get">
@@ -75,7 +75,9 @@ function PlaceSorting({ width, height, currentOption, onOptionClick }: PlaceSort
       />
     </form>
   );
-}
+});
+
+PlaceSorting.displayName = 'PlaceSorting';
 
 export default PlaceSorting;
 

@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import type { Offer } from '../../types/types';
 
-function HostTemplate ({ hostData }: { hostData: Offer }): JSX.Element {
+const Host = memo(({ hostData }: { hostData: Offer }): JSX.Element => {
   const { host } = hostData;
   return (
     <div className="offer__host-user user">
@@ -16,8 +16,8 @@ function HostTemplate ({ hostData }: { hostData: Offer }): JSX.Element {
       </span>
     </div>
   );
-}
+});
 
-const Host = memo(HostTemplate);
+Host.displayName = 'Host';
 
 export default Host;
