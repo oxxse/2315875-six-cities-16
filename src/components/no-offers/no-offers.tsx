@@ -1,10 +1,11 @@
+import { memo } from 'react';
 import './no-offers.css';
 
 type NoOffers = {
   city: string;
 }
 
-const NoOffers = (({ city }: NoOffers): JSX.Element => (
+const NoOffers = memo((({ city }: NoOffers): JSX.Element => (
   <div className="cities__places-container cities__places-container--empty container">
     <section className="cities__no-places">
       <div className="cities__status-wrapper tabs__content">
@@ -14,6 +15,8 @@ const NoOffers = (({ city }: NoOffers): JSX.Element => (
     </section>
     <div className="cities__right-section"></div>
   </div>
-));
+)));
+
+NoOffers.displayName = 'NoOffers';
 
 export default NoOffers;

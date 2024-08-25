@@ -14,10 +14,14 @@ const createAppAsyncThunk = createAsyncThunk.withTypes<{
   extra: AxiosInstance;
 }>();
 
-export const fetchOffers = createAppAsyncThunk<PlaceCard[], undefined>(`${NameSpace.Offers}/fetchOffers`,
+export const fetchOffers = createAppAsyncThunk<PlaceCard[] | undefined, undefined>(`${NameSpace.Offers}/fetchOffers`,
   async (_arg, { extra: api }) => {
-    const { data } = await api.get<PlaceCard[]>(ApiRoute.Offers);
-    return data;
+    try {
+      const { data } = await api.get<PlaceCard[]>(ApiRoute.Offers);
+      return data;
+    } catch {
+      toast.warn('Не удалось загрузить данные с сервера');
+    }
   }
 );
 
@@ -28,11 +32,15 @@ export const checkAuthStatus = createAppAsyncThunk<UserData, undefined>(`${NameS
   }
 );
 
-export const loginAction = createAppAsyncThunk<UserData, AuthData>(`${NameSpace.User}/loginAction`,
+export const loginAction = createAppAsyncThunk<UserData | null | undefined, AuthData>(`${NameSpace.User}/loginAction`,
   async ({ email, password }, { extra: api }) => {
-    const { data } = await api.post<UserData>(ApiRoute.Login, { email, password });
-    saveToken(data.token);
-    return data;
+    try {
+      const { data } = await api.post<UserData>(ApiRoute.Login, { email, password });
+      saveToken(data.token);
+      return data;
+    } catch {
+      toast.warn('Ошибка авторизации');
+    }
   }
 );
 
@@ -40,13 +48,6 @@ export const logoutAction = createAppAsyncThunk<void, undefined>(`${NameSpace.Us
   async (_arg, { extra: api }) => {
     await api.delete(ApiRoute.Logout);
     dropToken();
-  }
-);
-
-export const getOfferData = createAppAsyncThunk<Offer, string>(`${NameSpace.Offers}/getOfferData`,
-  async (id, { extra: api }) => {
-    const { data } = await api.get<Offer>(`${ApiRoute.Offers}/${id}`);
-    return data;
   }
 );
 
@@ -64,9 +65,9 @@ export const fetchOfferComments = createAppAsyncThunk<Review[], string>(`${NameS
   }
 );
 
-export const postComment = createAsyncThunk<Review | undefined, {offerId: string; comment: string; rating: number; disableForm: (status: boolean) => void}, {dispatch: AppDispatch; state: State; extra: AxiosInstance}>('loginUser', async ({ offerId, comment, rating, disableForm }, {extra: api}) => {
+export const postComment = createAsyncThunk<Review | undefined, { offerId: string; comment: string; rating: number; disableForm: (status: boolean) => void }, { dispatch: AppDispatch; state: State; extra: AxiosInstance }>(`${NameSpace.Offers}/postComment`, async ({ offerId, comment, rating, disableForm }, { extra: api }) => {
   try {
-    const { data } = await api.post<Review>(`${ApiRoute.Comments}/${offerId}`, {comment, rating});
+    const { data } = await api.post<Review>(`${ApiRoute.Comments}/${offerId}`, { comment, rating });
     disableForm(true);
     return data;
   } catch {
@@ -75,12 +76,21 @@ export const postComment = createAsyncThunk<Review | undefined, {offerId: string
   }
 });
 
-export const fetchFavoriteOffers = createAppAsyncThunk<Offer[], undefined>(`${NameSpace.Offers}/fetchFavoriteOffers`, async (_arg, {extra: api}) => {
+export const fetchFavoriteOffers = createAppAsyncThunk<Offer[], undefined>(`${NameSpace.Offers}/fetchFavoriteOffers`, async (_arg, { extra: api }) => {
   const { data } = await api.get<Offer[]>(ApiRoute.Favorites);
   return data;
 });
 
-export const toggleFavoriteStatus = createAppAsyncThunk<Offer, {offerId: string; status: number}>(`${NameSpace.Offers}/toggleFavoriteStatus`, async ({offerId, status}, {extra: api}) => {
+export const toggleFavoriteStatus = createAppAsyncThunk<Offer, { offerId: string; status: number }>(`${NameSpace.Offers}/toggleFavoriteStatus`, async ({ offerId, status }, { extra: api }) => {
   const { data } = await api.post<Offer>(`${ApiRoute.Favorites}/${offerId}/${status}`);
   return data;
+});
+
+export const getOfferData = createAsyncThunk<Offer | null | undefined, string, {dispatch: AppDispatch; state: State; extra: AxiosInstance}>(`${NameSpace.Offers}/getOfferData`, async (id, { extra: api }) => {
+  try {
+    const { data } = await api.get<Offer>(`${ApiRoute.Offers}/${id}`);
+    return data;
+  } catch {
+    toast.warn('Не удалось загрузить данные о предложении');
+  }
 });

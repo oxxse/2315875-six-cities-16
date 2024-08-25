@@ -16,7 +16,7 @@ import ReviewForm from '../../components/review-form/review-form';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getOfferData, fetchOfferComments, fetchNearbyOffers } from '../../store/thunk-actions';
-import { selectNearbyOffers, selectOfferDetails, selectOfferComments, selectOfferLoadingStatus, selectOfferLoadingError } from '../../store/offer/offer-selectors';
+import { selectNearbyOffers, selectOfferDetails, selectOfferComments, selectOfferLoadingStatus, selectOfferLoadingError } from '../../store/offers/offers-selectors';
 import { useAuthorization } from '../../hooks/use-authorization';
 import Spinner from '../../components/spinner/spinner';
 
@@ -62,6 +62,7 @@ function OfferPage(): JSX.Element {
   const { title, price, rating, isPremium, isFavorite, goods, description, images } = currentOffer;
   const imagesToShow = images.slice(0, MAX_IMAGES_COUNT);
   const offerId = id ?? 'defaultId';
+  const offersToMark = [...nearbyOffers, currentOffer];
 
   return (
     <>
@@ -122,13 +123,13 @@ function OfferPage(): JSX.Element {
             </section>
           </div>
         </section>
-        <Map className='offer' city={currentOffer.location} offers={[...nearbyOffers, currentOffer]} activeOffer={currentOffer} />
+        <Map className='offer' city={currentOffer.location} offers={offersToMark} activeOffer={currentOffer} />
       </main>
       <div className="container">
         {nearbyOffers &&
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighborhood</h2>
-            <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places__' imageWidth={260} imageHeight={200} />
+            <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places' imageWidth={260} imageHeight={200} />
           </section>}
       </div>
     </>

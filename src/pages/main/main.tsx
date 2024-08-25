@@ -3,7 +3,7 @@ import LocationsList from '../../components/locations-list/locations-list';
 import Map from '../../components/map/map';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import NoOffers from '../../components/no-offers/no-offers';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { selectCity, selectSortingOption } from '../../store/active-main/active-main-selectors';
 import { selectOffers } from '../../store/offers/offers-selectors';
@@ -19,7 +19,8 @@ function Main(): JSX.Element {
   const offers = useAppSelector(selectOffers);
   const selectedSortingOption = useAppSelector(selectSortingOption);
   const dispatch = useAppDispatch();
-  const currentCityOffers = offers.filter((offer) => offer.city.name === selectedCity);
+  const filterOffers = useCallback((cards: PlaceCard[]) => cards.filter((card) => card.city.name === selectedCity), [selectedCity]);
+  const currentCityOffers = useMemo(() => filterOffers(offers), [filterOffers, offers]);
   const placesTitle = currentCityOffers.length === 1 ? 'place' : 'places';
   const sortedOffers = getSortedOffers(currentCityOffers, selectedSortingOption);
 
@@ -58,7 +59,7 @@ function Main(): JSX.Element {
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{currentCityOffers.length} {placesTitle} to stay in {selectedCity}</b>
               <SortingForm currentOption={selectedSortingOption} onOptionClick={handleOptionClick} width={7} height={4} />
-              <PlaceCardList offers={sortedOffers} onHover={handleOfferHover} classNameList={'cities__places-list'} classNameItem={'cities__'} imageWidth={260} imageHeight={200} />
+              <PlaceCardList offers={sortedOffers} onHover={handleOfferHover} classNameList={'cities__places-list'} classNameItem={'cities'} imageWidth={260} imageHeight={200} />
             </section>
             <div className="cities__right-section">
               <Map offers={currentCityOffers} city={cityLocation.location} className='cities' activeOffer={activeOffer} />

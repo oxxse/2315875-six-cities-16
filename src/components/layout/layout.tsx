@@ -18,16 +18,18 @@ const Layout = ((): JSX.Element => {
   const navigate = useNavigate();
   const favorites = useAppSelector(selectFavoriteOffers);
   const isAuthorized = useAuthorization();
+  const favoritePageUrl : string = AppRoute.Favorites;
+  const isFavoritePage = pathname === favoritePageUrl;
 
   const handleLogoutClick = useCallback(() => {
     dispatch(logoutAction()).then(() => {
-      if (isAuthorized) {
+      if (isAuthorized && isFavoritePage) {
         navigate(AppRoute.Login);
       } else {
         navigate(pathname);
       }
     });
-  }, [dispatch, isAuthorized, navigate, pathname]);
+  }, [dispatch, isAuthorized, navigate, pathname, isFavoritePage]);
 
   const userEmail = user ? user.email : '';
 

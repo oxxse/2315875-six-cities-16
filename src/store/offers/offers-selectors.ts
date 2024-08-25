@@ -5,5 +5,12 @@ import { PlaceCard } from '../../types/types';
 const selectOffers = (state: Pick<State, NameSpace.Offers>) : PlaceCard[] => state[NameSpace.Offers].offers;
 const selectOffersDataLoading = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].isOffersDataLoading;
 const selectFavoriteOffers = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].favoriteOffers;
+const selectOfferDetails = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].offerDetails;
+const selectOfferComments = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].offerComments;
+const selectNearbyOffers = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].nearbyOffers;
+const selectOfferLoadingStatus = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].isOfferDetailsLoading;
+const selectOfferLoadingError = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].isOfferDetailsError;
+const selectFavoriteTogglingStatus = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].isFavoriteStatusToggling;
 
+export {selectOfferLoadingStatus, selectOfferLoadingError, selectOfferDetails, selectOfferComments, selectNearbyOffers, selectFavoriteTogglingStatus };
 export { selectOffersDataLoading, selectFavoriteOffers, selectOffers };

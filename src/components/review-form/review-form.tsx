@@ -61,11 +61,11 @@ const ReviewForm = memo(({offerId}: ReviewFormData): JSX.Element => {
   return (
     <form ref={form} className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
-      <div className="reviews__rating-form form__rating" onChange={handleRaitingChange}>
+      <div className="reviews__rating-form form__rating">
         {
           Array.from({ length: MAX_RATING_VALUE}, (_, i: number) => i + 1).reverse().map((item, index) => (
             <React.Fragment key={`raiting-${item}`}>
-              <input className="form__rating-input visually-hidden" name="rating" value={ item } id={`${ item }-stars`} type="radio" disabled={formDisableStatus} />
+              <input className="form__rating-input visually-hidden" name="rating" value={ item } id={`${ item }-stars`} type="radio" onChange={handleRaitingChange} disabled={formDisableStatus} checked={formData.rating === item}/>
               <label htmlFor={(formDisableStatus) ? '' : `${ item }-stars`} className="reviews__rating-label form__rating-label" title={RATING_TITLES[index]}>
                 <svg className="form__star-image" width="37" height="33">
                   <use xlinkHref="#icon-star"></use>

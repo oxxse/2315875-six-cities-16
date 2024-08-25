@@ -20,7 +20,7 @@ const CardItem = memo(({ imageWidth, imageHeight, className, title, type, price,
   const hotelType = capitalizeFirstLetter(type);
 
   return (
-    <article className={`${className}card place-card`}
+    <article className={`${className}__card place-card`}
       onMouseOver={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >

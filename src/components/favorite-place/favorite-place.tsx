@@ -13,7 +13,7 @@ const FavoritePlace = memo(({ city, offers }: FavoritePlace): JSX.Element => (
     <div className="favorites__locations locations locations--current">
       <LocationsItem city={city} isFavoritePage key={city} />
     </div>
-    <PlaceCardList offers={offers} classNameList="favorites__places" classNameItem='favorites__' imageWidth={150} imageHeight={110} />
+    <PlaceCardList offers={offers} classNameList="favorites__places" classNameItem='favorites' imageWidth={150} imageHeight={110} />
   </li>
 ));
 

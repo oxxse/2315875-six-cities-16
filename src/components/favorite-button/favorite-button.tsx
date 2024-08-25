@@ -1,9 +1,10 @@
 import React, { memo, useCallback } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 import { toggleFavoriteStatus } from '../../store/thunk-actions';
 import { AppRoute } from '../../const';
 import { useAuthorization } from '../../hooks/use-authorization';
+import { selectFavoriteTogglingStatus } from '../../store/offers/offers-selectors';
 
 type FavoriteButton = {
   offerId: string;
@@ -13,10 +14,11 @@ type FavoriteButton = {
   height: number;
 };
 
-const FavoriteButton: React.FC<FavoriteButton> = memo(({ offerId, isFavorite, buttonType, width, height } : FavoriteButton) : JSX.Element => {
+const FavoriteButton: React.FC<FavoriteButton> = memo(({ offerId, isFavorite, buttonType, width, height }: FavoriteButton): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isAuthorized = useAuthorization();
+  const isToggling = useAppSelector(selectFavoriteTogglingStatus);
 
   const handleClick = useCallback(() => {
     if (isAuthorized) {
@@ -40,7 +42,7 @@ const FavoriteButton: React.FC<FavoriteButton> = memo(({ offerId, isFavorite, bu
   };
 
   return (
-    <button className={getButtonClass()} type="button" onClick={handleClick}>
+    <button className={getButtonClass()} type="button" onClick={handleClick} disabled={isToggling}>
       <svg className={buttonType === 'offer' ? 'offer__bookmark-icon' : 'place-card__bookmark-icon'} width={width} height={height}>
         <use xlinkHref="#icon-bookmark"></use>
       </svg>
