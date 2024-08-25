@@ -1,5 +1,6 @@
 import CardItem from '../card-item/card-item.tsx';
 import { PlaceCard } from '../../types/types.ts';
+import { memo, useCallback } from 'react';
 
 type PlaceList = {
   offers: PlaceCard[];
@@ -10,23 +11,23 @@ type PlaceList = {
   onHover?: (offer?: PlaceCard) => void;
 };
 
-function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNameItem, onHover}: PlaceList): JSX.Element {
+const PlaceCardList = memo(({ offers, imageWidth, imageHeight, classNameList, classNameItem, onHover}: PlaceList): JSX.Element => {
   const classes = [`${classNameList}`, 'places__list'];
   if (classNameList === 'cities__places-') {
     classes.push('tabs__content');
   }
 
-  const handleMouseEnter = (offer: PlaceCard) => {
+  const handleMouseEnter = useCallback((offer: PlaceCard) => {
     if (onHover) {
       onHover(offer);
     }
-  };
+  }, [onHover]);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     if (onHover) {
       onHover();
     }
-  };
+  }, [onHover]);
 
   return (
     <div className={classes.join(' ')}>
@@ -43,6 +44,8 @@ function PlaceCardList({ offers, imageWidth, imageHeight, classNameList, classNa
       ))}
     </div>
   );
-}
+});
+
+PlaceCardList.displayName = 'PlaceCardList';
 
 export default PlaceCardList;

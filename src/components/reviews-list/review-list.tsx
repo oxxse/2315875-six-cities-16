@@ -8,7 +8,7 @@ type ReviewsList = {
   reviews: Review[];
 }
 
-function ReviewsListTemplate({ reviews }: ReviewsList): JSX.Element {
+const ReviewsList = memo(({ reviews }: ReviewsList): JSX.Element => {
   const sortedReviews = [...reviews].sort(compareDates);
   const sortedAndLimitedReviews = sortedReviews.slice(0, MAX_REVIEWS_COUNT);
 
@@ -26,8 +26,8 @@ function ReviewsListTemplate({ reviews }: ReviewsList): JSX.Element {
       ))}
     </ul>
   );
-}
+});
 
-const ReviewsList = memo(ReviewsListTemplate);
+ReviewsList.displayName = 'ReviewsList';
 
 export default ReviewsList;

@@ -7,8 +7,9 @@ import { selectUser } from '../../store/user/user-selectors';
 import { logoutAction } from '../../store/thunk-actions';
 import { selectFavoriteOffers } from '../../store/offers/offers-selectors';
 import { useAuthorization } from '../../hooks/use-authorization';
+import { useCallback } from 'react';
 
-function Layout(): JSX.Element {
+const Layout = ((): JSX.Element => {
   const { pathname } = useLocation();
   const currentPage = pathname as AppRoute;
   const { rootClassName, linkClassName, shouldRenderUser } = getHeaderState(currentPage);
@@ -16,17 +17,19 @@ function Layout(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const favorites = useAppSelector(selectFavoriteOffers);
-  const isAuth = useAuthorization();
+  const isAuthorized = useAuthorization();
+  const favoritePageUrl : string = AppRoute.Favorites;
+  const isFavoritePage = pathname === favoritePageUrl;
 
-  const handleLogoutClick = () => {
+  const handleLogoutClick = useCallback(() => {
     dispatch(logoutAction()).then(() => {
-      if (isAuth) {
+      if (isAuthorized && isFavoritePage) {
         navigate(AppRoute.Login);
       } else {
         navigate(pathname);
       }
     });
-  };
+  }, [dispatch, isAuthorized, navigate, pathname, isFavoritePage]);
 
   const userEmail = user ? user.email : '';
 
@@ -44,7 +47,7 @@ function Layout(): JSX.Element {
                   <li className="header__nav-item user">
                     <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
                       <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                      {isAuth ? (
+                      {isAuthorized ? (
                         <>
                           <span className="header__user-name user__name">
                             {userEmail}
@@ -53,7 +56,7 @@ function Layout(): JSX.Element {
                       ) : <span className="header__login">Sign in</span>}
                     </Link>
                   </li>
-                  {isAuth ? (
+                  {isAuthorized ? (
                     <li className="header__nav-item">
                       <button type='button' className="header__nav-link button" onClick={handleLogoutClick}>
                         <span className="header__signout">Sign out</span>
@@ -68,6 +71,6 @@ function Layout(): JSX.Element {
       </header>
       <Outlet />
     </div>);
-}
+});
 
 export default Layout;

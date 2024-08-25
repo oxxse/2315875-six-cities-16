@@ -7,12 +7,10 @@ type ActiveMainState = {
   selectedSortingOption: typeof PLACES_OPTIONS[number];
 }
 
-
 const initialState: ActiveMainState = {
   currentCity: CITIES[0],
   selectedSortingOption: PLACES_OPTIONS[0]
 };
-
 
 export const activeMainSlice = createSlice({
   name: NameSpace.ActiveMain,

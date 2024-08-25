@@ -11,7 +11,7 @@ function FavoritesPage(): JSX.Element {
 
   return (
     <>
-      <main className={`page__main page__main--favorites${!favorites.length && 'page__main--favorites-empty'}`}>
+      <main className={`page__main page__main--favorites ${favorites.length ? 'page__main--favorites-empty' : ''}`}>
         <Helmet>
           <title>6 cities: Favorites</title>
         </Helmet>

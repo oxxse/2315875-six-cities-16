@@ -53,7 +53,6 @@ export const CITY_LOCATIONS = [
   }
 ] as const;
 
-const BASE_ACTIVE_CITY = 'Paris';
 const TIMEOUT_SHOW_ERROR = 5000;
 const PASSWORD_REGEXP = /^.*(?=.*[a-zA-Z])(?=.*\d).*$/;
 const MAX_REVIEWS_COUNT = 10;
@@ -76,7 +75,7 @@ const MapIcon: MapIconsType = {
   },
 };
 
-const TitleLayerUrl = {
+const TileLayerUrl = {
   Pattern:
     'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
   Attribution:
@@ -84,8 +83,7 @@ const TitleLayerUrl = {
 } as const;
 
 enum AppRoute {
-  Root = '/',
-  Main = '/:selectedCity',
+  Main = '/',
   Login = '/login',
   Favorites = '/favorites',
   Offer = '/offer/:id',
@@ -125,7 +123,6 @@ const RATING_TITLES: {[index: string]: string} = {
 };
 
 const MAX_RATING_VALUE = 5;
-
 const MAX_NEARBY_OFFERS_COUNT = 3;
 const MAX_IMAGES_COUNT = 6;
 
@@ -138,9 +135,8 @@ export {
   RATING_TITLES,
   ReviewLength,
   MapIcon,
-  TitleLayerUrl,
+  TileLayerUrl,
   NameSpace,
-  BASE_ACTIVE_CITY,
   TIMEOUT_SHOW_ERROR,
   MAX_NEARBY_OFFERS_COUNT,
   MAX_IMAGES_COUNT,

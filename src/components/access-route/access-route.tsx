@@ -1,4 +1,4 @@
-import { AppRoute, AuthorizationStatus, BASE_ACTIVE_CITY } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { selectAuthorizationStatus } from '../../store/user/user-selectors';
@@ -19,6 +19,6 @@ export default function AccessRoute({ children, isReverse }: AccessRouteData): J
   return (
     authorizationStatus === (isReverse ? AuthorizationStatus.NoAuth : AuthorizationStatus.Auth)
       ? children
-      : <Navigate to={isReverse ? AppRoute.Main.replace(':selectedCity', BASE_ACTIVE_CITY) : AppRoute.Login} />
+      : <Navigate to={isReverse ? AppRoute.Main : AppRoute.Login} />
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import './offer.css';
 import OfferGallery from '../../components/offer-gallery/offer-gallery';
 import FeaturesList from '../../components/features-list/features-list';
 import InsideList from '../../components/inside-list/inside-list';
@@ -15,14 +16,14 @@ import ReviewForm from '../../components/review-form/review-form';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getOfferData, fetchOfferComments, fetchNearbyOffers } from '../../store/thunk-actions';
-import { selectNearbyOffers, selectOfferDetails, selectOfferComments, selectOfferLoadingStatus, selectOfferLoadingError } from '../../store/offer/offer-selectors';
+import { selectNearbyOffers, selectOfferDetails, selectOfferComments, selectOfferLoadingStatus, selectOfferLoadingError } from '../../store/offers/offers-selectors';
 import { useAuthorization } from '../../hooks/use-authorization';
 import Spinner from '../../components/spinner/spinner';
 
 function OfferPage(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-  const isAuth = useAuthorization();
+  const isAuthorized = useAuthorization();
 
   useEffect(() => {
     if (id) {
@@ -61,6 +62,7 @@ function OfferPage(): JSX.Element {
   const { title, price, rating, isPremium, isFavorite, goods, description, images } = currentOffer;
   const imagesToShow = images.slice(0, MAX_IMAGES_COUNT);
   const offerId = id ?? 'defaultId';
+  const offersToMark = [...nearbyOffers, currentOffer];
 
   return (
     <>
@@ -112,22 +114,22 @@ function OfferPage(): JSX.Element {
                 </p>
               </div>
             </div>
-            <section className="offer__reviews reviews" style={{maxWidth: '613px', marginLeft: 'auto', marginRight: 'auto'}}>
+            <section className="offer__reviews reviews">
               <h2 className="reviews__title">
                 Reviews · <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ReviewsList reviews={reviews} />
-              {isAuth && id && <ReviewForm offerId={offerId} />}
+              {isAuthorized && id && <ReviewForm offerId={offerId} />}
             </section>
           </div>
         </section>
-        <Map isMainPage={false} city={currentOffer.location} places={[...nearbyOffers, currentOffer]} activePlaceId={currentOffer.id} />
+        <Map className='offer' city={currentOffer.location} offers={offersToMark} activeOffer={currentOffer} />
       </main>
       <div className="container">
         {nearbyOffers &&
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighborhood</h2>
-            <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places__' imageWidth={260} imageHeight={200} />
+            <PlaceCardList offers={nearbyOffers} classNameList="near-places__list" classNameItem='near-places' imageWidth={260} imageHeight={200} />
           </section>}
       </div>
     </>

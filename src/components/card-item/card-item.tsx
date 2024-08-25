@@ -3,6 +3,7 @@ import { PlaceCard } from '../../types/types';
 import { AppRoute } from '../../const';
 import { getMarkupRating, capitalizeFirstLetter } from '../../utils/common';
 import FavoriteButton from '../favorite-button/favorite-button';
+import { memo } from 'react';
 
 
 type Card = {
@@ -15,11 +16,11 @@ type Card = {
 
 type PlaceCardType = PlaceCard & Card;
 
-function CardItem({ imageWidth, imageHeight, className, title, type, price, isFavorite, isPremium, previewImage, rating, id, onMouseEnter, onMouseLeave }: PlaceCardType): JSX.Element {
+const CardItem = memo(({ imageWidth, imageHeight, className, title, type, price, isFavorite, isPremium, previewImage, rating, id, onMouseEnter, onMouseLeave }: PlaceCardType): JSX.Element => {
   const hotelType = capitalizeFirstLetter(type);
 
   return (
-    <article className={`${className}card place-card`}
+    <article className={`${className}__card place-card`}
       onMouseOver={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -60,6 +61,8 @@ function CardItem({ imageWidth, imageHeight, className, title, type, price, isFa
       </div>
     </article >
   );
-}
+});
+
+CardItem.displayName = 'CardItem';
 
 export default CardItem;

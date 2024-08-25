@@ -1,13 +1,15 @@
-import { useEffect, useState, useRef } from 'react';
-import leaflet, { Map } from 'leaflet';
-import { TitleLayerUrl } from '../const.ts';
-import { Location } from '../types/types.ts';
+import leaflet from 'leaflet';
+import { useEffect, useState, useRef, RefObject } from 'react';
+import { Location } from '../types/types';
+import { TileLayerUrl } from '../const';
 
-function useMap(
-  mapRef: React.RefObject<HTMLElement | null>,
-  city: Location
-): Map | null {
-  const [map, setMap] = useState<Map | null>(null);
+type UseMap = {
+  mapRef: RefObject<HTMLDivElement>;
+  city: Location;
+}
+
+function useMap({mapRef, city}: UseMap) {
+  const [ map, setMap ] = useState<leaflet.Map | null>(null);
   const isRenderedRef = useRef(false);
 
   useEffect(() => {
@@ -15,15 +17,18 @@ function useMap(
       const instance = leaflet.map(mapRef.current, {
         center: {
           lat: city.latitude,
-          lng: city.longitude,
+          lng: city.longitude
         },
         zoom: city.zoom,
       });
 
       leaflet
-        .tileLayer(TitleLayerUrl.Pattern, {
-          attribution: TitleLayerUrl.Attribution,
-        })
+        .tileLayer(
+          TileLayerUrl.Pattern,
+          {
+            attribution: TileLayerUrl.Attribution,
+          },
+        )
         .addTo(instance);
 
       setMap(instance);

@@ -3,7 +3,7 @@ import { getMarkupRating } from '../../utils/common';
 import { Review } from '../../types/types';
 
 
-function ReviewItemTemplate({ date, user, comment, rating }: Review): JSX.Element {
+const ReviewItem = memo(({ date, user, comment, rating }: Review): JSX.Element => {
   const reviewDate = new Date(date);
   const commonDate = reviewDate.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -42,8 +42,8 @@ function ReviewItemTemplate({ date, user, comment, rating }: Review): JSX.Elemen
       </div>
     </li>
   );
-}
+});
 
-const ReviewItem = memo(ReviewItemTemplate);
+ReviewItem.displayName = 'ReviewItem';
 
 export default ReviewItem;

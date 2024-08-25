@@ -1,11 +1,12 @@
 import LoginForm from '../../components/login-form/login-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AppRoute, CITIES } from '../../const';
-import { useRef, FormEvent } from 'react';
+import { AppRoute } from '../../const';
+import { useRef, FormEvent, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/thunk-actions';
 import { selectSubmittingStatus } from '../../store/user/user-selectors';
+import { getRandomCity } from '../../utils/common';
 
 function LoginPage(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -15,7 +16,7 @@ function LoginPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleFormSubmitLogin = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmitLogin = useCallback((evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (loginRef.current && passwordRef.current) {
       dispatch(loginAction({
@@ -28,9 +29,7 @@ function LoginPage(): JSX.Element {
           }
         });
     }
-  };
-
-  const randomCity = CITIES[Math.floor(Math.random() * CITIES.length)];
+  }, [dispatch, navigate]);
 
   return (
     <main className="page__main page__main--login">
@@ -44,8 +43,8 @@ function LoginPage(): JSX.Element {
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
-            <Link className="locations__item-link" to={AppRoute.Main.replace(':selectedCity', randomCity)}>
-              <span>{randomCity}</span>
+            <Link className="locations__item-link" to={AppRoute.Main}>
+              <span>{getRandomCity()}</span>
             </Link>
           </div>
         </section>

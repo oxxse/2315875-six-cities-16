@@ -2,22 +2,23 @@ import { createSlice } from '@reduxjs/toolkit';
 import { UserData } from '../../types/auth';
 import { AuthorizationStatus, NameSpace } from '../../const';
 import { checkAuthStatus, loginAction, logoutAction } from '../thunk-actions';
-import { toast } from 'react-toastify';
 
 type UserState = {
-  user: UserData | null;
+  user: UserData | null | undefined;
   authorizationStatus: AuthorizationStatus;
-  isAuthError: boolean;
-  isLogoutError: boolean;
-  isAuthSubmitting: boolean;
+  isAuthorizedError: boolean;
+  isAuthorizedSubmitting: boolean;
+  isLogoutLoading: boolean;
+  isLogoutLoadingError: boolean;
 }
 
 const initialState: UserState = {
   user: null,
   authorizationStatus: AuthorizationStatus.Unknown,
-  isAuthError: false,
-  isLogoutError: false,
-  isAuthSubmitting: false
+  isAuthorizedError: false,
+  isAuthorizedSubmitting: false,
+  isLogoutLoading: false,
+  isLogoutLoadingError: false,
 };
 
 export const userSlice = createSlice({
@@ -27,7 +28,7 @@ export const userSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(checkAuthStatus.pending, (state) => {
-        state.isAuthError = false;
+        state.isAuthorizedError = false;
       })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
@@ -35,33 +36,34 @@ export const userSlice = createSlice({
       })
       .addCase(checkAuthStatus.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
-        state.isAuthError = true;
+        state.isAuthorizedError = true;
       })
       .addCase(loginAction.pending, (state) => {
-        state.isAuthError = false;
-        state.isAuthSubmitting = true;
+        state.isAuthorizedError = false;
+        state.isAuthorizedSubmitting = true;
       })
       .addCase(loginAction.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
         state.user = action.payload;
-        state.isAuthSubmitting = false;
+        state.isAuthorizedSubmitting = false;
       })
       .addCase(loginAction.rejected, (state) => {
-        state.isAuthError = true;
-        state.isAuthSubmitting = false;
+        state.isAuthorizedError = true;
+        state.isAuthorizedSubmitting = false;
         state.authorizationStatus = AuthorizationStatus.NoAuth;
-        toast.error('Ошибка авторизации');
       })
       .addCase(logoutAction.pending, (state) => {
-        state.isLogoutError = false;
+        state.isLogoutLoading = true;
+        state.isLogoutLoadingError = false;
       })
       .addCase(logoutAction.fulfilled, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.user = null;
+        state.isLogoutLoading = false;
       })
       .addCase(logoutAction.rejected, (state) => {
-        state.isLogoutError = true;
-        toast.error('Ошибка выхода');
+        state.isLogoutLoading = false;
+        state.isLogoutLoadingError = true;
       });
   }
 });

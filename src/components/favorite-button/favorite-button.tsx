@@ -1,9 +1,10 @@
-import React from 'react';
-import { useAppDispatch } from '../../hooks';
+import React, { memo, useCallback } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 import { toggleFavoriteStatus } from '../../store/thunk-actions';
 import { AppRoute } from '../../const';
 import { useAuthorization } from '../../hooks/use-authorization';
+import { selectFavoriteTogglingStatus } from '../../store/offers/offers-selectors';
 
 type FavoriteButton = {
   offerId: string;
@@ -13,19 +14,20 @@ type FavoriteButton = {
   height: number;
 };
 
-const FavoriteButton: React.FC<FavoriteButton> = ({ offerId, isFavorite, buttonType, width, height }) => {
+const FavoriteButton: React.FC<FavoriteButton> = memo(({ offerId, isFavorite, buttonType, width, height }: FavoriteButton): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuth = useAuthorization();
+  const isAuthorized = useAuthorization();
+  const isToggling = useAppSelector(selectFavoriteTogglingStatus);
 
-  const handleClick = () => {
-    if (isAuth) {
+  const handleClick = useCallback(() => {
+    if (isAuthorized) {
       const status = (isFavorite) ? 0 : 1;
-      dispatch(toggleFavoriteStatus({offerId: offerId, status: status}));
+      dispatch(toggleFavoriteStatus({ offerId: offerId, status: status }));
     } else {
       navigate(AppRoute.Login);
     }
-  };
+  }, [dispatch, isAuthorized, isFavorite, navigate, offerId]);
 
   const getButtonClass = () => {
     let baseClass = 'button';
@@ -40,14 +42,15 @@ const FavoriteButton: React.FC<FavoriteButton> = ({ offerId, isFavorite, buttonT
   };
 
   return (
-    <button className={getButtonClass()} type="button" onClick={handleClick}>
+    <button className={getButtonClass()} type="button" onClick={handleClick} disabled={isToggling}>
       <svg className={buttonType === 'offer' ? 'offer__bookmark-icon' : 'place-card__bookmark-icon'} width={width} height={height}>
         <use xlinkHref="#icon-bookmark"></use>
       </svg>
       <span className="visually-hidden">{isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
     </button>
   );
-};
+});
+
+FavoriteButton.displayName = 'FavoriteButton';
 
 export default FavoriteButton;
-
