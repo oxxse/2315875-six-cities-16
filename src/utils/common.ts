@@ -1,4 +1,4 @@
-import { AuthorizationStatus, CITIES } from '../const';
+import { CITIES } from '../const';
 import { AppRoute } from '../const';
 import { PlaceCard, Review } from '../types/types';
 import classNames from 'classnames';
@@ -7,10 +7,6 @@ const getMarkupRating = (rating: number) => {
   const ratingInProcents = `${Math.round(rating) * 20}%`;
   return { width: ratingInProcents };
 };
-
-const upFirstLetter = (str: string) => `${str[0].toUpperCase()}${str.slice(1)}`;
-
-const getAuthorizationStatus = () => AuthorizationStatus.Auth;
 
 const getHeaderState = (pathname: AppRoute) => {
   const isMain = pathname === AppRoute.Main;
@@ -66,14 +62,15 @@ const groupOffersByCity = (offers: PlaceCard[]) => offers.reduce((accumulator: R
   return accumulator;
 }, {} as Record<typeof CITIES[number], PlaceCard[]>);
 
+const getRandomCity = () => CITIES[Math.floor(Math.random() * CITIES.length)];
+
 export {
   getMarkupRating,
-  upFirstLetter,
-  getAuthorizationStatus,
   getHeaderState,
   getSortedOffers,
   capitalizeFirstLetter,
   groupOffersByCity,
   compareDates,
-  formatDate
+  formatDate,
+  getRandomCity
 };

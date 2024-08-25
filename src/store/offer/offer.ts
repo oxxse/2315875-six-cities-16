@@ -10,8 +10,6 @@ type OfferState = {
   nearbyOffers: PlaceCard[];
   isOfferDetailsLoading: boolean;
   isOfferDetailsError: boolean;
-  isPostReviewError: boolean;
-  isPostCommentLoading: boolean;
 };
 
 const initialState: OfferState = {
@@ -20,8 +18,6 @@ const initialState: OfferState = {
   nearbyOffers: [],
   isOfferDetailsLoading: false,
   isOfferDetailsError: false,
-  isPostReviewError: false,
-  isPostCommentLoading: false
 };
 
 export const offerSlice = createSlice({

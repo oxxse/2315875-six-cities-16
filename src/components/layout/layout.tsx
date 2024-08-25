@@ -17,17 +17,17 @@ const Layout = ((): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const favorites = useAppSelector(selectFavoriteOffers);
-  const isAuth = useAuthorization();
+  const isAuthorized = useAuthorization();
 
   const handleLogoutClick = useCallback(() => {
     dispatch(logoutAction()).then(() => {
-      if (isAuth) {
+      if (isAuthorized) {
         navigate(AppRoute.Login);
       } else {
         navigate(pathname);
       }
     });
-  }, [dispatch, isAuth, navigate, pathname]);
+  }, [dispatch, isAuthorized, navigate, pathname]);
 
   const userEmail = user ? user.email : '';
 
@@ -45,7 +45,7 @@ const Layout = ((): JSX.Element => {
                   <li className="header__nav-item user">
                     <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
                       <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                      {isAuth ? (
+                      {isAuthorized ? (
                         <>
                           <span className="header__user-name user__name">
                             {userEmail}
@@ -54,7 +54,7 @@ const Layout = ((): JSX.Element => {
                       ) : <span className="header__login">Sign in</span>}
                     </Link>
                   </li>
-                  {isAuth ? (
+                  {isAuthorized ? (
                     <li className="header__nav-item">
                       <button type='button' className="header__nav-link button" onClick={handleLogoutClick}>
                         <span className="header__signout">Sign out</span>

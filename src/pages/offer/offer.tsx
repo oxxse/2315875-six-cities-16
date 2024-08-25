@@ -22,7 +22,7 @@ import Spinner from '../../components/spinner/spinner';
 function OfferPage(): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-  const isAuth = useAuthorization();
+  const isAuthorized = useAuthorization();
 
   useEffect(() => {
     if (id) {
@@ -117,11 +117,11 @@ function OfferPage(): JSX.Element {
                 Reviews · <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ReviewsList reviews={reviews} />
-              {isAuth && id && <ReviewForm offerId={offerId} />}
+              {isAuthorized && id && <ReviewForm offerId={offerId} />}
             </section>
           </div>
         </section>
-        <Map isMainPage={false} city={currentOffer.location} places={[...nearbyOffers, currentOffer]} activePlaceId={currentOffer.id} />
+        <Map className='offer' city={currentOffer.location} offers={[...nearbyOffers, currentOffer]} activeOffer={currentOffer} />
       </main>
       <div className="container">
         {nearbyOffers &&

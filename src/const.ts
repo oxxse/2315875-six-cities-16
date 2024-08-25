@@ -76,7 +76,7 @@ const MapIcon: MapIconsType = {
   },
 };
 
-const TitleLayerUrl = {
+const TileLayerUrl = {
   Pattern:
     'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
   Attribution:
@@ -125,7 +125,6 @@ const RATING_TITLES: {[index: string]: string} = {
 };
 
 const MAX_RATING_VALUE = 5;
-
 const MAX_NEARBY_OFFERS_COUNT = 3;
 const MAX_IMAGES_COUNT = 6;
 
@@ -138,7 +137,7 @@ export {
   RATING_TITLES,
   ReviewLength,
   MapIcon,
-  TitleLayerUrl,
+  TileLayerUrl,
   NameSpace,
   BASE_ACTIVE_CITY,
   TIMEOUT_SHOW_ERROR,

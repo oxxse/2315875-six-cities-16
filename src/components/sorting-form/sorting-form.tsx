@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react';
-import { PLACES_OPTIONS } from '../../../const';
+import { PLACES_OPTIONS } from '../../const';
 import { useState } from 'react';
-import { SortingOption } from '../../../types/types';
+import { SortingOption } from '../../types/types';
 
 type PlaceSorting = {
   width: number;
@@ -48,7 +48,7 @@ const PlacesOptionsList = memo(({ currentOption, onOptionClick, isOpen }: Places
 
 PlacesOptionsList.displayName = 'PlacesOptionsList';
 
-const PlaceSorting = memo(({ width, height, currentOption, onOptionClick }: PlaceSorting): JSX.Element => {
+const SortingForm = memo(({ width, height, currentOption, onOptionClick }: PlaceSorting): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleList = () => {
     setIsOpen(!isOpen);
@@ -77,7 +77,7 @@ const PlaceSorting = memo(({ width, height, currentOption, onOptionClick }: Plac
   );
 });
 
-PlaceSorting.displayName = 'PlaceSorting';
+SortingForm.displayName = 'SortingForm';
 
-export default PlaceSorting;
+export default SortingForm;
 

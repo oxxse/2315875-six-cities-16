@@ -1,27 +1,25 @@
+import leaflet, { LayerGroup } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { useRef, useEffect, memo } from 'react';
-import leaflet, { Icon, LayerGroup } from 'leaflet';
-import { PlaceCard, Location } from '../../types/types';
+import './map.module.css';
+import { Location, PlaceCard } from '../../types/types';
 import { MapIcon } from '../../const';
-
 import useMap from '../../hooks/use-map';
 
-import 'leaflet/dist/leaflet.css';
-
 type Map = {
-  activePlaceId: string | undefined;
+  className: string;
   city: Location;
-  places: PlaceCard[];
-  isMainPage: boolean;
+  offers?: PlaceCard[];
+  activeOffer?: PlaceCard | null;
 }
 
-const defaultIcon = new Icon(MapIcon.Default);
-const customIcon = new Icon(MapIcon.Active);
+const defaultCustomIcon = leaflet.icon(MapIcon.Default);
 
+const currentCustomIcon = leaflet.icon(MapIcon.Active);
 
-const Map = memo((props: Map): JSX.Element => {
-  const { activePlaceId, city, places, isMainPage } = props;
-  const mapRef = useRef(null);
-  const map = useMap(mapRef, city);
+const Map = memo(({ className, city, offers, activeOffer }: Map): JSX.Element => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const map = useMap({ mapRef, city });
   const markerLayer = useRef<LayerGroup>(leaflet.layerGroup());
 
   useEffect(() => {
@@ -33,26 +31,27 @@ const Map = memo((props: Map): JSX.Element => {
   }, [city, map]);
 
   useEffect(() => {
-    if (map) {
-      places.forEach((place) => {
-        leaflet
-          .marker({
-            lat: place.location.latitude,
-            lng: place.location.longitude,
-          }, {
-            icon: place.id === activePlaceId ? customIcon : defaultIcon,
-          })
-          .addTo(map);
+    if (map && offers) {
+      offers.forEach((offer) => {
+        if (offer.location) {
+          leaflet.
+            marker({
+              lat: offer.location.latitude,
+              lng: offer.location.longitude,
+            }, {
+              icon: activeOffer && activeOffer.id === offer.id ? currentCustomIcon : defaultCustomIcon,
+            }).addTo(markerLayer.current);
+        }
       });
     }
-  }, [activePlaceId, map, places]);
+  }, [activeOffer, map, offers]);
 
   return (
     <section
-      style={{ margin: '0 auto' }}
-      className={`${isMainPage ? 'cities__map' : 'offer__map'} map`}
+      className={`${className}__map map`}
       ref={mapRef}
-    />
+    >
+    </section>
   );
 });
 

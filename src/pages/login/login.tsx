@@ -1,11 +1,12 @@
 import LoginForm from '../../components/login-form/login-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AppRoute, CITIES } from '../../const';
+import { AppRoute } from '../../const';
 import { useRef, FormEvent, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/thunk-actions';
 import { selectSubmittingStatus } from '../../store/user/user-selectors';
+import { getRandomCity } from '../../utils/common';
 
 function LoginPage(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -30,7 +31,7 @@ function LoginPage(): JSX.Element {
     }
   }, [dispatch, navigate]);
 
-  const randomCity = CITIES[Math.floor(Math.random() * CITIES.length)];
+  const randomCity = getRandomCity();
 
   return (
     <main className="page__main page__main--login">

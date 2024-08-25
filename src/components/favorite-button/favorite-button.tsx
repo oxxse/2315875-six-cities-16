@@ -16,16 +16,16 @@ type FavoriteButton = {
 const FavoriteButton: React.FC<FavoriteButton> = memo(({ offerId, isFavorite, buttonType, width, height } : FavoriteButton) : JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuth = useAuthorization();
+  const isAuthorized = useAuthorization();
 
   const handleClick = useCallback(() => {
-    if (isAuth) {
+    if (isAuthorized) {
       const status = (isFavorite) ? 0 : 1;
       dispatch(toggleFavoriteStatus({ offerId: offerId, status: status }));
     } else {
       navigate(AppRoute.Login);
     }
-  }, [dispatch, isAuth, isFavorite, navigate, offerId]);
+  }, [dispatch, isAuthorized, isFavorite, navigate, offerId]);
 
   const getButtonClass = () => {
     let baseClass = 'button';

@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 import LocationsList from '../../components/locations-list/locations-list';
-import PlaceSorting from '../../components/sorting-form/sorting-form.tsx/sorting';
 import Map from '../../components/map/map';
 import PlaceCardList from '../../components/place-card-list/place-card-list';
 import NoOffers from '../../components/no-offers/no-offers';
@@ -14,6 +13,7 @@ import { AppRoute, CITY_LOCATIONS } from '../../const';
 import { getSortedOffers } from '../../utils/common';
 import { useState } from 'react';
 import { setSort } from '../../store/active-main/active-main';
+import SortingForm from '../../components/sorting-form/sorting-form';
 
 function Main(): JSX.Element {
   const navigate = useNavigate();
@@ -62,11 +62,11 @@ function Main(): JSX.Element {
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{currentCityOffers.length} {placesTitle} to stay in {selectedCity}</b>
-              <PlaceSorting currentOption={selectedSortingOption} onOptionClick={handleOptionClick} width={7} height={4} />
+              <SortingForm currentOption={selectedSortingOption} onOptionClick={handleOptionClick} width={7} height={4} />
               <PlaceCardList offers={sortedOffers} onHover={handleOfferHover} classNameList={'cities__places-list'} classNameItem={'cities__'} imageWidth={260} imageHeight={200} />
             </section>
             <div className="cities__right-section">
-              <Map isMainPage places={currentCityOffers} city={cityLocation.location} activePlaceId={activeOffer?.id} />
+              <Map offers={currentCityOffers} city={cityLocation.location} className='cities' activeOffer={activeOffer} />
             </div>
           </div>}
         {!currentCityOffers.length && selectedCity && <NoOffers city={selectedCity} />}
