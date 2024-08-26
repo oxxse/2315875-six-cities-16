@@ -1,10 +1,11 @@
-import { ReactEventHandler, ChangeEvent, useState, FormEvent, memo } from 'react';
+import { ReactEventHandler, ChangeEvent, useState, FormEvent, memo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { ReviewLength, RATING_TITLES } from '../../const.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks/index.ts';
 import { postComment } from '../../store/thunk-actions.ts';
-import { selectCommentPostingStatus } from '../../store/offers/offers-selectors.ts';
+import { selectCommentPostingErrorStatus, selectCommentPostingStatus } from '../../store/offers/offers-selectors.ts';
 import { CommentForm } from '../../types/types.ts';
+import { toast } from 'react-toastify';
 
 type StarsRatingData = {
   value: string;
@@ -14,51 +15,51 @@ type StarsRatingData = {
   disabled: boolean;
 }
 
-function StarsRating({value, title, checkedValue, disabled, onInputChange}: StarsRatingData): JSX.Element {
-  return (
-    <>
-      <input
-        className="form__rating-input visually-hidden"
-        name="rating"
-        value={value}
-        id={`${value}-stars`}
-        type="radio"
-        onChange={onInputChange}
-        checked={checkedValue === Number(value)}
-        disabled={disabled}
-      />
-      <label htmlFor={`${value}-stars`} className="reviews__rating-label form__rating-label" title={title}>
-        <svg className="form__star-image" width="37" height="33">
-          <use xlinkHref="#icon-star"></use>
-        </svg>
-      </label>
-    </>
-  );
-}
+const StarsRating = memo(({ value, title, checkedValue, disabled, onInputChange }: StarsRatingData): JSX.Element => (
+  <>
+    <input
+      className="form__rating-input visually-hidden"
+      name="rating"
+      value={value}
+      id={`${value}-stars`}
+      type="radio"
+      onChange={onInputChange}
+      checked={checkedValue === Number(value)}
+      disabled={disabled}
+    />
+    <label htmlFor={`${value}-stars`} className="reviews__rating-label form__rating-label" title={title}>
+      <svg className="form__star-image" width="37" height="33">
+        <use xlinkHref="#icon-star"></use>
+      </svg>
+    </label>
+  </>
+));
+
+StarsRating.displayName = 'StarsRating';
 
 const ReviewForm = memo((): JSX.Element => {
   const { id: offerId } = useParams();
   const isPosting = useAppSelector(selectCommentPostingStatus);
+  const isPostingError = useAppSelector(selectCommentPostingErrorStatus);
   const dispatch = useAppDispatch();
-
   const [formData, setFormData] = useState<CommentForm>({
-    rating: Number('0'),
+    rating: 0,
     comment: ''
   });
 
-  const handleRaitingChange = ({target}: ChangeEvent<HTMLInputElement>) => {
+  const handleRaitingChange = useCallback(({ target }: ChangeEvent<HTMLInputElement>) => {
     if (target.tagName === 'INPUT') {
-      setFormData({...formData, rating: parseInt(target.value, 10)});
+      setFormData({ ...formData, rating: parseInt(target.value, 10) });
     }
-  };
+  }, [formData]);
 
-  const handleReviewChange = ({target}: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleReviewChange = useCallback(({ target }: ChangeEvent<HTMLTextAreaElement>) => {
     if (target.tagName === 'TEXTAREA') {
-      setFormData({...formData, comment: target.value});
+      setFormData({ ...formData, comment: target.value });
     }
-  };
+  }, [formData]);
 
-  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = useCallback((evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (offerId) {
       dispatch(postComment({
@@ -68,21 +69,25 @@ const ReviewForm = memo((): JSX.Element => {
         .then((response) => {
           if (response.meta.requestStatus === 'fulfilled') {
             setFormData({
-              rating: Number('0'),
+              rating: 0,
               comment: ''
             });
           }
         });
     }
-  };
+  }, [dispatch, formData, offerId]);
 
-  const isSubmitButtonDisabled = isPosting || formData.rating === Number('0') || formData.comment.length < ReviewLength.Min || formData.comment.length > ReviewLength.Max;
+  const isSubmitButtonDisabled = isPosting || formData.rating === 0 || formData.comment.length < ReviewLength.Min || formData.comment.length > ReviewLength.Max;
+
+  if (isPostingError) {
+    toast.error('Возникла ошибка при отправке отзыва');
+  }
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit} >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        {Object.entries(RATING_TITLES).map(([rate, title]) => <StarsRating value={rate} title={title} key={title} onInputChange={handleRaitingChange} checkedValue={formData.rating} disabled={isPosting}/>).reverse()}
+        {Object.entries(RATING_TITLES).map(([rate, title]) => <StarsRating value={rate} title={title} key={title} onInputChange={handleRaitingChange} checkedValue={formData.rating} disabled={isPosting} />).reverse()}
       </div>
       <textarea
         className="reviews__textarea form__textarea"

@@ -65,17 +65,6 @@ export const fetchOfferComments = createAppAsyncThunk<Review[], string>(`${NameS
   }
 );
 
-// export const postComment = createAsyncThunk<Review | undefined, { offerId: string; comment: string; rating: number; disableForm: (status: boolean) => void }, { dispatch: AppDispatch; state: State; extra: AxiosInstance }>(`${NameSpace.Offers}/postComment`, async ({ offerId, comment, rating, disableForm }, { extra: api }) => {
-//   try {
-//     const { data } = await api.post<Review>(`${ApiRoute.Comments}/${offerId}`, { comment, rating });
-//     disableForm(true);
-//     return data;
-//   } catch {
-//     toast.warn('Возникла ошибка при отправке отзыва');
-//     disableForm(false);
-//   }
-// });
-
 export const postComment = createAppAsyncThunk<Review, CommentData>('offer/postCommentToOffer',
   async ({id, comment}, {extra: api}) => {
     const {data} = await api.post<Review>(`${ApiRoute.Comments}/${id}`, {comment: comment.comment, rating: +comment.rating});
