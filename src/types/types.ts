@@ -13,7 +13,7 @@ export type User = {
 }
 
 export type CommentForm = {
-  rating: string;
+  rating: number;
   comment: string;
 }
 

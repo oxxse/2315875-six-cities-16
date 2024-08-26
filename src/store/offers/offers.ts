@@ -3,6 +3,7 @@ import { Offer, Review, PlaceCard } from '../../types/types';
 import { NameSpace } from '../../const.ts';
 import { toggleFavoriteStatus, fetchFavoriteOffers, fetchOffers } from '../thunk-actions.ts';
 import { fetchOfferComments, postComment, fetchNearbyOffers, getOfferData } from '../thunk-actions.ts';
+import { toast } from 'react-toastify';
 
 type OffersState = {
   offers: PlaceCard[] | undefined;
@@ -95,18 +96,13 @@ export const offersSlice = createSlice({
         state.isCommentPostingError = false;
       })
       .addCase(postComment.fulfilled, (state, action) => {
-        if (action.payload) {
-          if (state.offerComments) {
-            state.offerComments = [...state.offerComments, action.payload];
-          } else {
-            state.offerComments = [action.payload];
-          }
-        }
         state.isCommentPosting = false;
+        state.offerComments.push(action.payload);
       })
       .addCase(postComment.rejected, (state) => {
         state.isCommentPosting = false;
         state.isCommentPostingError = true;
+        toast.error('Возникла ошибка при отправке отзыва');
       })
       .addCase(fetchOffers.pending, (state) => {
         state.isOffersDataLoading = true;

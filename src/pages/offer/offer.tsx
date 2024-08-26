@@ -119,7 +119,7 @@ function OfferPage(): JSX.Element {
                 Reviews · <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ReviewsList reviews={reviews} />
-              {isAuthorized && id && <ReviewForm offerId={offerId} />}
+              {isAuthorized && id && <ReviewForm/>}
             </section>
           </div>
         </section>
