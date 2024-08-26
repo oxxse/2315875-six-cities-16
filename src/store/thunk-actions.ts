@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state.ts';
 import { saveToken, dropToken } from '../services/token.ts';
 import { ApiRoute, NameSpace } from '../const.ts';
-import { Offer, PlaceCard, Review } from '../types/types.ts';
+import { CommentData, Offer, PlaceCard, Review } from '../types/types.ts';
 import { store } from './index.ts';
 import { AuthData, UserData } from '../types/auth.ts';
 import { toast } from 'react-toastify';
@@ -65,16 +65,24 @@ export const fetchOfferComments = createAppAsyncThunk<Review[], string>(`${NameS
   }
 );
 
-export const postComment = createAsyncThunk<Review | undefined, { offerId: string; comment: string; rating: number; disableForm: (status: boolean) => void }, { dispatch: AppDispatch; state: State; extra: AxiosInstance }>(`${NameSpace.Offers}/postComment`, async ({ offerId, comment, rating, disableForm }, { extra: api }) => {
-  try {
-    const { data } = await api.post<Review>(`${ApiRoute.Comments}/${offerId}`, { comment, rating });
-    disableForm(true);
+// export const postComment = createAsyncThunk<Review | undefined, { offerId: string; comment: string; rating: number; disableForm: (status: boolean) => void }, { dispatch: AppDispatch; state: State; extra: AxiosInstance }>(`${NameSpace.Offers}/postComment`, async ({ offerId, comment, rating, disableForm }, { extra: api }) => {
+//   try {
+//     const { data } = await api.post<Review>(`${ApiRoute.Comments}/${offerId}`, { comment, rating });
+//     disableForm(true);
+//     return data;
+//   } catch {
+//     toast.warn('Возникла ошибка при отправке отзыва');
+//     disableForm(false);
+//   }
+// });
+
+export const postComment = createAppAsyncThunk<Review, CommentData>('offer/postCommentToOffer',
+  async ({id, comment}, {extra: api}) => {
+    const {data} = await api.post<Review>(`${ApiRoute.Comments}/${id}`, {comment: comment.comment, rating: +comment.rating});
     return data;
-  } catch {
-    toast.warn('Возникла ошибка при отправке отзыва');
-    disableForm(false);
   }
-});
+);
+
 
 export const fetchFavoriteOffers = createAppAsyncThunk<Offer[], undefined>(`${NameSpace.Offers}/fetchFavoriteOffers`, async (_arg, { extra: api }) => {
   const { data } = await api.get<Offer[]>(ApiRoute.Favorites);

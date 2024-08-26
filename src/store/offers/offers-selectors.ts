@@ -10,6 +10,6 @@ const selectNearbyOffers = (state: Pick<State, NameSpace.Offers>) => state[NameS
 const selectOfferLoadingStatus = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].isOfferDetailsLoading;
 const selectOfferLoadingError = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].isOfferDetailsError;
 const selectFavoriteTogglingStatus = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].isFavoriteStatusToggling;
+const selectCommentPostingStatus = (state: Pick<State, NameSpace.Offers>) => state[NameSpace.Offers].isCommentPosting;
 
-export {selectOfferLoadingStatus, selectOfferLoadingError, selectOfferDetails, selectOfferComments, selectNearbyOffers, selectFavoriteTogglingStatus };
-export { selectOffersDataLoading, selectFavoriteOffers, selectOffers };
+export { selectCommentPostingStatus, selectOfferLoadingStatus, selectOfferLoadingError, selectOfferDetails, selectOfferComments, selectNearbyOffers, selectFavoriteTogglingStatus, selectOffersDataLoading, selectFavoriteOffers, selectOffers };

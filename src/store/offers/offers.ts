@@ -95,14 +95,8 @@ export const offersSlice = createSlice({
         state.isCommentPostingError = false;
       })
       .addCase(postComment.fulfilled, (state, action) => {
-        if (action.payload) {
-          if (state.offerComments) {
-            state.offerComments = [...state.offerComments, action.payload];
-          } else {
-            state.offerComments = [action.payload];
-          }
-        }
         state.isCommentPosting = false;
+        state.offerComments.push(action.payload);
       })
       .addCase(postComment.rejected, (state) => {
         state.isCommentPosting = false;
