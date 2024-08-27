@@ -8,6 +8,7 @@ import { loginAction } from '../../store/thunk-actions';
 import { selectSubmittingStatus } from '../../store/user/user-selectors';
 import { getRandomCity } from '../../utils/common';
 import { toast } from 'react-toastify';
+import { setCity } from '../../store/active-main/active-main';
 
 function LoginPage(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -16,6 +17,7 @@ function LoginPage(): JSX.Element {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const city = getRandomCity();
 
   const handleFormSubmitLogin = useCallback((evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -36,6 +38,10 @@ function LoginPage(): JSX.Element {
     }
   }, [dispatch, navigate]);
 
+  const handleCityClick = useCallback(() => {
+    dispatch(setCity(city));
+  }, [dispatch, city]);
+
   return (
     <main className="page__main page__main--login">
       <Helmet>
@@ -48,8 +54,8 @@ function LoginPage(): JSX.Element {
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
-            <Link className="locations__item-link" to={AppRoute.Main}>
-              <span>{getRandomCity()}</span>
+            <Link className="locations__item-link" onClick={handleCityClick} to={AppRoute.Main}>
+              <span>{city}</span>
             </Link>
           </div>
         </section>
