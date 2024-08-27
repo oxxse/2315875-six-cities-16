@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginAction } from '../../store/thunk-actions';
 import { selectSubmittingStatus } from '../../store/user/user-selectors';
 import { getRandomCity } from '../../utils/common';
+import { toast } from 'react-toastify';
 
 function LoginPage(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
@@ -23,10 +24,12 @@ function LoginPage(): JSX.Element {
         email: loginRef.current.value,
         password: passwordRef.current.value
       }))
+        .unwrap()
         .then((response) => {
-          if (response.meta.requestStatus === 'fulfilled') {
-            navigate(AppRoute.Main);
-          }
+          navigate(AppRoute.Main);
+        })
+        .catch(() => {
+          toast.warn('Ошибка авторизации');
         });
     }
   }, [dispatch, navigate]);

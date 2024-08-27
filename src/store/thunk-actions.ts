@@ -34,13 +34,9 @@ export const checkAuthStatus = createAppAsyncThunk<UserData, undefined>(`${NameS
 
 export const loginAction = createAppAsyncThunk<UserData | null | undefined, AuthData>(`${NameSpace.User}/loginAction`,
   async ({ email, password }, { extra: api }) => {
-    try {
-      const { data } = await api.post<UserData>(ApiRoute.Login, { email, password });
-      saveToken(data.token);
-      return data;
-    } catch {
-      toast.warn('Ошибка авторизации');
-    }
+    const { data } = await api.post<UserData>(ApiRoute.Login, { email, password });
+    saveToken(data.token);
+    return data;
   }
 );
 
@@ -66,12 +62,11 @@ export const fetchOfferComments = createAppAsyncThunk<Review[], string>(`${NameS
 );
 
 export const postComment = createAppAsyncThunk<Review, CommentData>('offer/postCommentToOffer',
-  async ({id, comment}, {extra: api}) => {
-    const {data} = await api.post<Review>(`${ApiRoute.Comments}/${id}`, {comment: comment.comment, rating: +comment.rating});
+  async ({ id, comment }, { extra: api }) => {
+    const { data } = await api.post<Review>(`${ApiRoute.Comments}/${id}`, { comment: comment.comment, rating: +comment.rating });
     return data;
   }
 );
-
 
 export const fetchFavoriteOffers = createAppAsyncThunk<Offer[], undefined>(`${NameSpace.Offers}/fetchFavoriteOffers`, async (_arg, { extra: api }) => {
   const { data } = await api.get<Offer[]>(ApiRoute.Favorites);
@@ -83,7 +78,7 @@ export const toggleFavoriteStatus = createAppAsyncThunk<Offer, { offerId: string
   return data;
 });
 
-export const getOfferData = createAsyncThunk<Offer | null | undefined, string, {dispatch: AppDispatch; state: State; extra: AxiosInstance}>(`${NameSpace.Offers}/getOfferData`, async (id, { extra: api }) => {
+export const getOfferData = createAsyncThunk<Offer | null | undefined, string, { dispatch: AppDispatch; state: State; extra: AxiosInstance }>(`${NameSpace.Offers}/getOfferData`, async (id, { extra: api }) => {
   try {
     const { data } = await api.get<Offer>(`${ApiRoute.Offers}/${id}`);
     return data;
