@@ -38,7 +38,6 @@ function LoginPage(): JSX.Element {
     }
   }, [dispatch, navigate]);
 
-
   const handleCityClick = useCallback(() => {
     dispatch(setCity(city));
   }, [dispatch, city]);
