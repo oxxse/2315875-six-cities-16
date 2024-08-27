@@ -84,7 +84,7 @@ function OfferPage(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <FavoriteButton offerId={offerId} isFavorite={isFavorite} width={31} height={33} buttonType="offer"/>
+                <FavoriteButton offerId={offerId} isFavorite={isFavorite} width={31} height={33} buttonType="offer" />
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
@@ -98,7 +98,7 @@ function OfferPage(): JSX.Element {
                 <b className="offer__price-value">€{price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
-              {goods.length > 1 ?
+              {goods.length > 0 ?
                 <div className="offer__inside">
                   <h2 className="offer__inside-title">What&apos;s inside</h2>
                   <InsideList items={currentOffer} />
@@ -119,7 +119,7 @@ function OfferPage(): JSX.Element {
                 Reviews · <span className="reviews__amount">{reviews.length}</span>
               </h2>
               <ReviewsList reviews={reviews} />
-              {isAuthorized && id && <ReviewForm/>}
+              {isAuthorized && id && <ReviewForm />}
             </section>
           </div>
         </section>

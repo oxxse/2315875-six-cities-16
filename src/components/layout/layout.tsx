@@ -12,11 +12,11 @@ import { useCallback } from 'react';
 const Layout = ((): JSX.Element => {
   const { pathname } = useLocation();
   const currentPage = pathname as AppRoute;
-  const { rootClassName, linkClassName, shouldRenderUser } = getHeaderState(currentPage);
+  const favorites = useAppSelector(selectFavoriteOffers);
+  const { rootClassName, linkClassName, shouldRenderUser } = getHeaderState(currentPage, favorites);
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const favorites = useAppSelector(selectFavoriteOffers);
   const isAuthorized = useAuthorization();
   const favoritePageUrl : string = AppRoute.Favorites;
   const isFavoritePage = pathname === favoritePageUrl;
