@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ReviewLength, RATING_TITLES } from '../../const.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks/index.ts';
 import { postComment } from '../../store/thunk-actions.ts';
-import { selectCommentPostingErrorStatus, selectCommentPostingStatus } from '../../store/offers/offers-selectors.ts';
+import { selectCommentPostingStatus } from '../../store/offers/offers-selectors.ts';
 import { CommentForm } from '../../types/types.ts';
 import { toast } from 'react-toastify';
 
@@ -40,7 +40,6 @@ StarsRating.displayName = 'StarsRating';
 const ReviewForm = memo((): JSX.Element => {
   const { id: offerId } = useParams();
   const isPosting = useAppSelector(selectCommentPostingStatus);
-  const isPostingError = useAppSelector(selectCommentPostingErrorStatus);
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<CommentForm>({
     rating: 0,
@@ -66,22 +65,22 @@ const ReviewForm = memo((): JSX.Element => {
         id: offerId,
         comment: formData
       }))
+        .unwrap()
         .then((response) => {
-          if (response.meta.requestStatus === 'fulfilled') {
+          if (response) {
             setFormData({
               rating: 0,
               comment: ''
             });
           }
+        })
+        .catch(() => {
+          toast.warn('Возникла ошибка при отправке отзыва');
         });
     }
   }, [dispatch, formData, offerId]);
 
   const isSubmitButtonDisabled = isPosting || formData.rating === 0 || formData.comment.length < ReviewLength.Min || formData.comment.length > ReviewLength.Max;
-
-  if (isPostingError) {
-    toast.error('Возникла ошибка при отправке отзыва');
-  }
 
   return (
     <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit} >

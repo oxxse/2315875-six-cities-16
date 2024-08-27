@@ -26,7 +26,9 @@ function LoginPage(): JSX.Element {
       }))
         .unwrap()
         .then((response) => {
-          navigate(AppRoute.Main);
+          if (response) {
+            navigate(AppRoute.Main);
+          }
         })
         .catch(() => {
           toast.warn('Ошибка авторизации');
