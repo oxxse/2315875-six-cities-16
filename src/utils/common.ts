@@ -8,18 +8,21 @@ const getMarkupRating = (rating: number) => {
   return { width: ratingInProcents };
 };
 
-const getHeaderState = (pathname: AppRoute) => {
+const getHeaderState = (pathname: AppRoute, favorites: PlaceCard[]) => {
   const isMain = pathname === AppRoute.Main;
   const isLogin = pathname === AppRoute.Login;
   const isKnownRoute = Object.values(AppRoute).some((route) =>
     route === pathname ||
     (route.includes(':id') && pathname.startsWith(route.split('/:id')[0]))
   );
+  const isFavorites = pathname === AppRoute.Favorites;
+  const isFavoritesEmpty = isFavorites && favorites.length === 0;
 
   const rootClassName = classNames('page', {
     'page--main': isMain || !isKnownRoute,
     'page--gray': isMain || isLogin,
     'page--login': isLogin,
+    'page--favorites-empty': isFavoritesEmpty
   });
 
   const linkClassName = classNames('header__logo-link', {
