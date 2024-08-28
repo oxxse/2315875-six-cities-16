@@ -20,7 +20,7 @@ const FavoriteButton: React.FC<FavoriteButton> = memo(({ offerId, isFavorite, bu
   const isAuthorized = useAuthorization();
   const isToggling = useAppSelector(selectFavoriteTogglingStatus);
 
-  const handleClick = useCallback(() => {
+  const handleButtonClick = useCallback(() => {
     if (isAuthorized) {
       const status = (isFavorite) ? 0 : 1;
       dispatch(toggleFavoriteStatus({ offerId: offerId, status: status }));
@@ -42,7 +42,7 @@ const FavoriteButton: React.FC<FavoriteButton> = memo(({ offerId, isFavorite, bu
   };
 
   return (
-    <button className={getButtonClass()} type="button" onClick={handleClick} disabled={isToggling}>
+    <button className={getButtonClass()} type="button" onClick={handleButtonClick} disabled={isToggling}>
       <svg className={buttonType === 'offer' ? 'offer__bookmark-icon' : 'place-card__bookmark-icon'} width={width} height={height}>
         <use xlinkHref="#icon-bookmark"></use>
       </svg>

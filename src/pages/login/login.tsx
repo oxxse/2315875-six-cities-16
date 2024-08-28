@@ -19,7 +19,7 @@ function LoginPage(): JSX.Element {
   const navigate = useNavigate();
   const city = getRandomCity();
 
-  const handleFormSubmitLogin = useCallback((evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = useCallback((evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (loginRef.current && passwordRef.current) {
       dispatch(loginAction({
@@ -50,7 +50,7 @@ function LoginPage(): JSX.Element {
       <div className="page__login-container container">
         <section className="login">
           <h1 className="login__title">Sign in</h1>
-          <LoginForm isSubmitting={isSubmitting} onSubmit={handleFormSubmitLogin} loginRef={loginRef} passwordRef={passwordRef} />
+          <LoginForm isSubmitting={isSubmitting} onSubmit={handleFormSubmit} loginRef={loginRef} passwordRef={passwordRef} />
         </section>
         <section className="locations locations--login locations--current">
           <div className="locations__item">
