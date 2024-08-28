@@ -1,5 +1,3 @@
-import { MapIconsType } from './types/types';
-
 const CITIES = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'] as const;
 
 export const CITY_LOCATIONS = [
@@ -53,8 +51,6 @@ export const CITY_LOCATIONS = [
   }
 ] as const;
 
-const TIMEOUT_SHOW_ERROR = 5000;
-const PASSWORD_REGEXP = /^.*(?=.*[a-zA-Z])(?=.*\d).*$/;
 const MAX_REVIEWS_COUNT = 10;
 
 const ReviewLength = {
@@ -62,18 +58,21 @@ const ReviewLength = {
   Max: 300
 } as const;
 
-const MapIcon: MapIconsType = {
+const MapIconData = {
+  iconSize: [27, 39],
+  iconAnchor: [13.5, 39]
+} as const;
+
+const MapIcon = {
   Default: {
     iconUrl: 'img/pin.svg',
-    iconSize: [27, 39],
-    iconAnchor: [13.5, 39],
+    MapIconData
   },
   Active: {
     iconUrl: 'img/pin-active.svg',
-    iconSize: [27, 39],
-    iconAnchor: [13.5, 39],
+    MapIconData
   },
-};
+} as const;
 
 const TileLayerUrl = {
   Pattern:
@@ -114,15 +113,14 @@ enum NameSpace {
 
 const PLACES_OPTIONS = ['Popular', 'Price: low to high', 'Price: high to low', 'Top rated first'];
 
-const RATING_TITLES: {[index: string]: string} = {
+const RatingTitles = {
   '1': 'terribly',
   '2': 'badly',
   '3': 'not bad',
   '4': 'good',
   '5': 'perfect'
-};
+} as const;
 
-const MAX_RATING_VALUE = 5;
 const MAX_NEARBY_OFFERS_COUNT = 3;
 const MAX_IMAGES_COUNT = 6;
 
@@ -132,15 +130,12 @@ export {
   AuthorizationStatus,
   CITIES,
   PLACES_OPTIONS,
-  RATING_TITLES,
+  RatingTitles,
   ReviewLength,
   MapIcon,
   TileLayerUrl,
   NameSpace,
-  TIMEOUT_SHOW_ERROR,
   MAX_NEARBY_OFFERS_COUNT,
   MAX_IMAGES_COUNT,
-  PASSWORD_REGEXP,
   MAX_REVIEWS_COUNT,
-  MAX_RATING_VALUE
 };

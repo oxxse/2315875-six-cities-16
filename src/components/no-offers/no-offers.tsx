@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import './no-offers.css';
+import './no-offers.module.css';
 
 type NoOffers = {
   city: string;

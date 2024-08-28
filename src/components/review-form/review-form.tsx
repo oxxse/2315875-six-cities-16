@@ -1,6 +1,6 @@
 import { ReactEventHandler, ChangeEvent, useState, FormEvent, memo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { ReviewLength, RATING_TITLES } from '../../const.ts';
+import { ReviewLength, RatingTitles } from '../../const.ts';
 import { useAppDispatch, useAppSelector } from '../../hooks/index.ts';
 import { postComment } from '../../store/thunk-actions.ts';
 import { selectCommentPostingStatus } from '../../store/offers/offers-selectors.ts';
@@ -86,7 +86,7 @@ const ReviewForm = memo((): JSX.Element => {
     <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit} >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        {Object.entries(RATING_TITLES).map(([rate, title]) => <StarsRating value={rate} title={title} key={title} onInputChange={handleRaitingChange} checkedValue={formData.rating} disabled={isPosting} />).reverse()}
+        {Object.entries(RatingTitles).map(([rate, title]) => <StarsRating value={rate} title={title} key={title} onInputChange={handleRaitingChange} checkedValue={formData.rating} disabled={isPosting} />).reverse()}
       </div>
       <textarea
         className="reviews__textarea form__textarea"
