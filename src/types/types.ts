@@ -27,12 +27,6 @@ export type City = {
   location: Location;
 }
 
-export type MapIconType = {
-  iconUrl: string;
-  iconSize: [number, number];
-  iconAnchor: [number, number];
-};
-
 export type OfferTemplate =
   {
     id: string;
