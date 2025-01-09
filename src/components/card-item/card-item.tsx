@@ -46,7 +46,7 @@ const CardItem = memo(({ imageWidth, imageHeight, className, title, type, price,
             <b className="place-card__price-value">€{price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <FavoriteButton offerId={id} isFavorite={isFavorite} buttonType="card" width={18} height={19} />
+          <FavoriteButton isFavorite={isFavorite} buttonType="card" width={18} height={19} />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">

@@ -61,7 +61,6 @@ function OfferPage(): JSX.Element {
   const nearbyOffers = nearOffers.slice(0, MAX_NEARBY_OFFERS_COUNT);
   const { title, price, rating, isPremium, isFavorite, goods, description, images } = currentOffer;
   const imagesToShow = images.slice(0, MAX_IMAGES_COUNT);
-  const offerId = id ?? 'defaultId';
   const offersToMark = [...nearbyOffers, currentOffer];
 
   return (
@@ -84,7 +83,7 @@ function OfferPage(): JSX.Element {
                 <h1 className="offer__name">
                   {title}
                 </h1>
-                <FavoriteButton offerId={offerId} isFavorite={isFavorite} width={31} height={33} buttonType="offer" />
+                <FavoriteButton isFavorite={isFavorite} width={31} height={33} buttonType="offer" />
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
